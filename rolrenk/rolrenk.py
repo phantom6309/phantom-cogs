@@ -15,7 +15,7 @@ __all__ = ["UNIQUE_ID", "Bio"]
 UNIQUE_ID = 0x62696F68617A61726400
 
 
-class Rolerenk(commands.Cog):
+class Rolrenk(commands.Cog):
     """başkalarının renklerine bakın"""
     def __init__(self, bot: bot.Red, *args, **kwargs):
         super().__init__(*args, **kwargs)
