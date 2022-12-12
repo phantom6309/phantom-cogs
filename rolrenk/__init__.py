@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from .rolerenk import Rolerenk
+from .rolrenk import Rolrenk
 
 async def setup(bot):
-    bot.add_cog(Rolerenk(bot))
+    bot.add_cog(Rolrenk(bot))
