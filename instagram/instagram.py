@@ -1,7 +1,15 @@
-from redbot.core import commands
-import discord
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+from redbot.core import checks, Config
+from redbot.core.i18n import Translator, cog_i18n
+import discord
+from redbot import version_info, VersionInfo
+from redbot.core import commands
+from redbot.core.utils.menus import menu, DEFAULT_CONTROLS, start_adding_reactions
+from redbot.core.utils import mod
+import asyncio
+import datetime
+import aiohttp
 
 
 class Instagram(commands.Cog):
