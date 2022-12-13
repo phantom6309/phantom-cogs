@@ -6,7 +6,7 @@ from instagram_private_api import Client, ClientCompatPatch
 from collections import namedtuple
 from typing import Optional, Union
 from mealdb import search
-instagram_client = Client("durmazbora44@gmail.com","Phantom2158")
+
 
 import discord
 from redbot.core import checks, Config, commands, bot
