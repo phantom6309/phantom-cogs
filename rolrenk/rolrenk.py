@@ -2,6 +2,7 @@
 import asyncio
 import logging
 import re
+import requests
 from collections import namedtuple
 from typing import Optional, Union
 from mealdb import search
