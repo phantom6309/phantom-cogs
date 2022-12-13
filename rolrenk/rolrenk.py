@@ -49,5 +49,23 @@ class Rolrenk(commands.Cog):
       else:
         # Send a message to the channel if the food could not be found
         await ctx.send('Sorry, I couldn\'t find any information about that food.')
+
+    
+    @commands.group(autohelp=False)
+    @commands.guild_only()
+    async def instagram(self, ctx, url):
+        # Download the video from Instagram using the URL
+        response = requests.get(url)
+
+        # Check if the response is successful
+        if response.status_code == 200:
+            # Send the video to the channel
+            await ctx.send(file=discord.File(response.content))
+            response.close()
+        else:
+            # Otherwise, send an error message
+            await ctx.send("Failed to download video from Instagram")
+
+
   
     
