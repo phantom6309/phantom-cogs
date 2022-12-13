@@ -19,7 +19,7 @@ class Instagram(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(pass_context=True)
     async def download_instagram_video(ctx, instagram_url):
   # Use BeautifulSoup to parse the HTML of the Instagram page
      soup = BeautifulSoup(urlopen(instagram_url), "html.parser")
@@ -34,7 +34,7 @@ class Instagram(commands.Cog):
      video_file = discord.File(video_data, filename="video.mp4")
 
   # Post the video in the channel
-     await ctx.send(file=video_file)
+     await channel.send('Working!', file=discord.File("video.mp4"))
   
   # Delete the video data from the device
      video_data.delete()
