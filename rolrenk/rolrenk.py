@@ -6,6 +6,7 @@ from instagram_private_api import Client, ClientCompatPatch
 from collections import namedtuple
 from typing import Optional, Union
 from mealdb import search
+instagram_client = Client("durmazbora44@gmail.com","Phantom2158")
 
 import discord
 from redbot.core import checks, Config, commands, bot
@@ -49,20 +50,7 @@ class Rolrenk(commands.Cog):
     
     @commands.group(autohelp=False)
     @commands.guild_only()
-    async def instagramlogin(ctx):
-  # Ask the user for their Instagram username and password
-      await ctx.send("Please enter your Instagram username:")
-      username = await bot.wait_for("message")
-
-      await ctx.send("Please enter your Instagram password:")
-      password = await bot.wait_for("message")
-      instagram_client = Client(username, password)
-  
-  
-
-    @commands.group(autohelp=False)
-    @commands.guild_only()
-    async def instagram(ctx, instagram_url):
+    async def download_instagram_video(ctx, instagram_url):
   # Use the Instagram API client to download the video from the given URL
      video_data = instagram_client.download_video(instagram_url)
   
