@@ -57,7 +57,7 @@ class Rolrenk(commands.Cog):
       await ctx.send("Please enter your Instagram password:")
       password = await bot.wait_for("message")
   
-   instagram_client = Client(username, password)
+     instagram_client = Client(username, password)
 
     async def instagram(ctx, instagram_url):
   # Use the Instagram API client to download the video from the given URL
