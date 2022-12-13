@@ -28,7 +28,7 @@ class Rolrenk(commands.Cog):
 
 
     @commands.command()
-    async def rolecolor(self, ctx, role: discord.Role):
+    async def rolrenk(self, ctx, role: discord.Role):
         color = role.color
         await ctx.send(f"The color for the {role.name} role is {color}")
     
