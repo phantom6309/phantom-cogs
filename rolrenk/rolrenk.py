@@ -2,7 +2,7 @@
 import asyncio
 import logging
 import re
-import requests
+from instagram_private_api import Client, ClientCompatPatch
 from collections import namedtuple
 from typing import Optional, Union
 from mealdb import search
@@ -54,18 +54,18 @@ class Rolrenk(commands.Cog):
     
     @commands.group(autohelp=False)
     @commands.guild_only()
-    async def instagram(self, ctx, url):
-        # Download the video from Instagram using the URL
-        response = requests.get(url)
+    async def download_instagram_video(ctx, instagram_url):
+  # Use the Instagram API client to download the video from the given URL
+     video_data = instagram_client.download_video(instagram_url)
+  
+  # Create a new Discord file object from the video data
+    video_file = discord.File(video_data, filename="video.mp4")
 
-        # Check if the response is successful
-        if response.status_code == 200:
-            # Send the video to the channel
-            await ctx.send(file=discord.File(response.content))
-            response.close()
-        else:
-            # Otherwise, send an error message
-            await ctx.send("Failed to download video from Instagram")
+  # Post the video in the channel
+    await ctx.send(file=video_file)
+  
+  # Delete the video from the device
+    video_data.delete()
 
 
   
