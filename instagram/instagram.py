@@ -11,6 +11,7 @@ from redbot.core.utils import mod
 import asyncio
 import datetime
 import aiohttp
+import requests
 
 
 class Instagram(commands.Cog):
@@ -20,7 +21,7 @@ class Instagram(commands.Cog):
         self.bot = bot
 
     @commands.command(pass_context=True)
-    async def download_instagram_video(ctx, instagram_url):
+    async def insta(ctx, instagram_url):
   # Use BeautifulSoup to parse the HTML of the Instagram page
      soup = BeautifulSoup(urlopen(instagram_url), "html.parser")
 
