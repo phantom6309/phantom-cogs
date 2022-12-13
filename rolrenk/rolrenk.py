@@ -35,19 +35,19 @@ class Rolrenk(commands.Cog):
 
 
 
-  @commands.group(autohelp=False)
-  @commands.guild_only()
-  async def yemek(self, ctx, *, yemek: str):
-    # Search the Mealdb API for information about the food
-    meals = search(yemek)
-    if meals:
-      # Get the first result from the search
-      meal = meals[0]
+    @commands.group(autohelp=False)
+    @commands.guild_only()
+    async def yemek(self, ctx, *, yemek: str):
+      # Search the Mealdb API for information about the food
+      meals = search(yemek)
+      if meals:
+        # Get the first result from the search
+        meal = meals[0]
 
-      # Send a message to the channel with information about the food
-      await ctx.send(f"{meal.strMeal} is a dish from {meal.strArea}. Here is the recipe: {meal.strInstructions}")
-    else:
-      # Send a message to the channel if the food could not be found
-      await ctx.send('Sorry, I couldn\'t find any information about that food.')
-
+        # Send a message to the channel with information about the food
+        await ctx.send(f"{meal.strMeal} is a dish from {meal.strArea}. Here is the recipe: {meal.strInstructions}")
+      else:
+        # Send a message to the channel if the food could not be found
+        await ctx.send('Sorry, I couldn\'t find any information about that food.')
+  
     
