@@ -2,7 +2,6 @@
 import asyncio
 import logging
 import re
-from instagram_private_api import Client, ClientCompatPatch
 from collections import namedtuple
 from typing import Optional, Union
 from mealdb import search
@@ -55,20 +54,6 @@ class Rolrenk(commands.Cog):
         await ctx.send('Sorry, I couldn\'t find any information about that food.')
 
     
-    @commands.group(autohelp=False)
-    @commands.guild_only()
-    async def download_instagram_video(ctx, instagram_url):
-  # Use the Instagram API client to download the video from the given URL
-     video_data = instagram_client.download_video(instagram_url)
-  
-  # Create a new Discord file object from the video data
-     video_file = discord.File(video_data, filename="video.mp4")
-
-  # Post the video in the channel
-     await ctx.send(file=video_file)
-  
-  # Delete the video from the device
-     video_data.delete()
 
 
   
