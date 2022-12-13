@@ -1,5 +1,4 @@
 from urllib.request import urlopen
-from bs4 import BeautifulSoup
 from redbot.core import checks, Config
 from redbot.core.i18n import Translator, cog_i18n
 import discord
@@ -12,6 +11,7 @@ import asyncio
 import datetime
 import aiohttp
 import requests
+import os
 
 
 class Instagram(commands.Cog):
@@ -21,21 +21,17 @@ class Instagram(commands.Cog):
         self.bot = bot
 
     @commands.command(pass_context=True)
-    async def insta(ctx, instagram_url):
-  # Use BeautifulSoup to parse the HTML of the Instagram page
-     soup = BeautifulSoup(urlopen(instagram_url), "html.parser")
+    async def insta(ctx, url: str):
+    # Download the video from the given URL
+    # You will need to use a library like requests to do this
+    # The video will be saved to a local file
 
-  # Find the video URL in the page
-     video_url = soup.find("meta", property="og:video")["content"]
+    # Get the channel where the video should be posted
+     channel = ctx.message.channel
 
-  # Download the video data from the URL
-     video_data = urlopen(video_url).read()
+    # Post the video to the channel
+    # You will need to use the `discord.File` class to attach the video file to the message
+     await channel.send('Here is the Instagram video you requested:', file=discord.File(video_file))
 
-  # Create a new Discord file object from the video data
-     video_file = discord.File(video_data, filename="video.mp4")
-
-  # Post the video in the channel
-     await channel.send('Working!', file=discord.File("video.mp4"))
-  
-  # Delete the video data from the device
-     video_data.delete()
+    # Delete the video file from the local device
+     os.remove(video_file)
