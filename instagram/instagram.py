@@ -1,8 +1,8 @@
-
+from redbot.core import commands
 import discord
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
-from redbot.core import commands
+
 
 class Instagram(commands.Cog):
     """İnstagram video download"""
