@@ -27,8 +27,7 @@ class Rolrenk(commands.Cog):
         
 
 
-    @commands.group(autohelp=False)
-    @commands.guild_only()
+    @commands.command()
     async def rolecolor(self, ctx, role: discord.Role):
         color = role.color
         await ctx.send(f"The color for the {role.name} role is {color}")
@@ -38,8 +37,7 @@ class Rolrenk(commands.Cog):
 
 
 
-    @commands.group(autohelp=False)
-    @commands.guild_only()
+    @commands.command()
     async def yemek(self, ctx, *, yemek: str):
       # Search the Mealdb API for information about the food
       meals = search(yemek)
