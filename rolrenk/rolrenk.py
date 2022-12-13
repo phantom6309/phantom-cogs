@@ -34,10 +34,10 @@ class Rolrenk(commands.Cog):
     
     
 
-    @client.event
-    async def on_message(message):
-     # Check if the message starts with the `!food` command
-      if message.content.startswith('!food'):
+@client.event
+async def on_message(message):
+  # Check if the message starts with the `!food` command
+  if message.content.startswith('!food'):
     # Get the food name from the message
     food = message.content.split(' ')[1]
 
@@ -52,3 +52,6 @@ class Rolrenk(commands.Cog):
     else:
       # Send a message to the channel if the food could not be found
       await message.channel.send('Sorry, I couldn\'t find any information about that food.')
+
+
+    
