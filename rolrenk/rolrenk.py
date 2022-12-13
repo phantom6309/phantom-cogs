@@ -10,11 +10,6 @@ from mealdb import search
 import discord
 from redbot.core import checks, Config, commands, bot
 
-log = logging.getLogger("red.cbd-cogs.bio")
-
-__all__ = ["UNIQUE_ID", "Bio"]
-
-UNIQUE_ID = 0x62696F68617A61726400
 
 
 class Rolrenk(commands.Cog):
@@ -54,7 +49,17 @@ class Rolrenk(commands.Cog):
     
     @commands.group(autohelp=False)
     @commands.guild_only()
-    async def download_instagram_video(ctx, instagram_url):
+    async def instagramlogin(ctx):
+  # Ask the user for their Instagram username and password
+      await ctx.send("Please enter your Instagram username:")
+      username = await bot.wait_for("message")
+
+      await ctx.send("Please enter your Instagram password:")
+      password = await bot.wait_for("message")
+  
+   instagram_client = Client(username, password)
+
+    async def instagram(ctx, instagram_url):
   # Use the Instagram API client to download the video from the given URL
      video_data = instagram_client.download_video(instagram_url)
   
