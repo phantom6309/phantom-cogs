@@ -35,7 +35,8 @@ class Rolrenk(commands.Cog):
 
 
 
-  @commands.command()
+  @commands.group(autohelp=False)
+  @commands.guild_only()
   async def yemek(self, ctx, *, yemek: str):
     # Search the Mealdb API for information about the food
     meals = search(yemek)
