@@ -39,7 +39,7 @@ class Rolrenk(commands.Cog):
      # Check if the message starts with the `!food` command
       if message.content.startswith('!food'):
     # Get the food name from the message
-      food = message.content.split(' ')[1]
+    food = message.content.split(' ')[1]
 
     # Search the Mealdb API for information about the food
     result = await mealdb_client.search(food)
