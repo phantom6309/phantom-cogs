@@ -21,12 +21,11 @@ class Hikaye(BaseCog):
 
     @commands.command()
     @commands.cooldown(1, 60, commands.BucketType.guild)
-    async def ekle(ctx, *, text):
+    async def ekle(self,ctx, text):
      texts.append(text)
      await ctx.send(f"Text added: {text}")
- 
-# Define a command to get a random text from the list
+
     @commands.command()
-    async def rastgele(ctx):
+    async def rastgele(self,ctx):
      text = random.choice(texts)
      await ctx.send(f"Random text: {text}")
