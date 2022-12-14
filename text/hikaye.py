@@ -30,7 +30,3 @@ class Hikaye(BaseCog):
 async def random_text(ctx):
   text = random.choice(texts)
   await ctx.send(f"Random text: {text}")
-
-
-    
-def cog_unload(self):
