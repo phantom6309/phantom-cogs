@@ -26,7 +26,7 @@ class Hikaye(BaseCog):
      await ctx.send(f"Text added: {text}")
  
 # Define a command to get a random text from the list
-@bot.command()
-async def random_text(ctx):
-  text = random.choice(texts)
-  await ctx.send(f"Random text: {text}")
+    @commands.command()
+    async def random_text(ctx):
+    text = random.choice(texts)
+    await ctx.send(f"Random text: {text}")
