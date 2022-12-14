@@ -23,7 +23,7 @@ class Hikaye(BaseCog):
     @commands.cooldown(1, 60, commands.BucketType.guild)
     async def add_text(ctx, *, text):
      texts.append(text)
-    await ctx.send(f"Text added: {text}")
+     await ctx.send(f"Text added: {text}")
  
 # Define a command to get a random text from the list
 @bot.command()
