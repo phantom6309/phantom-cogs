@@ -235,16 +235,16 @@ class Burc(BaseCog):
     @commands.cooldown(1, 60, commands.BucketType.guild)
     async def kur(self, ctx):
          """Döviz kurlarını görün """
-        endpoint = "https://api.genelpara.com/embed/doviz.json"
-        response = requests.post(endpoint)
-        embed = discord.Embed(title="Akrep")
+       endpoint = "https://api.genelpara.com/embed/doviz.json"
+       response = requests.post(endpoint)
+       embed = discord.Embed(title="Akrep")
 
-        # Add the values from the response to the embed
-        for key, value in response.json().items():
-         embed.add_field(name=key, value=value)
+       # Add the values from the response to the embed
+       for key, value in response.json().items():
+        embed.add_field(name=key, value=value)
 
-        # Send the embed to the channel
-        await ctx.send(embed=embed)
+       # Send the embed to the channel
+       await ctx.send(embed=embed)
     
     def cog_unload(self):
         self.bot.loop.create_task(self.session.close())
