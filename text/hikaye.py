@@ -8,6 +8,7 @@ from redbot.core import commands
 from redbot.core.utils.chat_formatting import box, humanize_list
 from redbot.core.utils.menus import DEFAULT_CONTROLS, menu
 import random
+import json
 # Libs
 import aiohttp
 
@@ -22,10 +23,12 @@ class Hikaye(BaseCog):
     @commands.command()
     @commands.cooldown(1, 60, commands.BucketType.guild)
     async def ekle(self,ctx, text):
-     texts.append(text)
+     with open('data.json', 'r') as f:
+      data = json.load(f)
+     data['text'].append(text)
      await ctx.send(f"Text added: {text}")
 
     @commands.command()
     async def rastgele(self,ctx):
-     text = random.choice(texts)
+     text = random.choice(data)
      await ctx.send(f"Random text: {text}")
