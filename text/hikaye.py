@@ -34,5 +34,3 @@ async def random_text(ctx):
 
     
 def cog_unload(self):
-
-__del__ = cog_unload
