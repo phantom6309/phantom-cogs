@@ -34,6 +34,5 @@ async def random_text(ctx):
 
     
 def cog_unload(self):
-self.bot.loop.create_task(self.session.close())
 
 __del__ = cog_unload
