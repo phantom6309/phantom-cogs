@@ -216,7 +216,7 @@ class Burc(BaseCog):
 
     @commands.command()
     @commands.cooldown(1, 60, commands.BucketType.guild)
-    async def balık(self, ctx):
+    async def kur(self, ctx):
         """Shows a cat"""
         endpoint = "https://api.genelpara.com/embed/doviz.json"
         
