@@ -215,6 +215,23 @@ class Burc(BaseCog):
         await ctx.send(embed=embed)
 
     @commands.command()
+    @commands.cooldown(1, 60, commands.BucketType.guild)
+    async def kur(self, ctx):
+        """Shows a cat"""
+        endpoint = "https://api.genelpara.com/embed/doviz.json"
+        
+        response = requests.post(endpoint)
+        embed = discord.Embed(title="Balık")
+
+        # Add the values from the response to the embed
+        for key, value in response.json().items():
+         embed.add_field(name=key, value=value)
+
+        # Send the embed to the channel
+        await ctx.send(embed=embed)
+
+
+    @commands.command()
     async def havadurumu(self, ctx, *, location):
         # Send a request to the OpenWeatherMap API to get the current weather
         # for the specified location
@@ -230,7 +247,8 @@ class Burc(BaseCog):
 
         # Send a message to the discord channel with the weather information
         await ctx.send(f'The weather in {city}, {country} is currently {temperature} degrees and {description}.')
-
+   
+    
     
     def cog_unload(self):
         self.bot.loop.create_task(self.session.close())
