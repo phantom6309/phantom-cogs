@@ -250,17 +250,16 @@ class Burc(BaseCog):
    
     @commands.command()
     @commands.cooldown(1, 60, commands.BucketType.guild)
-        def ecza(ilce, il):
-            url = 'https://api.collectapi.com/health/dutyPharmacy'
-            headers = {
+    async def eczane(ctx, ilce: str, il: str):
+           url = 'https://api.collectapi.com/health/dutyPharmacy'
+           headers = {
         'authorization': 'apikey 30d5SeFaSenqEvTFHaJjXI:71pwcsZRZA2qxRi2vNJVmX',
         'content-type': 'application/json',
     }
-            params = {
+           params = {
         'ilce': ilce,
         'il': il,
     }
-        async def eczane(ctx, ilce: str, il: str):
            response = ecza(ilce, il)
            await ctx.send(response)
            response = requests.get(url, headers=headers, params=params)
