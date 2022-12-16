@@ -3,6 +3,7 @@
 # Discord
 import discord
 import requests
+import json
 # Red
 from redbot.core import commands
 from redbot.core.utils.chat_formatting import box, humanize_list
@@ -254,15 +255,10 @@ class Burc(BaseCog):
            url = "https://api.collectapi.com/health/dutyPharmacy"
            headers = {'authorization':'apikey 30d5SeFaSenqEvTFHaJjXI:71pwcsZRZA2qxRi2vNJVmX','content-type':'application/json',}
            params = {'ilce': ilce,'il': il,}
-           a = requests.get(url, headers=headers, params=params)
-           veri = a.json()
-           isim = veri['name']
-           adres = veri['address']
-           telefon = veri['phone']
+           response = requests.get(url, headers=headers, params=params)
+           data = response.json()
            embed = discord.Embed(title="nobetçi")
-           embed.add_field(title = isim, description='isim')
-           embed.add_field(title = adres, description='adres')
-           embed.add_field(title = telefon, description='telefon')
+           embed.add_field(name="Data", value=json.dumps(data, indent=4))
            await ctx.send(embed=embed)
     
     def cog_unload(self):
