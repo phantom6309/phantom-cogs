@@ -260,9 +260,9 @@ class Burc(BaseCog):
            adres = veri['address']
            telefon = veri['phone']
            embed = discord.Embed(title="nobetçi")
-           embed.add_field(title = "isim", value=isim)
-           embed.add_field(title = "adres", value=adres)
-           embed.add_field(title = "telefon", value=telefon)
+           embed.add_field(title = "isim", description=isim)
+           embed.add_field(title = "adres", description=adres)
+           embed.add_field(title = "telefon", description=telefon)
            await ctx.send(embed=embed)
     
     def cog_unload(self):
