@@ -21,7 +21,7 @@ class Burc(BaseCog):
 
     @commands.command()
     @commands.cooldown(1, 60, commands.BucketType.guild)
-    async def akrep(self, ctx):
+    async def burc(self, ctx,):
         """Shows a cat"""
         endpoint = "https://aztro.sameerkumar.website/"
         params = { "sign": "scorpio", "day": "today"}
@@ -254,10 +254,15 @@ class Burc(BaseCog):
            url = "https://api.collectapi.com/health/dutyPharmacy"
            headers = {'authorization':'apikey 30d5SeFaSenqEvTFHaJjXI:71pwcsZRZA2qxRi2vNJVmX','content-type':'application/json',}
            params = {'ilce': ilce,'il': il,}
-           response = requests.get(url, headers=headers, params=params)
+           r = response = requests.get(url, headers=headers, params=params)
+           veri = r.json()
+           isim = veri['name']
+           adres = veri['address']
+           telefon = veri['phone']
            embed = discord.Embed(title="nobetçi")
-           for key, value in response.json().items():
-            embed.add_field(name=key, value=value)
+           embed.add_field(name="isim", value=isim)
+           embed.add_field(name="adres", value=adres)
+           embed.add_field(name="telefon", value=telefon)
            await ctx.send(embed=embed)
     
     def cog_unload(self):
