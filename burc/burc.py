@@ -258,7 +258,7 @@ class Burc(BaseCog):
            embed = discord.Embed(title="nobetçi")
            for key, value in response.json().items():
             embed.add_field(name=key, value=value)
-           await ctx.send(embed=embed)
+           await ctx.send(response)
     
     def cog_unload(self):
         self.bot.loop.create_task(self.session.close())
