@@ -257,8 +257,9 @@ class Burc(BaseCog):
            params = {'ilce': ilce,'il': il,}
            response = requests.get(url, headers=headers, params=params)
            data = response.json()
+           name = data["name"]
            embed = discord.Embed(title="nobetçi")
-           embed.add_field(name="Data", value=json.dumps(data, indent=4))
+           embed.add_field(name="Name", value=name)
            await ctx.send(embed=embed)
     
     def cog_unload(self):
