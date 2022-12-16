@@ -260,8 +260,7 @@ class Burc(BaseCog):
         'ilce': ilce,
         'il': il,
     }
-           response = ecza(ilce, il)
-           await ctx.send(response)
+           
            response = requests.get(url, headers=headers, params=params)
            embed = discord.Embed(title="nobetçi")
 
