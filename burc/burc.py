@@ -248,7 +248,30 @@ class Burc(BaseCog):
         # Send a message to the discord channel with the weather information
         await ctx.send(f'The weather in {city}, {country} is currently {temperature} degrees and {description}.')
    
-    
+     @commands.command()
+     @commands.cooldown(1, 60, commands.BucketType.guild)
+        def ecza(ilce, il):
+            url = 'https://api.collectapi.com/health/dutyPharmacy'
+            headers = {
+        'authorization': 'apikey 30d5SeFaSenqEvTFHaJjXI:71pwcsZRZA2qxRi2vNJVmX',
+        'content-type': 'application/json',
+    }
+            params = {
+        'ilce': ilce,
+        'il': il,
+    }
+        async def eczane(ctx, ilce: str, il: str):
+           response = ecza(ilce, il)
+           await ctx.send(response)
+           response = requests.get(url, headers=headers, params=params)
+           embed = discord.Embed(title="nobetçi")
+
+         # Add the values from the response to the embed
+            for key, value in response.json().items():
+            embed.add_field(name=key, value=value)
+
+        # Send the embed to the channel
+            await ctx.send(embed=embed)
     
     def cog_unload(self):
         self.bot.loop.create_task(self.session.close())
