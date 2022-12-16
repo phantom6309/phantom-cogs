@@ -248,8 +248,8 @@ class Burc(BaseCog):
         # Send a message to the discord channel with the weather information
         await ctx.send(f'The weather in {city}, {country} is currently {temperature} degrees and {description}.')
    
-     @commands.command()
-     @commands.cooldown(1, 60, commands.BucketType.guild)
+    @commands.command()
+    @commands.cooldown(1, 60, commands.BucketType.guild)
         def ecza(ilce, il):
             url = 'https://api.collectapi.com/health/dutyPharmacy'
             headers = {
