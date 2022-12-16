@@ -254,8 +254,8 @@ class Burc(BaseCog):
            url = "https://api.collectapi.com/health/dutyPharmacy"
            headers = {'authorization':'apikey 30d5SeFaSenqEvTFHaJjXI:71pwcsZRZA2qxRi2vNJVmX','content-type':'application/json',}
            params = {'ilce': ilce,'il': il,}
-           r = requests.get(url, headers=headers, params=params)
-           veri = r.json()
+           a = requests.get(url, headers=headers, params=params)
+           veri = a.json()
            isim = veri['name']
            adres = veri['address']
            telefon = veri['phone']
