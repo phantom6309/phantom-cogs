@@ -262,7 +262,7 @@ class Burc(BaseCog):
             embed.add_field(name=key, value=value)
            await ctx.send(embed=embed)
 
-    @commands.commands()
+    @commands.command()
     async def sinemavizyon(self, ctx):
            url = "https://api.collectapi.com/watching/moviesPlaying"
            headers = {'authorization':'apikey 30d5SeFaSenqEvTFHaJjXI:71pwcsZRZA2qxRi2vNJVmX','content-type':'application/json',}
@@ -273,7 +273,7 @@ class Burc(BaseCog):
             embed.add_field(name=key, value=value)
            await ctx.send(embed=embed)
 
-    @commands.commands()
+    @commands.command()
     async def sinemayakında(self, ctx):
            url = "https://api.collectapi.com/watching/moviesComing"
            headers = {'authorization':'apikey 30d5SeFaSenqEvTFHaJjXI:71pwcsZRZA2qxRi2vNJVmX','content-type':'application/json',}
