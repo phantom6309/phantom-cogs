@@ -22,7 +22,7 @@ class Burc(BaseCog):
 
     @commands.command()
     @commands.cooldown(1, 60, commands.BucketType.guild)
-    async def burc(self, ctx,):
+    async def akrep(self, ctx,):
         """Shows a cat"""
         endpoint = "https://aztro.sameerkumar.website/"
         params = { "sign": "scorpio", "day": "today"}
