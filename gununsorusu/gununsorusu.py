@@ -33,7 +33,7 @@ class Gununsorusu(commands.Cog):
 
     @commands.command()
     async def gününsorusu(self, ctx):
-        """Günün sorusunu isteyin""""
+        """Günün sorusunu isteyin"""
         if not self.items:
             await ctx.send('No items have been saved yet!')
         else:
