@@ -20,7 +20,7 @@ class Gununsorusu(commands.Cog):
         self.items = data_manager.load_json('gununsorusu')
 
     @commands.command()
-    async def soruekle(self, ctx, *, item):
+    async def soruekle(self, ctx, *, item: str):
           """Listeye soru ekler"""
         self.items.append(item)
         await ctx.send(f'Added "{item}" to the list')
