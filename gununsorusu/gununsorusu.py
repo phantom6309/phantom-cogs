@@ -29,7 +29,7 @@ class Gununsorusu(commands.Cog):
         self.items.append(item)
         with open(self.filename, 'w') as f:
             json.dump(self.items, f)
-        await ctx.send(f'Saved "{item}" to the list of items!')
+        await ctx.send(f'Soru eklendi!')
 
     @commands.command()
     async def gününsorusu(self, ctx):
@@ -44,10 +44,10 @@ class Gununsorusu(commands.Cog):
     async def sorulistesi(self, ctx):
         """Soru havuzunu görüntüleyin"""
         if not self.items:
-            await ctx.send('No items have been saved yet!')
+            await ctx.send('Havuzda soru yok!')
         else:
             item_list = '\n'.join(self.items)
-            await ctx.send(f'Here is the full list of items:\n{item_list}')
+            await ctx.send(f'Havuzdaki bütün sorular:\n{item_list}')
 
     @commands.command()
     async def çıkart(self, ctx, *, item):
@@ -55,14 +55,15 @@ class Gununsorusu(commands.Cog):
         try:
             self.items.remove(item)
         except ValueError:
-            await ctx.send(f'Item "{item}" not found in the list!')
+            await ctx.send(f'Item "{item}" sorusu listede bulunamadı!')
         else:
             with open(self.filename, 'w') as f:
                 json.dump(self.items, f)
-            await ctx.send(f'Removed "{item}" from the list of items!')
+            await ctx.send(f'Removed "{item}" sorusu listeden çıkarıldı!')
     
     @commands.command()
     async def temizle(self, ctx):
+        """Tüm listeyi temizleyin"""
         self.items.clear()
         with open(self.filename, 'w') as f:
             json.dump(self.items, f)
