@@ -7,7 +7,7 @@ from redbot.core import data_manager
 
 from redbot.core import commands
 from redbot.core import checks, Config, commands, bot
-import random
+from random import choice 
 
 
 class Gununsorusu(commands.Cog):
@@ -15,57 +15,51 @@ class Gununsorusu(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.items = []
-
-        # Load the list of items from the JSON file
-        self.items = data_manager.load_json('gununsorusu')
+        self.filename = 'items.json'
+        # Load items from file if it exists
+        try:
+            with open(self.filename, 'r') as f:
+                self.items = json.load(f)
+        except FileNotFoundError:
+            pass
 
     @commands.command()
-    async def soruekle(self, ctx, *, item: str):
-        """Listeye soru ekler"""
+    async def soruekle(self, ctx, *, item):
+        """Havuza soru ekleyin"""
         self.items.append(item)
-        await ctx.send(f'Added "{item}" to the list')
-
-        # Save the list of items to the JSON file
-        data_manager.save_json('gununsorusu', self.items)
+        with open(self.filename, 'w') as f:
+            json.dump(self.items, f)
+        await ctx.send(f'Saved "{item}" to the list of items!')
 
     @commands.command()
-    async def gununsorusu(self, ctx):
-        """Günün sorusunu atar"""
-        if len(self.items) == 0:
-            await ctx.send('No items in the list')
+    async def gününsorusu(self, ctx):
+        """Günün sorusunu isteyin""""
+        if not self.items:
+            await ctx.send('No items have been saved yet!')
         else:
-            item = random.choice(self.items)
-            self.items.remove(item)
-            await ctx.send(f'Random item: "{item}"')
+            item = choice(self.items)
+            await ctx.send(f'Here is a random item from the list: "{item}"')
 
     @commands.command()
-    async def soruliste(self, ctx):
-        """Listedeki soruları gösterir"""
-        if len(self.items) == 0:
-            await ctx.send('No items in the list')
+    async def sorulistesi(self, ctx):
+        """Soru havuzunu görüntüleyin"""
+        if not self.items:
+            await ctx.send('No items have been saved yet!')
         else:
-            items_str = '\n'.join(self.items)
-            await ctx.send(f'Items:\n{items_str}')
+            item_list = '\n'.join(self.items)
+            await ctx.send(f'Here is the full list of items:\n{item_list}')
 
-    # Add the following command
     @commands.command()
-    async def sil(self, ctx, *, item):
-        """Listeden soru kaldırır"""
+    async def çıkart(self, ctx, *, item):
+        """Listeden soru çıkartın"""
         try:
             self.items.remove(item)
-            await ctx.send(f'Removed "{item}" from the list')
-            data_manager.save_json('gununsorusu', self.items)
         except ValueError:
-            await ctx.send(f'Item "{item}" not found in the list')
-
-    # Add the following command
-    @commands.command()
-    async def temizle(self, ctx):
-        "Listeden tüm soruları kaldırır"""
-        self.items.clear()
-        await ctx.send('Cleared the list')
-        data_manager.save_json('gununsorusu', self.items)
-
+            await ctx.send(f'Item "{item}" not found in the list!')
+        else:
+            with open(self.filename, 'w') as f:
+                json.dump(self.items, f)
+            await ctx.send(f'Removed "{item}" from the list of items!')
     def cog_unload(self):
         self.bot.loop.create_task(self.session.close())
 
