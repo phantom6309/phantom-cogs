@@ -38,8 +38,8 @@ class Gununsorusu(commands.Cog):
             await ctx.send('No items have been saved yet!')
         else:
             item = choice(self.items)
-            await ctx.send(f'Here is a random item from the list: "{item}"')
-
+            await ctx.send(f'Günün sorusu: "{item}"')
+            self.items.remove(item)
     @commands.command()
     async def sorulistesi(self, ctx):
         """Soru havuzunu görüntüleyin"""
