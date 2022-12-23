@@ -60,7 +60,14 @@ class Gununsorusu(commands.Cog):
             with open(self.filename, 'w') as f:
                 json.dump(self.items, f)
             await ctx.send(f'Removed "{item}" from the list of items!')
-    def cog_unload(self):
+    
+    @commands.command()
+    async def temizle(self, ctx):
+        self.items.clear()
+        with open(self.filename, 'w') as f:
+            json.dump(self.items, f)
+        await ctx.send('soru havuzu temizlendi!')
+   def cog_unload(self):
         self.bot.loop.create_task(self.session.close())
 
-    __del__ = cog_unload
+  __del__ = cog_unload
