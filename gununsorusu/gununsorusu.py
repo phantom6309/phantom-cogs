@@ -21,8 +21,8 @@ class Gununsorusu(commands.Cog):
 
     @commands.command()
     async def soruekle(self, ctx, *, item):
-       """Listeye soru ekler"""
-        self.items.append(item)
+          """Listeye soru ekler"""
+         self.items.append(item)
         await ctx.send(f'Added "{item}" to the list')
 
         # Save the list of items to the JSON file
