@@ -22,8 +22,8 @@ class Gununsorusu(commands.Cog):
     @commands.command()
     async def soruekle(self, ctx, *, item):
           """Listeye soru ekler"""
-       self.items.append(item)
-       await ctx.send(f'Added "{item}" to the list')
+        self.items.append(item)
+        await ctx.send(f'Added "{item}" to the list')
 
         # Save the list of items to the JSON file
         data_manager.save_json('gununsorusu', self.items)
