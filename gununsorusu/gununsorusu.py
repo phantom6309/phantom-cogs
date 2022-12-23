@@ -21,7 +21,7 @@ class Gununsorusu(commands.Cog):
 
     @commands.command()
     async def soruekle(self, ctx, *, item: str):
-          """Listeye soru ekler"""
+        """Listeye soru ekler"""
         self.items.append(item)
         await ctx.send(f'Added "{item}" to the list')
 
@@ -30,7 +30,7 @@ class Gununsorusu(commands.Cog):
 
     @commands.command()
     async def gununsorusu(self, ctx):
-      """Günün sorusunu atar"""
+        """Günün sorusunu atar"""
         if len(self.items) == 0:
             await ctx.send('No items in the list')
         else:
