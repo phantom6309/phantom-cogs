@@ -40,7 +40,7 @@ class Gununsorusu(commands.Cog):
 
     @commands.command()
     async def soruliste(self, ctx):
-       """Listedeki soruları gösterir"""
+        """Listedeki soruları gösterir"""
         if len(self.items) == 0:
             await ctx.send('No items in the list')
         else:
@@ -50,7 +50,7 @@ class Gununsorusu(commands.Cog):
     # Add the following command
     @commands.command()
     async def sil(self, ctx, *, item):
-      """Listeden soru kaldırır"""
+        """Listeden soru kaldırır"""
         try:
             self.items.remove(item)
             await ctx.send(f'Removed "{item}" from the list')
@@ -61,7 +61,7 @@ class Gununsorusu(commands.Cog):
     # Add the following command
     @commands.command()
     async def temizle(self, ctx):
-    "Listeden tüm soruları kaldırır"""
+        "Listeden tüm soruları kaldırır"""
         self.items.clear()
         await ctx.send('Cleared the list')
         data_manager.save_json('gununsorusu', self.items)
