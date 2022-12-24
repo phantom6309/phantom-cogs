@@ -260,7 +260,8 @@ class Burc(BaseCog):
            Sehir = data['result'][0]['dist']
            Isim = data['result'][0]['name']
            Telefon = data['result'][0]['phone']
-           await ctx.send(f' {Sehir} da nöbetçi ezcane {Isim} iletişim numarası {Telefon} .')
+           Isim2 = data['result'][1]['name']
+           await ctx.send(f' {Sehir} da nöbetçi ezcane {Isim} iletişim numarası {Telefon} {İsim2} .')
    
 
     
