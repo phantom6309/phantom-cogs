@@ -264,18 +264,18 @@ class Burc(BaseCog):
            Isim2 = data['result'][1]['name']
            Telefon2 = data['result'][1]['phone']
            Adres2 = data['result'][1]['address']
-           Isim3 = data['result'][2]['name']
-           Telefon3 = data['result'][2]['phone']
-           Adres3 = data['result'][2]['address']
+           #Isim3 = data['result'][2]['name']
+           #Telefon3 = data['result'][2]['phone']
+           #Adres3 = data['result'][2]['address']
            embed.add_field(name="isim", value=Isim)
            embed.add_field(name="telefon", value=Telefon)
            embed.add_field(name="address", value=Adres)
            embed.add_field(name="isim", value=Isim2)
            embed.add_field(name="telefon", value=Telefon2)
            embed.add_field(name="address", value=Adres2)
-           embed.add_field(name="isim", value=Isim3)
-           embed.add_field(name="telefon", value=Telefon3)
-           embed.add_field(name="address", value=Adres3)
+           #embed.add_field(name="isim", value=Isim3)
+           #embed.add_field(name="telefon", value=Telefon3)
+           #embed.add_field(name="address", value=Adres3)
            await ctx.send(embed=embed)
 
     def cog_unload(self):
