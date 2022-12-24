@@ -257,10 +257,10 @@ class Burc(BaseCog):
            params = {'ilce': ilce,'il': il,}
            response = requests.get(url, headers=headers, params=params)
            data = response.json()
-           Şehir = data['result']['dist']
-           İsim = data['result']['name']
+           Sehir = data['result']['dist']
+           Isim = data['result']['name']
            Telefon = data['result']['phone']
-           await ctx.send(f' {Şehir} da nöbetçi ezcane {İsim} iletişim numarası {Telefon} .')
+           await ctx.send(f' {Sehir} da nöbetçi ezcane {Isim} iletişim numarası {Telefon} .')
    
 
     
