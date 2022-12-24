@@ -257,15 +257,27 @@ class Burc(BaseCog):
            params = {'ilce': ilce,'il': il,}
            response = requests.get(url, headers=headers, params=params)
            data = response.json()
-           Sehir = data['result'][0]['dist']
+           embed = discord.Embed(title="Nöbetçi")
            Isim = data['result'][0]['name']
            Telefon = data['result'][0]['phone']
+           Adres = data['result'][0]['address']
            Isim2 = data['result'][1]['name']
-           await ctx.send(f' {Sehir} da nöbetçi ezcane {Isim} iletişim numarası {Telefon} {Isim2} .')
-   
+           Telefon2 = data['result'][1]['phone']
+           Adres2 = data['result'][1]['address']
+           Isim3 = data['result'][1]['name']
+           Telefon3 = data['result'][1]['phone']
+           Adres3 = data['result'][1]['address']
+           embed.add_field(name="isim", value=Isim)
+           embed.add_field(name="telefon", value=Telefon)
+           embed.add_field(name="address", value=Adres)
+           embed.add_field(name="isim", value=Isim2)
+           embed.add_field(name="telefon", value=Telefon2)
+           embed.add_field(name="address", value=Adres2)
+           embed.add_field(name="isim", value=Isim3)
+           embed.add_field(name="telefon", value=Telefon3)
+           embed.add_field(name="address", value=Adres3)
+           await ctx.send(embed=embed)
 
-    
-    
     def cog_unload(self):
         self.bot.loop.create_task(self.session.close())
 
