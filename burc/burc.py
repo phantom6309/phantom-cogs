@@ -257,9 +257,9 @@ class Burc(BaseCog):
            params = {'ilce': ilce,'il': il,}
            response = requests.get(url, headers=headers, params=params)
            data = response.json()
-           Sehir = data['result']['dist']
-           Isim = data['result']['name']
-           Telefon = data['result']['phone']
+           Sehir = data['result'][0]['dist']
+           Isim = data['result'][0]['name']
+           Telefon = data['result'][0]['phone']
            await ctx.send(f' {Sehir} da nöbetçi ezcane {Isim} iletişim numarası {Telefon} .')
    
 
