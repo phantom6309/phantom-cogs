@@ -261,9 +261,9 @@ class Burc(BaseCog):
            Şehir = data['result']['dist']
            İsim = data['result']['name']
            Telefon = data['result']['phone']
-           embed.add_field(name="şehir", value=Şehir)
-           embed.add_field(name="isim", value=İsim)
-           embed.add_field(name="telefon", value=Telefon)
+           embed.add_field(name="şehir", value={Şehir})
+           embed.add_field(name="isim", value={İsim})
+           embed.add_field(name="telefon", value={Telefon})
            await ctx.send(embed=embed)
 
     
