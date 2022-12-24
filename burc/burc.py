@@ -257,14 +257,11 @@ class Burc(BaseCog):
            params = {'ilce': ilce,'il': il,}
            response = requests.get(url, headers=headers, params=params)
            data = response.json()
-           embed = discord.Embed(title="nobetçi")
            Şehir = data['result']['dist']
            İsim = data['result']['name']
            Telefon = data['result']['phone']
-           embed.add_field(name="şehir", value={Şehir})
-           embed.add_field(name="isim", value={İsim})
-           embed.add_field(name="telefon", value={Telefon})
-           await ctx.send(embed=embed)
+           await ctx.send(f' {Şehir} da nöbetçi ezcane {İsim} iletişim numarası {Telefon} .')
+   
 
     
     
