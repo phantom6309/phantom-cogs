@@ -38,7 +38,7 @@ class Burc(BaseCog):
        
 
     @commands.command()
-    @commands.cooldown(1, 60, commands.BucketType.guild)
+    
     async def başak(self, ctx):
         """Shows a cat"""
         endpoint = "https://aztro.sameerkumar.website/"
@@ -54,7 +54,7 @@ class Burc(BaseCog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    @commands.cooldown(1, 60, commands.BucketType.guild)
+    
     async def koç(self, ctx):
         """Shows a cat"""
         endpoint = "https://aztro.sameerkumar.website/"
@@ -70,7 +70,7 @@ class Burc(BaseCog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    @commands.cooldown(1, 60, commands.BucketType.guild)
+    
     async def aslan(self, ctx):
         """Shows a cat"""
         endpoint = "https://aztro.sameerkumar.website/"
@@ -86,7 +86,7 @@ class Burc(BaseCog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    @commands.cooldown(1, 60, commands.BucketType.guild)
+    
     async def yay(self, ctx):
         """Shows a cat"""
         endpoint = "https://aztro.sameerkumar.website/"
@@ -103,7 +103,7 @@ class Burc(BaseCog):
 
     
     @commands.command()
-    @commands.cooldown(1, 60, commands.BucketType.guild)
+    
     async def boğa(self, ctx):
         """Shows a cat"""
         endpoint = "https://aztro.sameerkumar.website/"
@@ -216,7 +216,7 @@ class Burc(BaseCog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    @commands.cooldown(1, 60, commands.BucketType.guild)
+    
     async def kur(self, ctx):
         """Shows a cat"""
         endpoint = "https://api.genelpara.com/embed/doviz.json"
@@ -250,7 +250,7 @@ class Burc(BaseCog):
         await ctx.send(f'The weather in {city}, {country} is currently {temperature} degrees and {description}.')
    
     @commands.command()
-    @commands.cooldown(1, 60, commands.BucketType.guild)
+    
     async def eczane(self, ctx, ilce: str, il: str):
            url = "https://api.collectapi.com/health/dutyPharmacy"
            headers = {'authorization':'apikey 30d5SeFaSenqEvTFHaJjXI:71pwcsZRZA2qxRi2vNJVmX','content-type':'application/json',}
@@ -262,27 +262,7 @@ class Burc(BaseCog):
             embed.add_field(name=key, value=value)
            await ctx.send(embed=embed)
 
-    @commands.command()
-    async def sinemavizyon(self, ctx):
-           url = "https://api.collectapi.com/watching/moviesPlaying"
-           headers = {'authorization':'apikey 30d5SeFaSenqEvTFHaJjXI:71pwcsZRZA2qxRi2vNJVmX','content-type':'application/json',}
-           response = requests.get(url, headers=headers)
-           data = response.json()
-           embed = discord.Embed(title="Vizyondaki Filmler")
-           for key, value in response.json().items():
-            embed.add_field(name=key, value=value)
-           await ctx.send(embed=embed)
-
-    @commands.command()
-    async def sinemayakında(self, ctx):
-           url = "https://api.collectapi.com/watching/moviesComing"
-           headers = {'authorization':'apikey 30d5SeFaSenqEvTFHaJjXI:71pwcsZRZA2qxRi2vNJVmX','content-type':'application/json',}
-           response = requests.get(url, headers=headers)
-           data = response.json()
-           embed = discord.Embed(title="Yakında gelecek filmler")
-           for key, value in response.json().items():
-            embed.add_field(name=key, value=value)
-           await ctx.send(embed=embed)
+    
     
     def cog_unload(self):
         self.bot.loop.create_task(self.session.close())
