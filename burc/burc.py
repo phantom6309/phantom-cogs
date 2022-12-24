@@ -264,9 +264,9 @@ class Burc(BaseCog):
            Isim2 = data['result'][1]['name']
            Telefon2 = data['result'][1]['phone']
            Adres2 = data['result'][1]['address']
-           Isim3 = data['result'][1]['name']
-           Telefon3 = data['result'][1]['phone']
-           Adres3 = data['result'][1]['address']
+           Isim3 = data['result'][2]['name']
+           Telefon3 = data['result'][2]['phone']
+           Adres3 = data['result'][2]['address']
            embed.add_field(name="isim", value=Isim)
            embed.add_field(name="telefon", value=Telefon)
            embed.add_field(name="address", value=Adres)
