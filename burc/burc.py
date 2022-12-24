@@ -262,7 +262,16 @@ class Burc(BaseCog):
             embed.add_field(name=key, value=value)
            await ctx.send(embed=embed)
 
-    
+    @commands.command()
+    async def havatest(self, ctx, *, location):
+        # Send a request to the OpenWeatherMap API to get the current weather
+        # for the specified location
+        r = requests.get(f'https://api.openweathermap.org/data/2.5/weather?q={location}&appid=a065235d36f27c780a5ac9f345c28194')
+        for key, value in r.json().items():
+         embed.add_field(name=key, value=value)
+
+        # Send the embed to the channel
+        await ctx.send(embed=embed)
     
     def cog_unload(self):
         self.bot.loop.create_task(self.session.close())
