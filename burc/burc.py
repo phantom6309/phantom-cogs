@@ -267,6 +267,7 @@ class Burc(BaseCog):
         # Send a request to the OpenWeatherMap API to get the current weather
         # for the specified location
         r = requests.get(f'https://api.openweathermap.org/data/2.5/weather?q={location}&appid=a065235d36f27c780a5ac9f345c28194')
+        embed = discord.Embed(title="Hava")
         for key, value in r.json().items():
          embed.add_field(name=key, value=value)
 
