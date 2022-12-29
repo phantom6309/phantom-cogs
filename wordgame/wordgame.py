@@ -11,18 +11,17 @@ from redbot.core.data_manager import cog_data_path
 class Wordgame(Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.word_list = self.load_word_list()
-        self.scores = self.load_scores()
-        self.current_word = None
         self.config = Config.get_conf(self, identifier=965854745)
         self.config.register_guild(
-			fp = str(bundled_data_path(self) / 'wordlist.txt'),
-			doEdit = True
-		)
-
+            fp=str(bundled_data_path(self) / 'wordlist.txt'),
+        )
+        self.scores = self.load_scores()
+        self.current_word = None
+    
     def load_word_list(self):
-        f = open(str(bundled_data_path(self) / 'wordlist.txt'))
-        wordlist = [line.strip().lower() for line in f]
+        fp = self.config.guild(ctx.guild).fp()
+        with open(fp) as f:
+            return [line.strip() for line in f]
 
     def load_scores(self):
         if os.path.exists("scores.json"):
@@ -36,7 +35,8 @@ class Wordgame(Cog):
     
     @commands.command()
     async def wordgame_start(self, ctx):
-        self.current_word = random.choice(self.word_list)
+        word_list = self.load_word_list()
+        self.current_word = random.choice(word_list)
         await ctx.send(f"The word game has started! The first word is: {self.current_word}")
     
     @commands.command()
