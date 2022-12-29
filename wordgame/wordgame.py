@@ -1,61 +1,129 @@
 import json
 import random
-import os
-from redbot.core.data_manager import bundled_data_path
 import discord
-from redbot.core import checks, Config, commands, bot
+from redbot.core import checks, commands, bot
 
-class Wordgame(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
-        self.word_list = []
-        self.points = {}
-        self.current_word = None
-        self.previous_word = None
 
-        # Load the word list from the wordlist.json file
-       
-        self.word_list = bundled_data_path(self) / "wordlist.txt"
-        # Load the points from the points.json file, if it exists
-        if os.path.exists('points.json'):
-            with open('points.json', 'r') as f:
-                self.points = json.load(f)
+# Load the list of words from the wordlist.txt file
+with open('wordlist.txt') as f:
+    word_list = f.read().splitlines()
 
-    @commands.command(name='wordgame_start')
-    async def start(self, ctx):
-        # Choose a random word from the word list
-        self.current_word = random.choice(self.word_list)
+# Load the scores from the scores.json file, or create an empty dictionary if the file doesn't exist
+try:
+    with open('scores.json') as f:
+        scores = json.load(f)
+except FileNotFoundError:
+    scores = {}
 
-        # Send the word to the channel
-        await ctx.send(f'The word is: {self.current_word}')
+# Initialize the bot with a command prefix of '!'
+bot = commands.Bot(command_prefix='!')
 
-    async def on_message(self, message):
-        # Ignore messages from the bot itself
-        if message.author == self.bot.user:
-            return
+# Initialize the current game state
+current_game = None
+current_word = None
 
-        # Check if the message starts with the last character of the current word
-        if message.content[0] == self.current_word[-1]:
-            # Check if the word is in the word list
-            if message.content not in self.word_list:
-                await message.channel.send('That word is not in the list!')
-                return
+# A function to start a new game
+def start_game():
+    global current_game
+    global current_word
+    
+    # Choose a random word from the word list
+    current_word = random.choice(word_list)
+    
+    # Create a new game object with the current word
+    current_game = {
+        'word': current_word,
+        'players': {}
+    }
 
-            # Update the points for the user
-            if message.author.id in self.points:
-                self.points[message.author.id] += len(message.content)
-            else:
-                self.points[message.author.id] = len(message.content)
+# A function to end the current game and reset the game state
+def end_game():
+    global current_game
+    global current_word
+    
+    # Save the scores for each player in the game to the scores dictionary
+    for player, score in current_game['players'].items():
+        if player in scores:
+            scores[player] += score
+        else:
+            scores[player] = score
+    
+    # Save the updated scores to the scores.json file
+    with open('scores.json', 'w') as f:
+        json.dump(scores, f)
+    
+    # Reset the game state
+    current_game = None
+    current_word = None
 
-            # Save the points to the points.json file
-            with open('points.json', 'w') as f:
-                json.dump(self.points, f)
+# A function to get the leaderboard as a formatted string
+def get_leaderboard():
+    # Sort the scores in descending order
+    sorted_scores = sorted(scores.items(), key=lambda x: x[1], reverse=True)
+    
+    # Format the leaderboard as a string
+    leaderboard_str = 'Leaderboard:\n'
+    for i, (player, score) in enumerate(sorted_scores):
+        leaderboard_str += f'{i+1}. {player}: {score} points\n'
+    
+    return leaderboard_str
+# The command to start a new game
+@bot.command()
+async def wordgame_start(ctx):
+    global current_game
+    
+    # If there is already a game in progress, end the current game first
+    if current_game is not None:
+        end_game()
+    
+    # Start a new game
+    start_game()
+    
+    # Announce the start of the game and the first word
+    await ctx.send(f'A new word game has started! The first word is "{current_word}".')
 
-            # Set the previous word to the current word
-            self.previous_word = self.current_word
-
-            # Choose a new current word
-            self.current_word = random.choice(self.word_list)
-
-            await message.channel.send(f'Correct! The new word is: {self.current_word} You now have {self.points[message.author.id]} points.')
-
+# A function to process a word submission
+def process_submission(author, word):
+    global current_game
+    global current_word
+    
+    # Check if there is a game in progress
+    if current_game is None:
+        return
+    
+    # Check if the word is in the word list
+    if word not in word_list:
+        return
+    
+    # Check if the word starts with the correct letter
+    if word[0] != current_word[-1]:
+        return
+    
+    # Add the player to the game if they haven't played before
+    if author not in current_game['players']:
+        current_game['players'][author] = 0
+    
+    # Increment the player's score by the length of the word
+    current_game['players'][author] += len(word)
+    
+    # Update the current word
+    current_word = word
+# An event handler for message events
+@bot.event
+async def on_message(message):
+    # Ignore messages from the bot itself
+    if message.author == bot.user:
+        return
+    
+    # Process the submission if the message starts with the current word
+    if message.content.startswith(current_word):
+        process_submission(message.author, message.content.split()[0])
+    
+# The command to show the leaderboard
+@bot.command()
+async def wordgame_leaderboard(ctx):
+    # Get the leaderboard as a string
+    leaderboard_str = get_leaderboard()
+    
+    # Send the leaderboard to the channel
+    await ctx.send(leaderboard_str)
