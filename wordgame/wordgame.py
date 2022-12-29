@@ -14,7 +14,12 @@ try:
         scores = json.load(f)
 except FileNotFoundError:
     scores = {}
-
+    
+class Wordgame(commands.Cog):
+    """başkalarının renklerine bakın"""
+    def __init__(self, bot: bot.Red, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.bot = bot
 # Initialize the bot with a command prefix of '!'
 bot = commands.Bot(command_prefix='!')
 
