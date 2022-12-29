@@ -1,9 +1,11 @@
 import json
-import random
-import os
+from random import randint
+import asyncio,os
 from redbot.core.commands import Cog
 import discord
 from redbot.core import Config, checks, commands
+from redbot.core.data_manager import bundled_data_path
+from redbot.core.data_manager import cog_data_path
 
 class Wordgame(Cog):
     def __init__(self, bot):
@@ -11,11 +13,15 @@ class Wordgame(Cog):
         self.word_list = self.load_word_list()
         self.scores = self.load_scores()
         self.current_word = None
-    
+        self.config.register_guild(
+			fp = str(bundled_data_path(self) / 'wordlist.txt'),
+			doEdit = True
+		)
+
     def load_word_list(self):
-        with open("wordlist.txt") as f:
-            return [line.strip() for line in f]
-    
+        f = open(str(bundled_data_path(self) / 'wordlist.txt'))
+        wordlist = [line.strip().lower() for line in f]
+
     def load_scores(self):
         if os.path.exists("scores.json"):
             with open("scores.json") as f:
