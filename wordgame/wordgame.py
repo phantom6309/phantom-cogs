@@ -13,6 +13,7 @@ class Wordgame(Cog):
         self.word_list = self.load_word_list()
         self.scores = self.load_scores()
         self.current_word = None
+        self.config = Config.get_conf(self, identifier=965854745)
         self.config.register_guild(
 			fp = str(bundled_data_path(self) / 'wordlist.txt'),
 			doEdit = True
