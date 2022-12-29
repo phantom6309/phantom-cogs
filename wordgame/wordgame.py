@@ -1,7 +1,7 @@
 import json
 import random
 import os
-
+from redbot.core.data_manager import bundled_data_path
 import discord
 from redbot.core import checks, Config, commands, bot
 
@@ -14,10 +14,8 @@ class Wordgame(commands.Cog):
         self.previous_word = None
 
         # Load the word list from the wordlist.json file
-        if os.path.exists('wordlist.json'):
-            with open('wordlist.json', 'r') as f:
-                self.word_list = json.load(f)
-
+       
+        self.word_list = bundled_data_path(self) / "wordlist.json"
         # Load the points from the points.json file, if it exists
         if os.path.exists('points.json'):
             with open('points.json', 'r') as f:
