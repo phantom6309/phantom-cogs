@@ -15,7 +15,7 @@ class Wordgame(commands.Cog):
 
         # Load the word list from the wordlist.json file
        
-        self.word_list = bundled_data_path(self) / "wordlist.json"
+        self.word_list = bundled_data_path(self) / "wordlist.txt"
         # Load the points from the points.json file, if it exists
         if os.path.exists('points.json'):
             with open('points.json', 'r') as f:
