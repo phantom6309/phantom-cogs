@@ -2,11 +2,10 @@ import json
 import random
 import discord
 from redbot.core import checks, commands, bot
-
+redbot.core.data_manager import bundled_data_path
 
 # Load the list of words from the wordlist.txt file
-with open('wordlist.txt') as f:
-    word_list = f.read().splitlines()
+word_list = bundled_data_path(self) / "wordlist.txt" 
 
 # Load the scores from the scores.json file, or create an empty dictionary if the file doesn't exist
 try:
@@ -14,7 +13,6 @@ try:
         scores = json.load(f)
 except FileNotFoundError:
     scores = {}
-    
 class Wordgame(commands.Cog):
     """başkalarının renklerine bakın"""
     def __init__(self, bot: bot.Red, *args, **kwargs):
