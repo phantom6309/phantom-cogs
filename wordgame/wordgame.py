@@ -5,7 +5,7 @@ import os
 import discord
 from redbot.core import checks, Config, commands, bot
 
-class WordGame(commands.Cog):
+class Wordgame(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.word_list = []
