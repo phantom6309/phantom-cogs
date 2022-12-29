@@ -18,10 +18,10 @@ class Wordgame(Cog):
         self.scores = self.load_scores()
         self.current_word = None
     
-    def load_word_list(self,ctx):
+    def load_word_list(self, ctx):
         fp = self.config.guild(ctx.guild).fp()
         with open(fp) as f:
-            return [line.strip() for line in f]
+           return [line.strip() for line in f]
 
     def load_scores(self):
         if os.path.exists("scores.json"):
@@ -35,7 +35,7 @@ class Wordgame(Cog):
     
     @commands.command()
     async def wordgame_start(self, ctx):
-        word_list = self.load_word_list()
+        word_list = self.load_word_list(ctx)
         self.current_word = random.choice(word_list)
         await ctx.send(f"The word game has started! The first word is: {self.current_word}")
     
