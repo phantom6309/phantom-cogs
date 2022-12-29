@@ -19,7 +19,7 @@ class Wordgame(Cog):
         self.current_word = None
     
     def load_word_list(self, ctx):
-        fp = self.config.guild(ctx.guild).fp()
+        fp = str(self.config.guild(ctx.guild).fp())
         with open(fp) as f:
            return [line.strip() for line in f]
 
