@@ -2,7 +2,7 @@ import json
 import random
 import discord
 from redbot.core import checks, commands, bot
-redbot.core.data_manager import bundled_data_path
+from redbot.core.data_manager import bundled_data_path
 
 # Load the list of words from the wordlist.txt file
 word_list = bundled_data_path(self) / "wordlist.txt" 
