@@ -14,7 +14,7 @@ class Wordgame(commands.Cog):
         self.previous_word = None
 
         # Load the word list from the wordlist.json file
-        if os.path.exists('wordlist.json')
+        if os.path.exists('wordlist.json'):
             with open('wordlist.json', 'r') as f:
                 self.word_list = json.load(f)
 
