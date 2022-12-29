@@ -2,7 +2,8 @@ import json
 import random
 import os
 
-from discord.ext import commands
+import discord
+from redbot.core import checks, Config, commands, bot
 
 class WordGame(commands.Cog):
     def __init__(self, bot):
