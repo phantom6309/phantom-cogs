@@ -5,7 +5,7 @@ from redbot.core import checks, commands, bot
 from redbot.core.data_manager import bundled_data_path
 
 # Load the list of words from the wordlist.txt file
-word_list = bundled_data_path(self) / "wordlist.txt" 
+
 
 # Load the scores from the scores.json file, or create an empty dictionary if the file doesn't exist
 try:
@@ -18,6 +18,7 @@ class Wordgame(commands.Cog):
     def __init__(self, bot: bot.Red, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.bot = bot
+        word_list = bundled_data_path(self) / "wordlist.txt" 
 # Initialize the bot with a command prefix of '!'
 bot = commands.Bot(command_prefix='!')
 
