@@ -17,8 +17,7 @@ class Wordgame(Cog):
         self.current_word = None
     
     def load_word_list(self, ctx):
-        fp=str(bundled_data_path(self) / 'wordlist.txt'),
-        f = open(fp)
+        f = open(str(bundled_data_path(self) / 'wordlist.txt'))
         wordlist = [line.strip().lower() for line in f]
 
     def load_scores(self):
