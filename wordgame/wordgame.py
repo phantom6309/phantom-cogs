@@ -1,4 +1,5 @@
 import json
+import random
 from random import randint
 import asyncio,os
 from redbot.core.commands import Cog
