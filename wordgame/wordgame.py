@@ -1,67 +1,103 @@
-import json
-import random
-from random import randint
-import asyncio,os
-from redbot.core.commands import Cog
+import asyncio
+import pathlib
+import yaml
+from collections import Counter
+from typing import Dict, Any
+
 import discord
-from redbot.core import Config, checks, commands
-from redbot.core.data_manager import bundled_data_path
+
+from redbot.core import Config, commands, checks
+from redbot.core.bot import Red
 from redbot.core.data_manager import cog_data_path
+from redbot.core.i18n import Translator, cog_i18n
 
-class Wordgame(Cog):
-    def __init__(self, bot):
+_ = Translator("WordGame", __file__)
+
+
+class Wordgame:
+    """Play a word game with friends!"""
+
+    def __init__(self, bot: Red) -> None:
         self.bot = bot
-        self.config = Config.get_conf(self, identifier=965854745)     
-        
-        self.scores = self.load_scores()
-        self.current_word = None
-    
-    def load_word_list(self, ctx):
-        f = open(str(bundled_data_path(self) / 'wordlist.txt'))
-        wordlist = [line.strip().lower() for line in f]
+        self.config = Config.get_conf(self, identifier=0xB3C0E454, force_registration=True)
 
-    def load_scores(self):
-        if os.path.exists("scores.json"):
-            with open("scores.json") as f:
-                return json.load(f)
-        return {}
-    
-    def save_scores(self):
-        with open("scores.json", "w") as f:
-            json.dump(self.scores, f)
-    
-    @commands.command()
-    async def wordgame_start(self, ctx):
-        wordlist = self.load_word_list(ctx)
-        self.current_word = random.choice(wordlist)
-        await ctx.send(f"The word game has started! The first word is: {self.current_word}")
-    
-    @commands.command()
-    async def wordgame_submit(self, ctx, *, word: str):
-        if self.current_word is None:
-            await ctx.send("The word game has not started yet. Use the `wordgame_start` command to start a new game.")
+        self.config.register_member(points=0, games=0)
+
+    async def red_delete_data_for_user(
+        self,
+        *,
+        requester: Literal["discord_deleted_user", "owner", "user", "user_strict"],
+        user_id: int,
+    ):
+        if requester != "discord_deleted_user":
             return
-        
-        if not word.lower().startswith(self.current_word[-1]):
-            await ctx.send("The word must start with the last character of the previous word.")
+
+        all_members = await self.config.all_members()
+
+        async for guild_id, guild_data in AsyncIter(all_members.items(), steps=100):
+            if user_id in guild_data:
+                await self.config.member_from_ids(guild_id, user_id).clear()
+def get_word_list() -> List[str]:
+    filepath = cog_data_path(raw_name="WordGame") / "wordlist.yaml"
+    if not filepath.is_file():
+        return []
+
+    with filepath.open("r", encoding="utf-8") as fp:
+        try:
+            data = yaml.safe_load(fp)
+        except yaml.YAMLError as exc:
+            LOG.exception("Error while parsing word list:", exc_info=exc)
+            return []
+
+    return data
+@commands.command()
+@commands.guild_only()
+async def wordgame(self, ctx: commands.Context):
+    """Start a game of word game."""
+    word_list = get_word_list()
+    if not word_list:
+        await ctx.send(_("No word list found!"))
+        return
+
+    previous_word = None
+    current_word = None
+    while True:
+        if not current_word:
+            current_word = random.choice(word_list)
+            await ctx.send(f"The first word is: {current_word}")
+
+        def check(m):
+            return (
+                m.author == ctx.author
+                and m.channel == ctx.channel
+                and m.content.lower() in word_list
+                and m.content.lower()[0] == current_word[-1]
+            )
+
+        try:
+            msg = await self.bot.wait_for("message", check=check, timeout=60.0)
+        except asyncio.TimeoutError:
+            await ctx.send(_("Time's up! The game has ended."))
             return
-        
-        if word.lower() not in self.word_list:
-            await ctx.send("The word is not in the word list.")
-            return
-        
-        # Update scores
-        self.scores[str(ctx.author.id)] = self.scores.get(str(ctx.author.id), 0) + len(word)
-        self.save_scores()
-        
-        self.current_word = word
-        await ctx.send(f"{ctx.author.mention} has submitted a valid word! The new word is: {self.current_word}")
-    
-    @commands.command()
-    async def wordgame_leaderboard(self, ctx):
-        sorted_scores = sorted(self.scores.items(), key=lambda x: x[1], reverse=True)
-        leaderboard_message = "Word Game Leaderboard:\n"
-        for i, (user_id, score) in enumerate(sorted_scores):
-            user = self.bot.get_user(int(user_id))
-            leaderboard_message += f"{i+1}. {user}: {score}\n"
-        await ctx.send(leaderboard_message)
+
+        previous_word = current_word
+        current_word = msg.content.lower()
+        await ctx.send(f"The next word is: {current_word}")
+        await self.config.member(ctx.author).points.set(
+            self.config.member(ctx.author).points() + len(current_word)
+        )
+@commands.command()
+@commands.guild_only()
+async def leaderboard(self, ctx: commands.Context):
+    """Show the leaderboard for the word game."""
+    leaderboard_data = await self.config.all_members()
+    sorted_leaderboard = sorted(
+        leaderboard_data.items(), key=lambda x: x[1]["points"], reverse=True
+    )
+    leaderboard_str = "\n".join(
+        [
+            f"{i+1}. {self.bot.get_user(int(user_id)).name}: {data['points']} points"
+            for i, (user_id, data) in enumerate(sorted_leaderboard)
+        ]
+    )
+    await ctx.send(f"```{leaderboard_str}```")
