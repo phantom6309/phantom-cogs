@@ -2,15 +2,16 @@ import asyncio
 import pathlib
 import yaml
 from collections import Counter
-from typing import Dict, Any
-
+from typing import Any, Dict, List, Literal, Union
+import math
 import discord
-
+import random
+from redbot.core.utils import AsyncIter, can_user_react_in
 from redbot.core import Config, commands, checks
 from redbot.core.bot import Red
 from redbot.core.data_manager import cog_data_path
 from redbot.core.i18n import Translator, cog_i18n
-
+from .log import LOG
 _ = Translator("WordGame", __file__)
 
 
