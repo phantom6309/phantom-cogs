@@ -6,7 +6,7 @@ from typing import Any, Dict, List, Literal, Union
 import math
 import discord
 import random
-from redbot.core.utils import AsyncIter, can_user_react_in
+from redbot.core.utils import AsyncIter
 from redbot.core import Config, commands, checks
 from redbot.core.bot import Red
 from redbot.core.data_manager import cog_data_path
