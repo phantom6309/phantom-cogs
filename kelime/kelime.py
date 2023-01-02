@@ -63,8 +63,23 @@ class Kelime(commands.Cog):
                 message += f"{i + 1}. Unknown player ({player_id}) - {score}\n"
         await ctx.send(message)
 
-    @commands.Cog.listener("on_message_without_command")
-    async def on_message(self, message: discord.Message):
+    
+
+
+    @commands.command()
+    async def startgame(self, ctx):
+        if self.game_channel is None:
+            self.game_channel = ctx.channel
+            self.current_word = self.word_list[randint(0, len(self.word_list) - 1)]
+            self.winning_score = None
+            self.scores = defaultdict(int)
+            await ctx.send(f"A new game has been started in {ctx.channel.mention}!")
+            await ctx.send(f"The first word is: {self.current_word}")
+        else:
+            await ctx.send("A game is already in progress.")
+
+    @Cog.listener()
+    async def on_message_without_command(self, message: discord.Message):
          if message.channel == self.game_channel and message.author != self.bot.user:
             word = message.content.lower()
             if word.strip()[0] == self.current_word.strip()[-1] and word.strip() in self.word_list.as_dict():
@@ -80,20 +95,6 @@ class Kelime(commands.Cog):
                     await message.channel.send("Correct! The next word is:")
             else:
                 await self.give_points(message.author, word)
-
-
-    @commands.command()
-    async def startgame(self, ctx):
-        if self.game_channel is None:
-            self.game_channel = ctx.channel
-            self.current_word = self.word_list[randint(0, len(self.word_list) - 1)]
-            self.winning_score = None
-            self.scores = defaultdict(int)
-            await ctx.send(f"A new game has been started in {ctx.channel.mention}!")
-            await ctx.send(f"The first word is: {self.current_word}")
-        else:
-            await ctx.send("A game is already in progress.")
-    
     @commands.command()
     async def endgame(self, ctx):
         if self.game_channel is not None:
