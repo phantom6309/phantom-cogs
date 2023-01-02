@@ -95,6 +95,7 @@ class Kelime(commands.Cog):
                     await message.channel.send("Correct! The next word is:")
             else:
                 await self.give_points(message.author, word)
+                
     @commands.command()
     async def endgame(self, ctx):
         if self.game_channel is not None:
