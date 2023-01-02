@@ -64,7 +64,7 @@ class Kelime(commands.Cog):
         await ctx.send(message)
 
     @commands.Cog.listener("on_message_without_command")
-    async def message_handler(self, message: discord.Message):
+    async def on_message(self, message: discord.Message):
          if message.channel == self.game_channel and message.author != self.bot.user:
             word = message.content.lower()
             if word.strip()[0] == self.current_word.strip()[-1] and word.strip() in self.word_list.as_dict():
