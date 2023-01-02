@@ -66,7 +66,7 @@ class Kelime(commands.Cog):
     async def on_message(self, message: discord.Message):
          if message.channel == self.game_channel and message.author != self.bot.user:
             word = message.content.lower()
-            if word[0] == self.current_word[-1] and word in self.word_list:
+            if word[0] == self.current_word[-1] and word in self.word_list.as_dict():
                 self.current_word = word
                 await self.give_points(message.author, word)
                 if self.scores[message.author.id] >= self.winning_score:
