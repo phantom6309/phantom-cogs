@@ -28,11 +28,7 @@ class Kelime(commands.Cog):
         with open(word_list_path) as f:
             return [line.strip() for line in f]
     
-    async def give_points(self, user: discord.User, word: str):
-        if word in self.word_list:
-            self.scores[user.id] += len(word)
-        else:
-            self.scores[user.id] -= 1
+    
 
     @commands.command()
     async def setchannel(self, ctx, channel: discord.TextChannel):
@@ -99,7 +95,12 @@ class Kelime(commands.Cog):
                     await message.channel.send("Correct! The next word is:")
             else:
                 await self.give_points(message.author, word)
-
+                
+    async def give_points(self, user: discord.User, word: str):
+        if word in self.word_list:
+            self.scores[user.id] += len(word)
+        else:
+            self.scores[user.id] -= 1
 
 
     @commands.command()
@@ -112,9 +113,3 @@ class Kelime(commands.Cog):
             await ctx.send("The game has been ended.")
         else:
             await ctx.send("There is no game in progress.")
-    
-    
-
-
- 
-
