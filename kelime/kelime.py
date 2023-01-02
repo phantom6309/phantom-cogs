@@ -6,7 +6,7 @@ from random import randint
 import discord
 from redbot.core import Config, commands
 from redbot.core.data_manager import bundled_data_path
-
+from redbot.core.commands import Cog
 
 class Kelime(commands.Cog):
     """A simple word game where players must guess words that start with the last letter of the previous word."""
@@ -95,7 +95,7 @@ class Kelime(commands.Cog):
                     await message.channel.send("Correct! The next word is:")
             else:
                 await self.give_points(message.author, word)
-                
+
     @commands.command()
     async def endgame(self, ctx):
         if self.game_channel is not None:
