@@ -3,7 +3,7 @@ from collections import defaultdict
 from typing import List
 from random import randint
 import discord
-from redbot.core import Config, checks, commands, tasks
+from redbot.core import Config, checks, commands
 from redbot.core.commands import Cog
 from redbot.core.data_manager import bundled_data_path
 
