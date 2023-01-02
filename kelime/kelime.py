@@ -24,7 +24,7 @@ class Kelime(commands.Cog):
          with open("scores.json") as f:
             self.scores = json.load(f)
         except FileNotFoundError:
-         pass
+         self.update_scores()
 
     def load_word_list(self):
         word_list_path = bundled_data_path(self) / "wordlist.txt"
@@ -48,7 +48,10 @@ class Kelime(commands.Cog):
         self.word_list.append(word.lower())
         await ctx.send(f"{word} has been added to the word list.")
 
-    async def update_scores(self):     
+    async def update_scores(self):
+     if not os.path.exists("scores.json"):
+        with open("scores.json", "w") as f:
+            json.dump({}, f)
      with open("scores.json", "w") as f:
         json.dump(self.scores, f)
 
