@@ -27,7 +27,12 @@ class Kelime(commands.Cog):
         word_list_path = bundled_data_path(self) / "wordlist.txt"
         with open(word_list_path) as f:
             return [line.strip() for line in f]
-
+    
+    async def give_points(self, user: discord.User, word: str):
+        if word in self.word_list:
+            self.scores[user.id] += len(word)
+        else:
+            self.scores[user.id] -= 1
 
     @commands.command()
     async def setchannel(self, ctx, channel: discord.TextChannel):
@@ -108,11 +113,7 @@ class Kelime(commands.Cog):
         else:
             await ctx.send("There is no game in progress.")
     
-    async def give_points(self, user: discord.User, word: str):
-        if word in self.word_list:
-            self.scores[user.id] += len(word)
-        else:
-            self.scores[user.id] -= 1
+    
 
 
  
