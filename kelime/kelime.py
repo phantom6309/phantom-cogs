@@ -30,7 +30,7 @@ class Kelime(commands.Cog):
 
     def give_points(self, user: discord.User, word: str):
         self.scores[user.id] += len(word)
-        
+
     @commands.command()
     async def setchannel(self, ctx, channel: discord.TextChannel):
         self.game_channel = channel
@@ -68,7 +68,7 @@ class Kelime(commands.Cog):
             word = message.content.lower()
             if word[0] == self.current_word[-1] and word in self.word_list:
                 self.current_word = word
-                self.give_points(message.author, word)
+                await self.give_points(message.author, word)
                 if self.scores[message.author.id] >= self.winning_score:
                     await message.channel.send(f"{message.author.mention} has won the game!")
                     self.game_channel = None
@@ -78,8 +78,8 @@ class Kelime(commands.Cog):
                 else:
                     await message.channel.send("Correct! The next word is:")
             else:
-                self.give_points(message.author, word)
-
+                await self.give_points(message.author, word)
+                
     @commands.command()
     async def startgame(self, ctx):
         if self.game_channel is None:
