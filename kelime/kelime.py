@@ -14,14 +14,17 @@ class Kelime(commands.Cog):
     def __init__(self, bot):
         super().__init__()
         self.bot = bot
-        self.config = Config.get_conf(self, identifier=545846965)
         default_global = {"scores": {}}
-        self.config.register_global(**default_global)
         self.game_channel = None
         self.current_word = ""
         self.winning_score = None
         self.word_list = self.load_word_list()
         self.scores = defaultdict(int)
+        try:
+         with open("scores.json") as f:
+            self.scores = json.load(f)
+        except FileNotFoundError:
+         pass
 
     def load_word_list(self):
         word_list_path = bundled_data_path(self) / "wordlist.txt"
@@ -45,26 +48,22 @@ class Kelime(commands.Cog):
         self.word_list.append(word.lower())
         await ctx.send(f"{word} has been added to the word list.")
 
-    async def update_scores(self):
-        scores = {str(k): v for k, v in self.scores.items()}
-        await self.config.scores.set(scores)
+    async def update_scores(self):     
+     with open("scores.json", "w") as f:
+        json.dump(self.scores, f)
 
     @commands.command()
     async def scores(self, ctx):
-        scores = await self.config.scores()
-        scores = {int(k): v for k, v in scores.items()}
-        sorted_scores = sorted(scores.items(), key=lambda x: x[1], reverse=True)
-        message = "Top scores:\n"
-        for i, (player_id, score) in enumerate(sorted_scores):
-            player = self.bot.get_user(player_id)
-            if player is not None:
-                message += f"{i + 1}. {player} - {score}\n"
-            else:
-                message += f"{i + 1}. Unknown player ({player_id}) - {score}\n"
-        await ctx.send(message)
-
-    
-
+     with open("scores.json") as f:
+        scores = json.load(f)
+     sorted_scores = sorted(scores.items(), key=lambda x: x[1], reverse=True)
+     message = "Top scores:\n"
+     for i, (player_id, score) in enumerate(sorted_scores):
+        player = self.bot.get_user(int(player_id))
+        if player is not None:
+            message += f"{i + 1}. {player} - {score}\n"
+        else:
+            message += f"{i + 1}. Unknown player ({player_id}) - {score}\n"
 
     @commands.command()
     async def startgame(self, ctx):
@@ -85,9 +84,9 @@ class Kelime(commands.Cog):
             if word[0] == self.current_word[-1] and word in self.word_list:
                 self.current_word = word
                 if word in self.word_list:
-                 self.scores[message.author.id] += len(word)
+                 self.scores[int(message.author.id)] += len(word)
                 else:
-                 self.scores[message.author.id] -= 1
+                 self.scores[int(message.author.id)] -= 1
                 if self.winning_score is not None and self.scores[message.author.id] >= self.winning_score:
                     await message.channel.send(f"{message.author.mention} has won the game!")
                     self.game_channel = None
