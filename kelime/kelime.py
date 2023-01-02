@@ -7,7 +7,7 @@ from redbot.core.commands import Cog
 from redbot.core.data_manager import bundled_data_path
 
 
-class WordGame(Cog):
+class Kelime(Cog):
     def __init__(self, bot):
         super().__init__()
         self.bot = bot
@@ -15,7 +15,7 @@ class WordGame(Cog):
         self.word_list = self.load_word_list()
 
     def load_word_list(self) -> List[str]:
-        with open(bundled_data_path(self) / "word_list.txt") as f:
+        with open(bundled_data_path(self) / "wordlist.txt") as f:
             words = f.readlines()
         return [word.strip() for word in words]
 
