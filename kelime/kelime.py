@@ -63,7 +63,7 @@ class Kelime(commands.Cog):
                 message += f"{i + 1}. Unknown player ({player_id}) - {score}\n"
         await ctx.send(message)
 
-        async def on_message(self, message: discord.Message):
+    async def on_message(self, message: discord.Message):
          if message.channel == self.game_channel and message.author != self.bot.user:
             word = message.content.lower()
             if word[0] == self.current_word[-1] and word in self.word_list:
