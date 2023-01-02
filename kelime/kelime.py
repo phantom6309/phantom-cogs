@@ -85,7 +85,7 @@ class Kelime(commands.Cog):
             if word[0] == self.current_word[-1] and word in self.word_list:
                 self.current_word = word
                 await self.give_points(message.author, word)
-                if self.scores[message.author.id] >= self.winning_score:
+                if self.winning_score is not None and self.scores[message.author.id] >= self.winning_score:
                     await message.channel.send(f"{message.author.mention} has won the game!")
                     self.game_channel = None
                     self.current_word = ""
