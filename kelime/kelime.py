@@ -108,12 +108,12 @@ class Kelime(commands.Cog):
         else:
             await ctx.send("There is no game in progress.")
     
-    def give_points(self, player, word):
-        if word[0] == self.current_word[-1]:
-            self.scores[player.id] += len(word)
+    async def give_points(self, user: discord.User, word: str):
+        if word in self.word_list:
+            self.scores[user.id] += len(word)
         else:
-            self.scores[player.id] -= 1
-        self.update_scores()
+            self.scores[user.id] -= 1
+
 
  
 
