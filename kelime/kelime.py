@@ -84,7 +84,6 @@ class Kelime(commands.Cog):
             word = message.content.strip()
             if word[0] == self.current_word[-1] and word in self.word_list:
                 self.current_word = word
-                await self.give_points(message.author, word)
                 if word in self.word_list:
                  self.scores[message.author.id] += len(word)
                 else:
@@ -96,7 +95,7 @@ class Kelime(commands.Cog):
                     self.winning_score = None
                     self.scores = defaultdict(int)
                 else:
-                    await message.channel.send("Correct! The next word is:")
+                    await message.channel.send("Correct!")
             
 
     @commands.command()
