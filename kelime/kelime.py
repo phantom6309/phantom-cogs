@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
-import random
-from typing import List
 import asyncio
+from typing import List
+import random
 import discord
-from redbot.core import Config, commands, tasks
+from redbot.core import Config, commands
 from redbot.core.commands import Cog
 from redbot.core.data_manager import bundled_data_path
 
@@ -14,10 +13,9 @@ class WordGame(Cog):
         self.bot = bot
         self.current_word = ""
         self.word_list = self.load_word_list()
-        self.automate_task.start()
 
     def load_word_list(self) -> List[str]:
-        with open(bundled_data_path(self) / "wordlist.txt") as f:
+        with open(bundled_data_path(self) / "word_list.txt") as f:
             words = f.readlines()
         return [word.strip() for word in words]
 
@@ -42,18 +40,10 @@ class WordGame(Cog):
         self.current_word = word
         await ctx.send(f"The current word is now {self.current_word}")
 
-    @tasks.loop(seconds=5.0)
-    async def automate_task(self):
-        if not self.current_word:
-            return
-
-        try:
-            message = await self.bot.wait_for("message", check=self.check_message, timeout=30.0)
-        except asyncio.TimeoutError:
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        if message.author == self.bot.user or message.channel != message.channel:
             return
 
         ctx = await self.bot.get_context(message)
         await self.guessword(ctx, message.content)
-
-    def check_message(self, message):
-        return message.channel == message.channel and message.author != self.bot.user
