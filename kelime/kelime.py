@@ -82,7 +82,7 @@ class Kelime(commands.Cog):
     async def on_message_without_command(self, message: discord.Message):
          if message.channel == self.game_channel and message.author != self.bot.user:
             word = message.content.lower()
-            if word.strip()[0] == self.current_word.strip()[-1] and word.strip() in self.word_list.as_dict():
+            if word.strip()[0] == self.current_word.strip()[-1] and word.strip() in self.word_list:
                 self.current_word = word
                 await self.give_points(message.author, word)
                 if self.scores[message.author.id] >= self.winning_score:
