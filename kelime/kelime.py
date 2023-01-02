@@ -14,7 +14,7 @@ class Kelime(commands.Cog):
     def __init__(self, bot):
         super().__init__()
         self.bot = bot
-        self.config = Config.get_conf(self, identifier=1049711010310997110)
+        self.config = Config.get_conf(self, identifier=545846965)
         default_global = {"scores": {}}
         self.config.register_global(**default_global)
         self.game_channel = None
@@ -45,6 +45,7 @@ class Kelime(commands.Cog):
     async def wordlist(self, ctx, *, word: str):
         self.word_list.append(word.lower())
         await ctx.send(f"{word} has been added to the word list.")
+
     async def update_scores(self):
         scores = {str(k): v for k, v in self.scores.items()}
         await self.config.scores.set(scores)
