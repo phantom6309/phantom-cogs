@@ -63,8 +63,8 @@ class Kelime(commands.Cog):
                 message += f"{i + 1}. Unknown player ({player_id}) - {score}\n"
         await ctx.send(message)
 
-    async def on_message(self, message: discord.Message):
-        if message.channel == self.game_channel and message.author != self.bot.user:
+        async def on_message(self, message: discord.Message):
+         if message.channel == self.game_channel and message.author != self.bot.user:
             word = message.content.lower()
             if word[0] == self.current_word[-1] and word in self.word_list:
                 self.current_word = word
@@ -79,7 +79,8 @@ class Kelime(commands.Cog):
                     await message.channel.send("Correct! The next word is:")
             else:
                 await self.give_points(message.author, word)
-                
+
+
     @commands.command()
     async def startgame(self, ctx):
         if self.game_channel is None:
