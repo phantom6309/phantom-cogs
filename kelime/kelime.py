@@ -35,7 +35,7 @@ class Kelime(commands.Cog):
         with open(word_list_path) as f:
             return [line.strip() for line in f]
 
-    async def give_points(self, user: discord.User, word: str,message):
+    async def give_points(self, user: discord.User, word: str, message):
      if word in self.word_list and word not in self.used_words:
         self.used_words.append(word)
         self.scores[user.id] += len(word)
@@ -43,6 +43,8 @@ class Kelime(commands.Cog):
         await message.add_reaction(emoji)
      else:
         self.scores[user.id] -= len(word)
+        emoji2 = '\N{THUMBS DOWN SIGN}'
+        await message.add_reaction(emoji2)
         if word in self.used_words:
             await self.game_channel.send(f"{word} kelimesi zaten kullanılmış.Yedin eksiyi.")
         else:
