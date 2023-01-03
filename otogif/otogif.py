@@ -64,9 +64,4 @@ class Otogif(commands.Cog):
         trigger_str = ', '.join(triggers)
         await ctx.send(f'Removed triggers "{trigger_str}"')
 
-    def setup(bot):
-     conn = sqlite3.connect('gif_responder.db')
-     cog = Otogif(bot, conn)
-     cog.init_db()
-     bot.add_cog(cog)
 
