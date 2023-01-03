@@ -102,6 +102,8 @@ class Kelime(commands.Cog):
 
     @Cog.listener()
     async def on_message(self, message: discord.Message):
+     if message.author == self.bot.user:
+        return 
         if self.game_channel is not None and message.channel == self.game_channel :
             word = message.content.strip()
             if word[0] == self.current_word[-1] and word in self.word_list:
