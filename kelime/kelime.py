@@ -109,8 +109,7 @@ class Kelime(commands.Cog):
      if message.author == self.bot.user:
         return 
      if message.channel == self.game_channel and not message.content.startswith("."):
-           word = message.content.strip()
-            word = word.lower()
+            word = message.content.strip.lower()
             if word[0] == self.current_word[-1] and word in self.word_list:
                 self.current_word = word
                 await self.give_points(message.author, word)
