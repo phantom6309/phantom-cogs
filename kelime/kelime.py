@@ -42,7 +42,7 @@ class Kelime(commands.Cog):
      else:
         self.scores[user.id] -= len(word)
         if word in self.used_words:
-            await self.game_channel.send(f"{word} kelimesi zaten kullanılmış.")
+            await self.game_channel.send(f"{word} kelimesi zaten kullanılmış.Yedin eksiyi.")
         else:
             await self.game_channel.send(f"{word} kelimesi geçersiz.")
 
@@ -121,7 +121,7 @@ class Kelime(commands.Cog):
                         self.winning_score = None
                         self.scores = defaultdict(int)
                 else:
-                    await message.channel.send(f"{self.current_word} Doğru ")
+                    await message.channel.send(f"{self.current_word} ile devam")
             else:
                 await self.give_points(message.author, word)
    
