@@ -105,7 +105,6 @@ class Kelime(commands.Cog):
      if message.author == self.bot.user:
         return 
      if message.channel == self.game_channel and not message.content.startswith(".") and not commands.is_command(message.content):
-     if self.game_channel is not None and message.channel == self.game_channel :
             word = message.content.strip()
             if word[0] == self.current_word[-1] and word in self.word_list:
                 self.current_word = word
