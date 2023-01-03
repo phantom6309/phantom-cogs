@@ -3,7 +3,7 @@ import discord
 import sqlite3
 from collections import defaultdict
 from random import randint
-from unidecode import unidecode
+import unidecode
 
 
 
@@ -121,7 +121,8 @@ class Kelime(commands.Cog):
         return 
      if message.channel == self.game_channel and not message.content.startswith("."):
             kek = message.content.strip()
-            word = turkish_lowercase(kek)
+            kek.replace('I', 'ı').lower()
+            word = kek.lower()
             if self.current_word and not word[0].startswith(self.current_word[-1]):
                await self.remove_points(message.author, word, message)
             else:
