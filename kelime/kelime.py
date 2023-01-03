@@ -41,7 +41,8 @@ class Kelime(commands.Cog):
         self.scores[user.id] += len(word)
         emoji = '\N{THUMBS UP SIGN}'
         await message.add_reaction(emoji)
-     else:
+
+    async def remove_points(self, user: discord.User, word: str, message):
         self.scores[user.id] -= len(word)
         if word in self.used_words:
            await self.game_channel.send(f"{word} kelimesi zaten kullanılmış.Yedin eksiyi.")
@@ -112,6 +113,8 @@ class Kelime(commands.Cog):
      if message.channel == self.game_channel and not message.content.startswith("."):
             kek = message.content.strip()
             word = kek.lower()
+            if self.current_word and not kek[0].startswith(self.current_word[-1]):
+               await self.remove_points(message.author, word, message)
             if word[0] == self.current_word[-1] and word in self.word_list:
                 self.current_word = word
                 await self.give_points(message.author, word, message)
@@ -125,10 +128,8 @@ class Kelime(commands.Cog):
                         self.game_channel = None
                         self.current_word = ""
                         self.winning_score = None
-                        self.scores = defaultdict(int)
-                
-            else:
-                await self.give_points(message.author, word, message)
+                        self.scores = defaultdict(int)   
+            
    
     @commands.command()
     async def kelimedurdur(self, ctx):
