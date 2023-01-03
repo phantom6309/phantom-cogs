@@ -5,15 +5,11 @@ import sqlite3
 
 
 class Otogif(commands.Cog):
-    def __init__(self, bot, db_conn):
+    def __init__(self, bot, db_conn):      
         self.bot = bot
-        self.conn = db_conn
-        conn = sqlite3.connect('gif_responder.db')
-        bot = Otogif(bot, conn)
-        bot.init_db()
-        bot.add_cog(bot)
-        
+        self.conn = db_conn       
     def init_db(self):
+
         c = self.conn.cursor()
         c.execute('''CREATE TABLE IF NOT EXISTS trigger_gif_pairs
                      (trigger text, gif_url text)''')
@@ -68,4 +64,9 @@ class Otogif(commands.Cog):
         trigger_str = ', '.join(triggers)
         await ctx.send(f'Removed triggers "{trigger_str}"')
 
-    
+    def setup(bot):
+     conn = sqlite3.connect('gif_responder.db')
+     bot = Otogif(bot, conn)
+     bot.init_db()
+     bot.add_cog(bot)
+
