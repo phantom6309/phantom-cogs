@@ -24,7 +24,7 @@ class Doctor(BaseCog):
     def __init__(self):
         self.config = Config.get_conf(self, identifier=745214589)
         default_global = {
-            "9": [
+            "dokuz": [
                 "https://tenor.com/tr/view/doctor-doktor-doctor-who-ninth-doctor-christopher-eccleston-gif-21001148",
                 "https://tenor.com/tr/view/doctor-dance-doctor-who-dances-gif-24783753",
                 "https://tenor.com/tr/view/fantastic-doctor-who-gif-24783749",
