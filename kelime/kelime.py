@@ -35,11 +35,12 @@ class Kelime(commands.Cog):
         with open(word_list_path) as f:
             return [line.strip() for line in f]
 
-    async def give_points(self, user: discord.User, word: str):
+    async def give_points(self, user: discord.User, word: str,message):
      if word in self.word_list and word not in self.used_words:
         self.used_words.append(word)
         self.scores[user.id] += len(word)
-        await self.game_channel.send(f"doğru.")
+        emoji = '\N{THUMBS UP SIGN}'
+        await message.add_reaction(emoji)
      else:
         self.scores[user.id] -= len(word)
         if word in self.used_words:
@@ -112,7 +113,7 @@ class Kelime(commands.Cog):
             word = kek.lower()
             if word[0] == self.current_word[-1] and word in self.word_list:
                 self.current_word = word
-                await self.give_points(message.author, word)
+                await self.give_points(message.author, word, message)
                 if self.winning_score is not None:
                     user_score = self.scores[message.author.id]
                     if user_score >= self.winning_score:
@@ -124,8 +125,7 @@ class Kelime(commands.Cog):
                         self.current_word = ""
                         self.winning_score = None
                         self.scores = defaultdict(int)
-                else:
-                    await message.channel.send(f"{self.current_word} ile devam")
+                
             else:
                 await self.give_points(message.author, word)
    
