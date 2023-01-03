@@ -43,7 +43,7 @@ class Kelime(commands.Cog):
         await self.game_channel.send(f"{word} kelimesi zaten kullanılmış.Yedin eksiyi.")
         emoji2 = '\N{THUMBS DOWN SIGN}'
         await message.add_reaction(emoji2)
-        
+        await ctx.send(f"Son kelime: {self.current_word}")
      if word in self.word_list and word not in self.used_words:
         self.used_words.append(word)
         self.scores[user.id] += len(word)
@@ -54,7 +54,7 @@ class Kelime(commands.Cog):
         self.scores[user.id] -= len(word)
         emoji2 = '\N{THUMBS DOWN SIGN}'
         await message.add_reaction(emoji2)
-
+        await ctx.send(f"Son kelime: {self.current_word}")
 
 
 
