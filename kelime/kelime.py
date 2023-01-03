@@ -115,7 +115,7 @@ class Kelime(commands.Cog):
             word = kek.lower()
             if self.current_word and not kek[0].startswith(self.current_word[-1]):
                await self.remove_points(message.author, word, message)
-            if word[0] == self.current_word[-1] and word in self.word_list:
+            else:
                 self.current_word = word
                 await self.give_points(message.author, word, message)
                 if self.winning_score is not None:
