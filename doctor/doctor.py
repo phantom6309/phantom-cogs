@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import discord
 from redbot.core import commands, Config
 from random import randint
@@ -34,7 +35,7 @@ class Doctor(BaseCog):
                 
             ],
         
-            "10": [
+            "on": [
                 "https://tenor.com/tr/view/10th-doctor-smile-gif-20188335",
                 "https://tenor.com/tr/view/david-tennant-doctor-who-ten-tenth-doctor-tenth-gif-5187427",
                 "https://tenor.com/tr/view/doctorwho-david-tennant-ten-allonsy-gif-5114776",
@@ -46,7 +47,7 @@ class Doctor(BaseCog):
                 "https://tenor.com/tr/view/doctor-who-dr-who-david-tennant-smile-laugh-gif-3963005",
                 "https://tenor.com/tr/view/david-tennant-doctor-who-smile-happy-gif-13595993",
             ],
-            "11": [
+            "onbir": [
                 "https://tenor.com/view/thumbs-up-eleventh-doctor-doctor-who-matt-smith-smile-gif-17095333",
                 "https://tenor.com/tr/view/bow-tie-whovian-doctor-who-gif-13949282",
                 "https://tenor.com/tr/view/doctor-who-matt-smith-tardis-the-doctor-gif-10088246",
@@ -58,7 +59,7 @@ class Doctor(BaseCog):
                 "https://tenor.com/tr/view/doctorwho-mattsmith-eleven-you-stuttering-gif-5136329",
                 
             ],
-            "12": [
+            "oniki": [
                 "https://tenor.com/tr/view/doctor-who-peter-capaldi-gif-8187020",
                 "https://tenor.com/tr/view/attack-eyebrows-serious-doctor-who-peter-capaldi-eyebrows-gif-17344691",
                 "https://tenor.com/tr/view/peter-capaldi-doctor-who-love-wow-gif-11318396",
@@ -68,7 +69,7 @@ class Doctor(BaseCog):
                 "https://tenor.com/view/doctor-who-guitar-rock-and-roll-rock-on-peter-capaldi-gif-4664372",
                 
             ],
-            "13": [
+            "onüç": [
                 "https://tenor.com/tr/view/jodie-whittaker-hood-thirteenth-doctor-doctor-who-gif-20617866",
                 "https://tenor.com/tr/view/doctor-who-thirteenth-doctor-jodie-whittaker-thirteen-the-doctor-gif-24425765",
                 "https://tenor.com/tr/view/thirteenth-doctor-doctor-who-jodie-whittaker-13th-doctor-series13-gif-22465266",
