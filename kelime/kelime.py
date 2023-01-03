@@ -113,7 +113,7 @@ class Kelime(commands.Cog):
      if message.channel == self.game_channel and not message.content.startswith("."):
             kek = message.content.strip()
             word = kek.lower()
-            if self.current_word and not kek[0].startswith(self.current_word[-1]):
+            if self.current_word and not word[0].startswith(self.current_word[-1]):
                await self.remove_points(message.author, word, message)
             else:
                 self.current_word = word
