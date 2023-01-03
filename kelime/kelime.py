@@ -36,7 +36,7 @@ class Kelime(commands.Cog):
             return [line.strip() for line in f]
 
     async def give_points(self, user: discord.User, word: str):
-     if word in self.word_list and word not in self.used_words:
+     if message.content.lower() in self.word_list and message.content.lower() not in self.used_words:
         self.used_words.append(word)
         self.scores[user.id] += len(word)
      else:
