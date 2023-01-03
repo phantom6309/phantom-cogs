@@ -6,8 +6,8 @@ import sqlite3
 
 class Otogif(commands.Cog):
     def __init__(self, bot, db_conn):      
-        bot = self.bot 
-        db_conn = self.conn        
+        self.bot = bot
+        self.conn = db_conn       
     def init_db(self):
 
         c = self.conn.cursor()
