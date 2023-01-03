@@ -120,9 +120,9 @@ class Kelime(commands.Cog):
      if message.author == self.bot.user:
         return 
      if message.channel == self.game_channel and not message.content.startswith("."):
-            kek = message.content.strip()
-            kek.replace('I', 'ı').lower()
-            word = kek.lower()
+            word = message.content.strip()
+            word.replace('I', 'ı').lower()
+            
             if self.current_word and not word[0].startswith(self.current_word[-1]):
                await self.remove_points(message.author, word, message)
             else:
