@@ -44,19 +44,19 @@ class Kelime(commands.Cog):
     async def kelimekanal(self, ctx, channel: discord.TextChannel):
         """Kelime Oyunu için kanal seçimi"""
         self.game_channel = channel
-        await ctx.send(f"The game channel has been set to {channel.mention}.")
+        await ctx.send(f"Seçilen oyun kanalı {channel.mention}.")
 
     @commands.command()
     async def kelimehedef(self, ctx, score: int):
         """Oyun bitim skoru seçimi"""
         self.winning_score = score
-        await ctx.send(f"The winning score has been set to {score}.")
+        await ctx.send(f"Seçilen kazanma skoru {score}.")
 
     @commands.command()
     async def kelimeekle(self, ctx, *, word: str):
         """Listeye kelime ekleyin"""
         self.word_list.append(word.lower())
-        await ctx.send(f"{word} has been added to the word list.")
+        await ctx.send(f"{word} listeye eklendi.")
 
     async def update_scores(self):
         self.cursor.execute("DELETE FROM scores")
@@ -87,10 +87,10 @@ class Kelime(commands.Cog):
             self.current_word = self.word_list[randint(0, len(self.word_list) - 1)]
             self.winning_score = None
             self.scores = defaultdict(int)
-            await ctx.send(f"A new game has been started in {ctx.channel.mention}!")
-            await ctx.send(f"The first word is: {self.current_word}")
+            await ctx.send(f"Yeni oyun {ctx.channel.mention} kanalında başladı!")
+            await ctx.send(f"Başlangıç kelimesi: {self.current_word}")
         else:
-            await ctx.send("A game is already in progress.")
+            await ctx.send("Oyun zaten açık.")
 
     @Cog.listener()
     async def on_message(self, message: discord.Message):
@@ -103,7 +103,7 @@ class Kelime(commands.Cog):
                     user_score = self.scores[message.author.id]
                     if user_score >= self.winning_score:
                         await message.channel.send(
-                            f"{message.author} wins with a score of {user_score}!"
+                            f"{message.author} kazandı.Skoru {user_score}!"
                         )
                         await self.update_scores()
                         self.game_channel = None
@@ -111,7 +111,7 @@ class Kelime(commands.Cog):
                         self.winning_score = None
                         self.scores = defaultdict(int)
                 else:
-                    await message.channel.send(f"{message.author} played {word}")
+                    await message.channel.send(f"Doğru")
             else:
                 await self.give_points(message.author, word)
    
@@ -123,17 +123,17 @@ class Kelime(commands.Cog):
             self.current_word = ""
             self.winning_score = None
             self.scores = defaultdict(int)
-            await ctx.send("The game has been stopped.")
+            await ctx.send("Oyun durduruldu.")
         else:
-            await ctx.send("There is no game currently in progress.")
+            await ctx.send("Açık oyun yok.")
 
     @commands.command()
     async def kelimeson(self, ctx):
         """Son yazılan kelimeyi görün"""
         if self.current_word:
-            await ctx.send(f"The current word is: {self.current_word}")
+            await ctx.send(f"Son kelime: {self.current_word}")
         else:
-            await ctx.send("There is no game currently in progress.")
+            await ctx.send("Açık oyun yok.")
 
     @commands.command()
     async def skor(self, ctx, user: discord.User = None):
@@ -141,15 +141,15 @@ class Kelime(commands.Cog):
         if self.current_word:
             if user is not None:
                 score = self.scores[user.id]
-                await ctx.send(f"{user}'s current score is {score}.")
+                await ctx.send(f"{user}'nin puanı {score}.")
             else:
-                await ctx.send(f"Your current score is {self.scores[ctx.author.id]}.")
+                await ctx.send(f"Puanınız {self.scores[ctx.author.id]}.")
         else:
-            await ctx.send("There is no game currently in progress.")
+            await ctx.send("Açık oyun yok.")
     
     @commands.command()
     async def kelimesayısı(self, ctx):
         """Toplam kelime sayısını görüntüeyin"""
         word_count = len(self.word_list)
-        await ctx.send(f"The word list currently has {word_count} words.")
+        await ctx.send(f"Listede şuanda {word_count} kelime bulunuyor.")
 
