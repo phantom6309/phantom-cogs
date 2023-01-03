@@ -39,8 +39,7 @@ class Kelime(commands.Cog):
      if word in self.word_list and word not in self.used_words:
         self.used_words.append(word)
         self.scores[user.id] += len(word)
-        await self.game_channel.send(f"{user.mention} scored {len(word)} points for using the word {word}.")
-        await message.add_reaction("\U0001f44d")
+        await self.game_channel.send(f"doğru.")
      else:
         self.scores[user.id] -= len(word)
         if word in self.used_words:
