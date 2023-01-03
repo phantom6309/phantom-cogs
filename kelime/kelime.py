@@ -127,7 +127,7 @@ class Kelime(commands.Cog):
                         self.scores = defaultdict(int)
                 
             else:
-                await self.give_points(message.author, word)
+                await self.give_points(message.author, word, message)
    
     @commands.command()
     async def kelimedurdur(self, ctx):
