@@ -95,7 +95,7 @@ class Kelime(commands.Cog):
 
     @Cog.listener()
     async def on_message(self, message: discord.Message):
-        if self.game_channel is not None and message.channel == self.game_channel and message.author != self.bot.user:
+        if self.game_channel is not None and message.channel == self.game_channel :
             word = message.content.strip()
             if word[0] == self.current_word[-1] and word in self.word_list:
                 self.current_word = word
@@ -112,7 +112,7 @@ class Kelime(commands.Cog):
                         self.winning_score = None
                         self.scores = defaultdict(int)
                 else:
-                    await message.channel.send(f"Doğru")
+                    await message.channel.send(f"Doğru ")
             else:
                 await self.give_points(message.author, word)
    
