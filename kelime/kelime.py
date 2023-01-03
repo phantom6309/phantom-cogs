@@ -41,14 +41,16 @@ class Kelime(commands.Cog):
         self.scores[user.id] += len(word)
         emoji = '\N{THUMBS UP SIGN}'
         await message.add_reaction(emoji)
+     else:
+        self.scores[user.id] -= len(word)
+        await self.game_channel.send(f"{word} kelimesi zaten kullanılmış.Yedin eksiyi.")
+        emoji2 = '\N{THUMBS DOWN SIGN}'
+        await message.add_reaction(emoji2)
 
     async def remove_points(self, user: discord.User, word: str, message):
         self.scores[user.id] -= len(word)
-        if word in self.used_words:
-           await self.game_channel.send(f"{word} kelimesi zaten kullanılmış.Yedin eksiyi.")
-        else:
-           emoji2 = '\N{THUMBS DOWN SIGN}'
-           await message.add_reaction(emoji2)
+        emoji2 = '\N{THUMBS DOWN SIGN}'
+        await message.add_reaction(emoji2)
 
 
 
