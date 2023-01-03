@@ -3,9 +3,8 @@ import discord
 import sqlite3
 from collections import defaultdict
 from random import randint
-import unidecode
-
-
+import locale
+locale.setlocale(locale.LC_ALL, 'tr_TR.utf8')
 
 from redbot.core import Config, commands
 from redbot.core.data_manager import bundled_data_path
@@ -32,9 +31,6 @@ class Kelime(commands.Cog):
         )
         self.conn.commit()
         self.scores = defaultdict(int)
-
-    def turkish_lowercase(word: str) -> str:
-     return unidecode(word).lower()
 
     def load_word_list(self):
         word_list_path = bundled_data_path(self) / "wordlist.txt"
@@ -120,9 +116,12 @@ class Kelime(commands.Cog):
      if message.author == self.bot.user:
         return 
      if message.channel == self.game_channel and not message.content.startswith("."):
-            word = message.content.strip()
-            word.replace('I', 'ı').lower()
-            
+            kek = message.content.strip()
+            lower_map = {
+             ord(u'I'): u'ı',
+             ord(u'İ'): u'i',
+             }
+            word = kek.translate(lower_map)
             if self.current_word and not word[0].startswith(self.current_word[-1]):
                await self.remove_points(message.author, word, message)
             else:
