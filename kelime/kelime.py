@@ -36,10 +36,16 @@ class Kelime(commands.Cog):
             return [line.strip() for line in f]
 
     async def give_points(self, user: discord.User, word: str):
-        if word in self.word_list:
-            self.scores[user.id] += len(word)
+     if word in self.word_list and word not in self.used_words:
+        self.used_words.append(word)
+        self.scores[user.id] += len(word)
+     else:
+        self.scores[user.id] -= len(word)
+        if word in self.used_words:
+            await self.game_channel.send(f"{word} kelimesi zaten kullanılmış.")
         else:
-            self.scores[user.id] -= 1
+            await self.game_channel.send(f"{word} kelimesi geçersiz.")
+
 
     @commands.command()
     async def kelimekanal(self, ctx, channel: discord.TextChannel):
@@ -83,6 +89,7 @@ class Kelime(commands.Cog):
     @commands.command()
     async def kelimebaşla(self, ctx):
         """Oyunu başlatın"""
+        self.used_words = []
         if self.game_channel is None:
             self.game_channel = ctx.channel
             self.current_word = self.word_list[randint(0, len(self.word_list) - 1)]
@@ -153,4 +160,3 @@ class Kelime(commands.Cog):
         """Toplam kelime sayısını görüntüeyin"""
         word_count = len(self.word_list)
         await ctx.send(f"Listede şuanda {word_count} kelime bulunuyor.")
-
