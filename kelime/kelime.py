@@ -112,7 +112,7 @@ class Kelime(commands.Cog):
                         self.winning_score = None
                         self.scores = defaultdict(int)
                 else:
-                    await message.channel.send(f"Doğru ")
+                    await message.channel.send(f"{self.current_word} Doğru ")
             else:
                 await self.give_points(message.author, word)
    
