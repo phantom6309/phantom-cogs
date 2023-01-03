@@ -40,6 +40,7 @@ class Kelime(commands.Cog):
      if word in self.word_list and word not in self.used_words:
         self.used_words.append(word)
         self.scores[user.id] += len(word)
+        await message.add_reaction("\U0001f44d")
      else:
         self.scores[user.id] -= len(word)
         if word in self.used_words:
