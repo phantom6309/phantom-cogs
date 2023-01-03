@@ -9,7 +9,7 @@ from redbot.core.commands import Cog
 
 
 class Kelime(commands.Cog):
-    """A simple word game where players must guess words that start with the last letter of the previous word."""
+    """Son kelimenin son harfi ile kelime uydurma oyunu."""
 
     def __init__(self, bot):
         super().__init__()
@@ -41,17 +41,20 @@ class Kelime(commands.Cog):
             self.scores[user.id] -= 1
 
     @commands.command()
-    async def setchannel(self, ctx, channel: discord.TextChannel):
+    async def kelimekanal(self, ctx, channel: discord.TextChannel):
+        """Kelime Oyunu için kanal seçimi"""
         self.game_channel = channel
         await ctx.send(f"The game channel has been set to {channel.mention}.")
 
     @commands.command()
-    async def setscore(self, ctx, score: int):
+    async def kelimehedef(self, ctx, score: int):
+        """Oyun bitim skoru seçimi"""
         self.winning_score = score
         await ctx.send(f"The winning score has been set to {score}.")
 
     @commands.command()
-    async def wordlist(self, ctx, *, word: str):
+    async def kelimeekle(self, ctx, *, word: str):
+        """Listeye kelime ekleyin"""
         self.word_list.append(word.lower())
         await ctx.send(f"{word} has been added to the word list.")
 
@@ -63,7 +66,8 @@ class Kelime(commands.Cog):
 
 
     @commands.command()
-    async def scores(self, ctx):
+    async def liderlik(self, ctx):
+        """Liderlik durumunu görün"""
         self.cursor.execute("SELECT * FROM scores ORDER BY score DESC")
         scores = self.cursor.fetchall()
         message = "Top scores:\n"
@@ -76,7 +80,8 @@ class Kelime(commands.Cog):
         await ctx.send(message)
     
     @commands.command()
-    async def startgame(self, ctx):
+    async def kelimebaşla(self, ctx):
+        """Oyunu başlatın"""
         if self.game_channel is None:
             self.game_channel = ctx.channel
             self.current_word = self.word_list[randint(0, len(self.word_list) - 1)]
@@ -111,7 +116,8 @@ class Kelime(commands.Cog):
                 await self.give_points(message.author, word)
    
     @commands.command()
-    async def stopgame(self, ctx):
+    async def kelimedurdur(self, ctx):
+        """Oyunu durdurun"""
         if self.game_channel is not None:
             self.game_channel = None
             self.current_word = ""
@@ -122,14 +128,16 @@ class Kelime(commands.Cog):
             await ctx.send("There is no game currently in progress.")
 
     @commands.command()
-    async def currentword(self, ctx):
+    async def kelimeson(self, ctx):
+        """Son yazılan kelimeyi görün"""
         if self.current_word:
             await ctx.send(f"The current word is: {self.current_word}")
         else:
             await ctx.send("There is no game currently in progress.")
 
     @commands.command()
-    async def currentscore(self, ctx, user: discord.User = None):
+    async def skor(self, ctx, user: discord.User = None):
+        """Mevcut oyunun puan durumu"""
         if self.current_word:
             if user is not None:
                 score = self.scores[user.id]
@@ -140,7 +148,8 @@ class Kelime(commands.Cog):
             await ctx.send("There is no game currently in progress.")
     
     @commands.command()
-    async def wordcount(self, ctx):
+    async def kelimesayısı(self, ctx):
+        """Toplam kelime sayısını görüntüeyin"""
         word_count = len(self.word_list)
         await ctx.send(f"The word list currently has {word_count} words.")
 
