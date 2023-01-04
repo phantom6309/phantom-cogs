@@ -117,6 +117,9 @@ class Kelime(commands.Cog):
     async def on_message(self, message: discord.Message):
      if message.author == self.bot.user:
         return 
+     if message.author == (message.author[-1]):
+        await ctx.send("sıra sizde değil.")
+        return
      if message.channel == self.game_channel and not message.content.startswith("."):
             kek = message.content.strip()
             lower_map = {
