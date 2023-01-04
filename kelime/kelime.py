@@ -21,6 +21,7 @@ class Kelime(commands.Cog):
         self.config.register_global(**default_global)
         self.game_channel = None
         self.current_word = ""
+        self.previous_user = None
         self.winning_score = None
         self.word_list = self.load_word_list()
         self.conn = sqlite3.connect("scores.db")
@@ -37,17 +38,26 @@ class Kelime(commands.Cog):
             return [line.strip() for line in f]
 
     async def give_points(self, user: discord.User, word: str, message):
-        if word in self.used_words:
-            self.scores[user.id] -= len(word)
-            await self.game_channel.send(f"{word} kelimesi zaten kullanılmış.Yedin eksiyi.")
-            emoji2 = '\N{THUMBS DOWN SIGN}'
-            await message.add_reaction(emoji2)
-            await self.game_channel.send(f"Son kelime: {self.current_word}")
-        if word in self.word_list and word not in self.used_words:
-            self.used_words.append(word)
-            self.scores[user.id] += len(word)
-            emoji = '\N{THUMBS UP SIGN}'
-            await message.add_reaction(emoji)
+    # Compare the user who played the previous word to the current user
+      if self.previous_user == user:
+        await self.game_channel.send(f"Lütfen bekleyin, sıradaki oyuncu oynasın.")
+        return
+
+    # Update the previous_user variable
+      self.previous_user = user
+
+      if word in self.used_words:
+        self.scores[user.id] -= len(word)
+        await self.game_channel.send(f"{word} kelimesi zaten kullanılmış.Yedin eksiyi.")
+        emoji2 = '\N{THUMBS DOWN SIGN}'
+        await message.add_reaction(emoji2)
+        await self.game_channel.send(f"Son kelime: {self.current_word}")
+      if word in self.word_list and word not in self.used_words:
+        self.used_words.append(word)
+        self.scores[user.id] += len(word)
+        emoji = '\N{THUMBS UP SIGN}'
+        await message.add_reaction(emoji)
+
 
     async def remove_points(self, user: discord.User, word: str, message):
         self.scores[user.id] -= len(word)
@@ -96,6 +106,10 @@ class Kelime(commands.Cog):
                 message += f"{i + 1}. Unknown player ({player_id}) - {score}\n"
         await ctx.send(message)
 
+    def last_author(self):
+        word_list_path = bundled_data_path(self) / "wordlist.txt"
+        with open(word_list_path) as f:
+            return [line.strip() for line in f]
     @commands.command()
     async def kelimebaşla(self, ctx):
         """Oyunu başlatın"""
@@ -111,22 +125,10 @@ class Kelime(commands.Cog):
         else:
             await ctx.send("Oyun zaten açık.")
 
-            
-
     @Cog.listener()
-    async def on_message(self,ctx, message: discord.Message):
+    async def on_message(self, message: discord.Message):
         if message.author == self.bot.user:
             return
-        else:
-            counter = 0
-            async for msg in message.channel.history(limit=2, oldest_first=False):
-                if counter == 1:
-                    author = msg.author
-                counter += 1
-                if message.author == author:
-                   await ctx.send("sıra sizde değil.")
-                return
-
         if message.channel == self.game_channel and not message.content.startswith("."):
             kek = message.content.strip()
             lower_map = {
