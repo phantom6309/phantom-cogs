@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
+from redbot.core.commands import Cog
+from redbot.core.data_manager import bundled_data_path
+from redbot.core import Config, commands
 import discord
 import sqlite3
 from collections import defaultdict
 from random import randint
 import locale
 locale.setlocale(locale.LC_ALL, 'tr_TR.utf8')
-
-from redbot.core import Config, commands
-from redbot.core.data_manager import bundled_data_path
-from redbot.core.commands import Cog
 
 
 class Kelime(commands.Cog):
@@ -38,27 +37,25 @@ class Kelime(commands.Cog):
             return [line.strip() for line in f]
 
     async def give_points(self, user: discord.User, word: str, message):
-     if word in self.used_words:
-        self.scores[user.id] -= len(word)
-        await self.game_channel.send(f"{word} kelimesi zaten kullanılmış.Yedin eksiyi.")
-        emoji2 = '\N{THUMBS DOWN SIGN}'
-        await message.add_reaction(emoji2)
-        await self.game_channel.send(f"Son kelime: {self.current_word}")
-     if word in self.word_list and word not in self.used_words:
-        self.used_words.append(word)
-        self.scores[user.id] += len(word)
-        emoji = '\N{THUMBS UP SIGN}'
-        await message.add_reaction(emoji)
+        if word in self.used_words:
+            self.scores[user.id] -= len(word)
+            await self.game_channel.send(f"{word} kelimesi zaten kullanılmış.Yedin eksiyi.")
+            emoji2 = '\N{THUMBS DOWN SIGN}'
+            await message.add_reaction(emoji2)
+            await self.game_channel.send(f"Son kelime: {self.current_word}")
+        if word in self.word_list and word not in self.used_words:
+            self.used_words.append(word)
+            self.scores[user.id] += len(word)
+            emoji = '\N{THUMBS UP SIGN}'
+            await message.add_reaction(emoji)
 
-    async def remove_points(self, user: discord.User, word: str, message):  
+    async def remove_points(self, user: discord.User, word: str, message):
         self.scores[user.id] -= len(word)
         emoji2 = '\N{THUMBS DOWN SIGN}'
         await message.add_reaction(emoji2)
         await self.game_channel.send(f"Son kelime: {self.current_word}")
         if word not in self.word_list:
-         await self.game_channel.send(f"geçersiz")
-
-
+            await self.game_channel.send(f"geçersiz")
 
     @commands.command()
     async def kelimekanal(self, ctx, channel: discord.TextChannel):
@@ -81,9 +78,9 @@ class Kelime(commands.Cog):
     async def update_scores(self):
         self.cursor.execute("DELETE FROM scores")
         for user_id, score in self.scores.items():
-            self.cursor.execute("INSERT INTO scores VALUES (?, ?)", (user_id, score))
+            self.cursor.execute(
+                "INSERT INTO scores VALUES (?, ?)", (user_id, score))
         self.conn.commit()
-
 
     @commands.command()
     async def liderlik(self, ctx):
@@ -98,14 +95,15 @@ class Kelime(commands.Cog):
             else:
                 message += f"{i + 1}. Unknown player ({player_id}) - {score}\n"
         await ctx.send(message)
-    
+
     @commands.command()
     async def kelimebaşla(self, ctx):
         """Oyunu başlatın"""
         self.used_words = []
         if self.game_channel is None:
             self.game_channel = ctx.channel
-            self.current_word = self.word_list[randint(0, len(self.word_list) - 1)]
+            self.current_word = self.word_list[randint(
+                0, len(self.word_list) - 1)]
             self.winning_score = None
             self.scores = defaultdict(int)
             await ctx.send(f"Yeni oyun {ctx.channel.mention} kanalında başladı!")
@@ -113,22 +111,31 @@ class Kelime(commands.Cog):
         else:
             await ctx.send("Oyun zaten açık.")
 
+            
+
     @Cog.listener()
-    async def on_message(self, message: discord.Message):
-     if message.author == self.bot.user:
-        return 
-     if message.author == (message.author[-1]):
-        await ctx.send("sıra sizde değil.")
-        return
-     if message.channel == self.game_channel and not message.content.startswith("."):
+    async def on_message(self,ctx, message: discord.Message):
+        if message.author == self.bot.user:
+            return
+        else:
+            counter = 0
+            async for msg in message.channel.history(limit=2, oldest_first=False):
+                if counter == 1:
+                    author = msg.author
+                counter += 1
+                if message.author == author:
+                   await ctx.send("sıra sizde değil.")
+                break
+
+        if message.channel == self.game_channel and not message.content.startswith("."):
             kek = message.content.strip()
             lower_map = {
-             ord(u'I'): u'ı',
-             ord(u'İ'): u'i',
-             }
+                ord(u'I'): u'ı',
+                ord(u'İ'): u'i',
+            }
             test = kek.translate(lower_map)
-            word=test.lower()
-            if self.current_word and word[0].startswith(self.current_word[-1]) and word in self.word_list:       
+            word = test.lower()
+            if self.current_word and word[0].startswith(self.current_word[-1]) and word in self.word_list:
                 self.current_word = word
                 await self.give_points(message.author, word, message)
                 if self.winning_score is not None:
@@ -141,9 +148,10 @@ class Kelime(commands.Cog):
                         self.game_channel = None
                         self.current_word = ""
                         self.winning_score = None
-                        self.scores = defaultdict(int)   
+                        self.scores = defaultdict(int)
             else:
-              await self.remove_points(message.author, word, message)
+                await self.remove_points(message.author, word, message)
+
     @commands.command()
     async def kelimedurdur(self, ctx):
         """Oyunu durdurun"""
@@ -175,7 +183,7 @@ class Kelime(commands.Cog):
                 await ctx.send(f"Puanınız {self.scores[ctx.author.id]}.")
         else:
             await ctx.send("Açık oyun yok.")
-    
+
     @commands.command()
     async def kelimesayısı(self, ctx):
         """Toplam kelime sayısını görüntüeyin"""
