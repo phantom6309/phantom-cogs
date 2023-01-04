@@ -125,7 +125,7 @@ class Kelime(commands.Cog):
                 counter += 1
                 if message.author == author:
                    await ctx.send("sıra sizde değil.")
-                break
+                return
 
         if message.channel == self.game_channel and not message.content.startswith("."):
             kek = message.content.strip()
