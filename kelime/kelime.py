@@ -126,7 +126,7 @@ class Kelime(commands.Cog):
             if self.current_word and not word[0].startswith(self.current_word[-1]):
                await self.remove_points(message.author, word, message)
             else:
-              if word not in self.used_words
+              if word not in self.used_words:
                 await self.remove_points(message.author, word, message)
               else:
                 self.current_word = word
