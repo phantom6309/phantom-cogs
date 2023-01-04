@@ -52,7 +52,7 @@ class Kelime(commands.Cog):
         emoji2 = '\N{THUMBS DOWN SIGN}'
         await message.add_reaction(emoji2)
         await self.game_channel.send(f"Son kelime: {self.current_word}")
-     elif word[-1] == "ğ":
+     if word[-1] == "ğ":
         # Select a random word from the continue_words list
         new_word = random.choice(self.continue_words)
         # Add the new word to the used words list
@@ -60,7 +60,7 @@ class Kelime(commands.Cog):
         # Set the current word to the new word
         self.current_word = new_word
         await self.game_channel.send(f"{word} kelimesiyle biten kelime oynayamazsınız. Sıradaki kelime: {self.current_word}")
-     elif word in self.word_list and word not in self.used_words:
+     if word in self.word_list and word not in self.used_words:
         self.used_words.append(word)
         self.scores[user.id] += len(word)
         emoji = '\N{THUMBS UP SIGN}'
