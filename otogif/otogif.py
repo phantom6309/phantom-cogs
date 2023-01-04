@@ -50,8 +50,8 @@ class Otogif(commands.Cog):
             await ctx.send('No trigger-gif pairs found')
         else:
             message = 'Trigger-gif pairs:\n'
-            for trigger, gif_url in pairs:
-                message += f'- {trigger}: {gif_url}\n'
+            for trigger in pairs:
+                message += f'- {trigger}'
             await ctx.send(message)
 
     @commands.command()
