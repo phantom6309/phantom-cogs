@@ -27,7 +27,7 @@ class Burc(BaseCog):
         endpoint = "https://aztro.sameerkumar.website/"
         params = { "sign": "scorpio", "day": "today"}
         response = requests.post(endpoint, params=params)
-        data = response.json
+        data = response.json()
         Yorum = data['description']
         await ctx.send(f'Akrep {Yorum}.')
         
