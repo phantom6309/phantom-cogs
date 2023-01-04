@@ -27,14 +27,10 @@ class Burc(BaseCog):
         endpoint = "https://aztro.sameerkumar.website/"
         params = { "sign": "scorpio", "day": "today"}
         response = requests.post(endpoint, params=params)
-        embed = discord.Embed(title="Akrep")
-
-        # Add the values from the response to the embed
-        for key, value in response.json().items():
-         embed.add_field(name=key, value=value)
-
-        # Send the embed to the channel
-        await ctx.send(embed=embed)
+        data = response.json
+        Yorum = data['description']
+        await ctx.send(f'Akrep {Yorum}.')
+        
        
 
     @commands.command()
