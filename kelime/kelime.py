@@ -8,7 +8,7 @@ from collections import defaultdict
 from random import randint
 import locale
 locale.setlocale(locale.LC_ALL, 'tr_TR.utf8')
-
+import random
 
 class Kelime(commands.Cog):
     """Son kelimenin son harfi ile kelime uydurma oyunu."""
@@ -31,7 +31,7 @@ class Kelime(commands.Cog):
         )
         self.conn.commit()
         self.scores = defaultdict(int)
-
+        continue_words = ["elma", "armut", "kiraz", "çilek"]
     def load_word_list(self):
         word_list_path = bundled_data_path(self) / "wordlist.txt"
         with open(word_list_path) as f:
@@ -39,24 +39,33 @@ class Kelime(commands.Cog):
 
     async def give_points(self, user: discord.User, word: str, message):
     # Compare the user who played the previous word to the current user
-      if self.previous_user == user:
+     if self.previous_user == user:
         await self.game_channel.send(f"Lütfen bekleyin, sıradaki oyuncu oynasın.")
         return
 
     # Update the previous_user variable
-      self.previous_user = user
+     self.previous_user = user
 
-      if word in self.used_words:
+     if word in self.used_words:
         self.scores[user.id] -= len(word)
         await self.game_channel.send(f"{word} kelimesi zaten kullanılmış.Yedin eksiyi.")
         emoji2 = '\N{THUMBS DOWN SIGN}'
         await message.add_reaction(emoji2)
         await self.game_channel.send(f"Son kelime: {self.current_word}")
-      if word in self.word_list and word not in self.used_words:
+     elif word[-1] == "ğ":
+        # Select a random word from the continue_words list
+        new_word = random.choice(self.continue_words)
+        # Add the new word to the used words list
+        self.used_words.append(new_word)
+        # Set the current word to the new word
+        self.current_word = new_word
+        await self.game_channel.send(f"{word} kelimesiyle biten kelime oynayamazsınız. Sıradaki kelime: {self.current_word}")
+     elif word in self.word_list and word not in self.used_words:
         self.used_words.append(word)
         self.scores[user.id] += len(word)
         emoji = '\N{THUMBS UP SIGN}'
         await message.add_reaction(emoji)
+
 
 
     async def remove_points(self, user: discord.User, word: str, message):
@@ -142,7 +151,7 @@ class Kelime(commands.Cog):
                 await self.give_points(message.author, word, message)
                 if self.winning_score is not None:
                     user_score = self.scores[message.author.id]
-                    if user_score >= self.winning_score or word[-1] == "ğ":
+                    if user_score >= self.winning_score:
                         await message.channel.send(
                             f"{message.author} kazandı.Skoru {user_score}!"
                         )
