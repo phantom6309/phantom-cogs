@@ -54,7 +54,8 @@ class Kelime(commands.Cog):
         await self.game_channel.send(f"Son kelime: {self.current_word}")
      if word[-1] == "ğ":
         # Select a random word from the continue_words list
-        new_word = random.choice(self.continue_words)
+        new_word = self.word_list[randint(
+                0, len(self.word_list) - 1)]
         # Add the new word to the used words list
         self.used_words.append(new_word)
         # Set the current word to the new word
