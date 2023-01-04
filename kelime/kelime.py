@@ -125,8 +125,6 @@ class Kelime(commands.Cog):
              }
             test = kek.translate(lower_map)
             word=test.lower()
-            if self.current_word and not word[0].startswith(self.current_word[-1]):
-               await self.remove_points(message.author, word, message)
             if self.current_word and word[0].startswith(self.current_word[-1]) and word in self.word_list:       
                 self.current_word = word
                 await self.give_points(message.author, word, message)
