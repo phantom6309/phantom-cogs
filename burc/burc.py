@@ -40,14 +40,9 @@ class Burc(BaseCog):
         endpoint = "https://aztro.sameerkumar.website/"
         params = { "sign": "virgo", "day": "today"}
         response = requests.post(endpoint, params=params)
-        embed = discord.Embed(title="Başak")
-
-        # Add the values from the response to the embed
-        for key, value in response.json().items():
-         embed.add_field(name=key, value=value)
-
-        # Send the embed to the channel
-        await ctx.send(embed=embed)
+        data = response.json()
+        Yorum = data['description']
+        await ctx.send(f'{params} \n {Yorum}.')
 
     @commands.command()
     
@@ -56,14 +51,9 @@ class Burc(BaseCog):
         endpoint = "https://aztro.sameerkumar.website/"
         params = { "sign": "aries", "day": "today"}
         response = requests.post(endpoint, params=params)
-        embed = discord.Embed(title="Koç")
-
-        # Add the values from the response to the embed
-        for key, value in response.json().items():
-         embed.add_field(name=key, value=value)
-
-        # Send the embed to the channel
-        await ctx.send(embed=embed)
+        data = response.json()
+        Yorum = data['description']
+        await ctx.send(f'{params} \n {Yorum}.')
 
     @commands.command()
     
@@ -72,14 +62,9 @@ class Burc(BaseCog):
         endpoint = "https://aztro.sameerkumar.website/"
         params = { "sign": "leo", "day": "today"}
         response = requests.post(endpoint, params=params)
-        embed = discord.Embed(title="Aslan")
-
-        # Add the values from the response to the embed
-        for key, value in response.json().items():
-         embed.add_field(name=key, value=value)
-
-        # Send the embed to the channel
-        await ctx.send(embed=embed)
+        data = response.json()
+        Yorum = data['description']
+        await ctx.send(f'{params} \n {Yorum}.')
 
     @commands.command()
     
@@ -88,14 +73,9 @@ class Burc(BaseCog):
         endpoint = "https://aztro.sameerkumar.website/"
         params = { "sign": "sagittarius", "day": "today"}
         response = requests.post(endpoint, params=params)
-        embed = discord.Embed(title="Yay")
-
-        # Add the values from the response to the embed
-        for key, value in response.json().items():
-         embed.add_field(name=key, value=value)
-
-        # Send the embed to the channel
-        await ctx.send(embed=embed)
+        data = response.json()
+        Yorum = data['description']
+        await ctx.send(f'{params} \n {Yorum}.')
 
     
     @commands.command()
@@ -105,15 +85,10 @@ class Burc(BaseCog):
         endpoint = "https://aztro.sameerkumar.website/"
         params = { "sign": "taurus", "day": "today"}
         response = requests.post(endpoint, params=params)
+        data = response.json()
+        Yorum = data['description']
+        await ctx.send(f'{params} \n {Yorum}.')
         
-        embed = discord.Embed(title="Boğa")
-
-        # Add the values from the response to the embed
-        for key, value in response.json().items():
-         embed.add_field(name=key, value=value)
-
-        # Send the embed to the channel
-        await ctx.send(embed=embed)
 
     @commands.command()
     @commands.cooldown(1, 60, commands.BucketType.guild)
@@ -122,14 +97,9 @@ class Burc(BaseCog):
         endpoint = "https://aztro.sameerkumar.website/"
         params = { "sign": "capricorn", "day": "today"}
         response = requests.post(endpoint, params=params)
-        embed = discord.Embed(title="Oğlak")
-
-        # Add the values from the response to the embed
-        for key, value in response.json().items():
-         embed.add_field(name=key, value=value)
-
-        # Send the embed to the channel
-        await ctx.send(embed=embed)
+        data = response.json()
+        Yorum = data['description']
+        await ctx.send(f'{params} \n {Yorum}.')
 
     @commands.command()
     @commands.cooldown(1, 60, commands.BucketType.guild)
@@ -138,14 +108,9 @@ class Burc(BaseCog):
         endpoint = "https://aztro.sameerkumar.website/"
         params = { "sign": "gemini", "day": "today"}
         response = requests.post(endpoint, params=params)
-        embed = discord.Embed(title="İkizler")
-
-        # Add the values from the response to the embed
-        for key, value in response.json().items():
-         embed.add_field(name=key, value=value)
-
-        # Send the embed to the channel
-        await ctx.send(embed=embed)
+        data = response.json()
+        Yorum = data['description']
+        await ctx.send(f'{params} \n {Yorum}.')
 
     @commands.command()
     @commands.cooldown(1, 60, commands.BucketType.guild)
@@ -154,14 +119,9 @@ class Burc(BaseCog):
         endpoint = "https://aztro.sameerkumar.website/"
         params = { "sign": "libra", "day": "today"}
         response = requests.post(endpoint, params=params)
-        embed = discord.Embed(title="Terazi")
-
-        # Add the values from the response to the embed
-        for key, value in response.json().items():
-         embed.add_field(name=key, value=value)
-
-        # Send the embed to the channel
-        await ctx.send(embed=embed)
+        data = response.json()
+        Yorum = data['description']
+        await ctx.send(f'{params} \n {Yorum}.')
 
     @commands.command()
     @commands.cooldown(1, 60, commands.BucketType.guild)
@@ -170,14 +130,9 @@ class Burc(BaseCog):
         endpoint = "https://aztro.sameerkumar.website/"
         params = { "sign": "aquarius", "day": "today"}
         response = requests.post(endpoint, params=params)
-        embed = discord.Embed(title="Kova")
-
-        # Add the values from the response to the embed
-        for key, value in response.json().items():
-         embed.add_field(name=key, value=value)
-
-        # Send the embed to the channel
-        await ctx.send(embed=embed)
+        data = response.json()
+        Yorum = data['description']
+        await ctx.send(f'{params} \n {Yorum}.')
 
     @commands.command()
     @commands.cooldown(1, 60, commands.BucketType.guild)
@@ -186,14 +141,9 @@ class Burc(BaseCog):
         endpoint = "https://aztro.sameerkumar.website/"
         params = { "sign": "cancer", "day": "today"}
         response = requests.post(endpoint, params=params)
-        embed = discord.Embed(title="Yengeç")
-
-        # Add the values from the response to the embed
-        for key, value in response.json().items():
-         embed.add_field(name=key, value=value)
-
-        # Send the embed to the channel
-        await ctx.send(embed=embed)
+        data = response.json()
+        Yorum = data['description']
+        await ctx.send(f'{params} \n {Yorum}.')
 
     @commands.command()
     @commands.cooldown(1, 60, commands.BucketType.guild)
@@ -202,14 +152,9 @@ class Burc(BaseCog):
         endpoint = "https://aztro.sameerkumar.website/"
         params = { "sign": "pisces", "day": "today"}
         response = requests.post(endpoint, params=params)
-        embed = discord.Embed(title="Balık")
-
-        # Add the values from the response to the embed
-        for key, value in response.json().items():
-         embed.add_field(name=key, value=value)
-
-        # Send the embed to the channel
-        await ctx.send(embed=embed)
+        data = response.json()
+        Yorum = data['description']
+        await ctx.send(f'{params} \n {Yorum}.')
 
     @commands.command()
     
@@ -218,7 +163,7 @@ class Burc(BaseCog):
         endpoint = "https://api.genelpara.com/embed/doviz.json"
         
         response = requests.post(endpoint)
-        embed = discord.Embed(title="Balık")
+        embed = discord.Embed(title="Kur")
 
         # Add the values from the response to the embed
         for key, value in response.json().items():
