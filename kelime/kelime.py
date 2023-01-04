@@ -50,11 +50,13 @@ class Kelime(commands.Cog):
         emoji = '\N{THUMBS UP SIGN}'
         await message.add_reaction(emoji)
 
-    async def remove_points(self, user: discord.User, word: str, message):
+    async def remove_points(self, user: discord.User, word: str, message):  
         self.scores[user.id] -= len(word)
         emoji2 = '\N{THUMBS DOWN SIGN}'
         await message.add_reaction(emoji2)
         await self.game_channel.send(f"Son kelime: {self.current_word}")
+        if word not in self.word_list:
+         await self.game_channel.send(f"Son kelime: {self.current_word}")
 
 
 
@@ -125,10 +127,9 @@ class Kelime(commands.Cog):
             word=test.lower()
             if self.current_word and not word[0].startswith(self.current_word[-1]):
                await self.remove_points(message.author, word, message)
-            else:
-              if word not in self.used_words:
-                await self.remove_points(message.author, word, message)
-              else:
+            if word not in self.word_list:
+                 await self.remove_points(message.author, word, message)   
+            if self.current_word and word[0].startswith(self.current_word[-1]) and word not in self.word_list:       
                 self.current_word = word
                 await self.give_points(message.author, word, message)
                 if self.winning_score is not None:
