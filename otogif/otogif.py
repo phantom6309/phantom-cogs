@@ -33,7 +33,7 @@ class Otogif(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(manage_guild=True)
-    async def addgif(self, ctx, trigger: str, gif_url: str):
+    async def addgif(self, ctx, gif_url: str, trigger: str):
      c = self.conn.cursor()
      c.execute('''INSERT INTO trigger_gif_pairs (trigger, gif_url)
                  VALUES (?, ?)''', (trigger, gif_url))
