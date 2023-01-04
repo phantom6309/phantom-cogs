@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import discord
-from redbot.core import commands, Config
+from redbot.core import commands
 import sqlite3
-
+import random
 
 class Otogif(commands.Cog):
     def __init__(self, bot, db_conn):      
@@ -17,29 +17,31 @@ class Otogif(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.author == self.bot.user:
-            return
+      if message.author == self.bot.user:
+         return
 
-        c = self.conn.cursor()
-        c.execute('''SELECT gif_url FROM trigger_gif_pairs WHERE trigger=?''',
-                  (message.content,))
-        result = c.fetchone()
-        if result:
-            gif_url = result[0]
-            embed = discord.Embed()
-            embed.set_image(url=gif_url)
-            await message.channel.send(embed=embed)
+      c = self.conn.cursor()
+      c.execute('''SELECT gif_url FROM trigger_gif_pairs WHERE trigger=?''',
+              (message.content,))
+      gif_urls = c.fetchall()
+      if gif_urls:
+        gif_url = random.choice(gif_urls)[0]  # Select a random gif URL from the list
+        embed = discord.Embed()
+        embed.set_image(url=gif_url)
+        await message.channel.send(embed=embed)
+
 
     @commands.command()
     @commands.has_permissions(manage_guild=True)
-    async def addgif(self, ctx, gif_url: str, *triggers: str):
-        c = self.conn.cursor()
-        for trigger in triggers:
-            c.execute('''INSERT INTO trigger_gif_pairs (trigger, gif_url)
-                         VALUES (?, ?)''', (trigger, gif_url))
-        self.conn.commit()
-        trigger_str = ', '.join(triggers)
-        await ctx.send(f'Added triggers "{trigger_str}" with gif URL "{gif_url}"')
+    async def addgif(self, ctx, *gif_urls: str, trigger: str):
+       c = self.conn.cursor()
+       for gif_url in gif_urls:
+           c.execute('''INSERT INTO trigger_gif_pairs (trigger, gif_url)
+                     VALUES (?, ?)''', (trigger, gif_url))
+       self.conn.commit()
+       gif_url_str = ', '.join(gif_urls)
+       await ctx.send(f'Added trigger "{trigger}" with gif URLs "{gif_url_str}"')
+
     @commands.command()
     @commands.has_permissions(manage_guild=True)
     async def listgifs(self, ctx):
