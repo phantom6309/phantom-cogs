@@ -44,15 +44,15 @@ class Otogif(commands.Cog):
     @commands.has_permissions(manage_guild=True)
     async def listgifs(self, ctx):
         c = self.conn.cursor()
-        c.execute('''SELECT trigger, gif_url FROM trigger_gif_pairs''')
-        pairs = c.fetchall()
-        if not pairs:
-            await ctx.send('No trigger-gif pairs found')
+        c.execute('''SELECT trigger FROM trigger_gif_pairs''')
+        triggers = c.fetchall()
+        if not triggers:
+           await ctx.send('No triggers found')
         else:
-            message = 'Trigger-gif pairs:\n'
-            for trigger in pairs:
-                message += f'- {trigger}'
-            await ctx.send(message)
+           message = 'Triggers:\n'
+           for trigger, in triggers:
+               message += f'- {trigger}\n'
+           await ctx.send(message)
 
     @commands.command()
     @commands.has_permissions(manage_guild=True)
