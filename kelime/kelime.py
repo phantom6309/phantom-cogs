@@ -56,7 +56,7 @@ class Kelime(commands.Cog):
         await message.add_reaction(emoji2)
         await self.game_channel.send(f"Son kelime: {self.current_word}")
         if word not in self.word_list:
-         await self.game_channel.send(f"Son kelime: {self.current_word}")
+         await self.game_channel.send(f"geçersiz")
 
 
 
@@ -127,9 +127,7 @@ class Kelime(commands.Cog):
             word=test.lower()
             if self.current_word and not word[0].startswith(self.current_word[-1]):
                await self.remove_points(message.author, word, message)
-            if word not in self.word_list:
-                 await self.remove_points(message.author, word, message)   
-            if self.current_word and word[0].startswith(self.current_word[-1]) and word not in self.word_list:       
+            if self.current_word and word[0].startswith(self.current_word[-1]) and word in self.word_list:       
                 self.current_word = word
                 await self.give_points(message.author, word, message)
                 if self.winning_score is not None:
@@ -143,8 +141,8 @@ class Kelime(commands.Cog):
                         self.current_word = ""
                         self.winning_score = None
                         self.scores = defaultdict(int)   
-            
-   
+            else:
+              await self.remove_points(message.author, word, message)
     @commands.command()
     async def kelimedurdur(self, ctx):
         """Oyunu durdurun"""
