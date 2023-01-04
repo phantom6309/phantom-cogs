@@ -29,7 +29,7 @@ class Burc(BaseCog):
         response = requests.post(endpoint, params=params)
         data = response.json()
         Yorum = data['description']
-        await ctx.send(f'Akrep \n {Yorum}.')
+        await ctx.send(f'{sign} \n {Yorum}.')
         
        
 
