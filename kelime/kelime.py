@@ -31,7 +31,6 @@ class Kelime(commands.Cog):
         )
         self.conn.commit()
         self.scores = defaultdict(int)
-        continue_words = ["elma", "armut", "kiraz", "çilek"]
     def load_word_list(self):
         word_list_path = bundled_data_path(self) / "wordlist.txt"
         with open(word_list_path) as f:
@@ -41,6 +40,7 @@ class Kelime(commands.Cog):
     # Compare the user who played the previous word to the current user
      if self.previous_user == user:
         await self.game_channel.send(f"Lütfen bekleyin, sıradaki oyuncu oynasın.")
+        await self.game_channel.send(f"Son kelime: {self.current_word}")
         return
 
     # Update the previous_user variable
