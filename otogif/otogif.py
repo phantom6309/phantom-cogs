@@ -33,14 +33,13 @@ class Otogif(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(manage_guild=True)
-    async def addgif(self, ctx, *gif_urls: str, trigger: str):
-       c = self.conn.cursor()
-       for gif_url in gif_urls:
-           c.execute('''INSERT INTO trigger_gif_pairs (trigger, gif_url)
-                     VALUES (?, ?)''', (trigger, gif_url))
-       self.conn.commit()
-       gif_url_str = ', '.join(gif_urls)
-       await ctx.send(f'Added trigger "{trigger}" with gif URLs "{gif_url_str}"')
+    async def addgif(self, ctx, trigger: str, gif_url: str):
+     c = self.conn.cursor()
+     c.execute('''INSERT INTO trigger_gif_pairs (trigger, gif_url)
+                 VALUES (?, ?)''', (trigger, gif_url))
+     self.conn.commit()
+     await ctx.send(f'Added trigger "{trigger}" with gif URL "{gif_url}"')
+
 
     @commands.command()
     @commands.has_permissions(manage_guild=True)
