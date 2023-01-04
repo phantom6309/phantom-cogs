@@ -142,7 +142,7 @@ class Kelime(commands.Cog):
                 await self.give_points(message.author, word, message)
                 if self.winning_score is not None:
                     user_score = self.scores[message.author.id]
-                    if user_score >= self.winning_score:
+                    if user_score >= self.winning_score or word[-1] == "ğ":
                         await message.channel.send(
                             f"{message.author} kazandı.Skoru {user_score}!"
                         )
