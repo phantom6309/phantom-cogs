@@ -278,7 +278,7 @@ class CrabRave(commands.Cog):
         async with ctx.typing():
             t = ctx.message.clean_content[len(f"{ctx.prefix}{ctx.invoked_with}") :]
             t = t.upper().replace(", ", ",").split(",")
-            if not await self.check_video_file(WEDNESDAY_LINK, "WEDNESDAY_template.mp4"):
+            if not await self.check_video_file(WEDNESDAY_LINK, "wednesday_template.mp4"):
                 return await ctx.send("I couldn't download the template file.")
             if not await self.check_font_file():
                 return await ctx.send("I couldn't download the font file.")
