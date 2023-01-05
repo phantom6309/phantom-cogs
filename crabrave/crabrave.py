@@ -17,7 +17,7 @@ CRAB_LINK = "https://youtu.be/gDLE3LikgUs"
 
 MIKU_LINK = "https://youtu.be/qeJjQGF6gz4"
 
-WEDNESDAY_LINK = "https://youtu.be/NakTu_VZxJ0"
+WEDNES_LINK = "https://youtu.be/NakTu_VZxJ0"
 
 FONT_FILE = "https://github.com/matomo-org/travis-scripts/raw/master/fonts/Verdana.ttf"
 log = logging.getLogger("red.trusty-cogs.crabrave")
@@ -277,7 +277,7 @@ class CrabRave(commands.Cog):
         async with ctx.typing():
             t = ctx.message.clean_content[len(f"{ctx.prefix}{ctx.invoked_with}") :]
             t = t.upper().replace(", ", ",").split(",")
-            if not await self.check_video_file(WEDNESDAY_LINK, "wednes_template.mp4"):
+            if not await self.check_video_file(WEDNES_LINK, "wednes_template.mp4"):
                 return await ctx.send("I couldn't download the template file.")
             if not await self.check_font_file():
                 return await ctx.send("I couldn't download the font file.")
