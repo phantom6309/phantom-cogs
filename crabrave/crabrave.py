@@ -17,7 +17,9 @@ CRAB_LINK = "https://youtu.be/gDLE3LikgUs"
 
 MIKU_LINK = "https://youtu.be/qeJjQGF6gz4"
 
-WEDNES_LINK = "https://youtu.be/zl70UdXp_ao"
+WEDNES_LINK = "https://youtu.be/NXa58h3V_Eg"
+
+MARY_LINK = "https://youtu.be/2fVpQwytr88"
 
 FONT_FILE = "https://github.com/matomo-org/travis-scripts/raw/master/fonts/Verdana.ttf"
 log = logging.getLogger("red.trusty-cogs.crabrave")
@@ -348,6 +350,95 @@ class CrabRave(commands.Cog):
             verbose=False,
             logger=None,
             temp_audiofile=str(cog_data_path(self) / f"{u_id}wednesraveaudio.mp3")
+            # ffmpeg_params=["-filter:a", "volume=0.5"]
+        )
+        clip.close()
+        video.close()
+        return True
+
+    @commands.command(aliases=["wednesrave"])
+    @commands.cooldown(1, 20, commands.BucketType.guild)
+    @commands.max_concurrency(2, commands.BucketType.default)
+    @checks.bot_has_permissions(attach_files=True)
+    async def mary(self, ctx: commands.Context, *, text: str) -> None:
+        """Make mary rave videos
+
+        There must be exactly 1 `,` to split the message
+        """
+        async with ctx.typing():
+            t = ctx.message.clean_content[len(f"{ctx.prefix}{ctx.invoked_with}") :]
+            t = t.upper().replace(", ", ",").split(",")
+            if not await self.check_video_file(MARY_LINK, "mary_template.mp4"):
+                return await ctx.send("I couldn't download the template file.")
+            if not await self.check_font_file():
+                return await ctx.send("I couldn't download the font file.")
+            if len(t) != 2:
+                return await ctx.send("You must submit exactly two strings split by comma")
+            if (not t[0] and not t[0].strip()) or (not t[1] and not t[1].strip()):
+                return await ctx.send("Cannot render empty text")
+            fake_task = functools.partial(self.make_mary, t=t, u_id=ctx.message.id)
+            task = self.bot.loop.run_in_executor(None, fake_task)
+
+            try:
+                await asyncio.wait_for(task, timeout=300)
+            except asyncio.TimeoutError:
+                # log.error("Error generating maryrave video", exc_info=True)
+                await ctx.send("maryrave Video took too long to generate.")
+                return
+            fp = cog_data_path(self) / f"{ctx.message.id}maryrave.mp4"
+            file = discord.File(str(fp), filename="maryrave.mp4")
+            try:
+                await ctx.send(files=[file])
+            except Exception:
+                log.error("Error sending mikurave video", exc_info=True)
+                pass
+            try:
+                os.remove(fp)
+            except Exception:
+                log.error("Error deleting mikurave video", exc_info=True)
+
+    def make_mary(self, t: str, u_id: int) -> bool:
+        """Non blocking miku rave video generation from DankMemer bot
+
+        https://github.com/DankMemer/meme-server/blob/master/endpoints/crab.py
+        """
+        fp = str(cog_data_path(self) / f"Verdana.ttf")
+        clip = VideoFileClip(str(cog_data_path(self)) + "/mary_template.mp4")
+        # clip.volume(1.0)
+        text = TextClip(t[0], fontsize=48, color="DarkSlateGrey", font=fp)
+        text2 = (
+            TextClip(
+                "____________________",
+                fontsize=48,
+                color="DarkSlateGrey",
+                font=fp,
+            )
+            .set_position(("center", 210))
+            .set_duration(40.0)
+        )
+        text = text.set_position(("center", 200)).set_duration(40.0)
+        text3 = (
+            TextClip(
+                t[1],
+                fontsize=48,
+                color="DarkSlateGrey",
+                font=fp,
+            )
+            .set_position(("center", 270))
+            .set_duration(40.0)
+        )
+
+        video = CompositeVideoClip(
+            [clip, text.crossfadein(1), text2.crossfadein(1), text3.crossfadein(1)]
+        ).set_duration(40.0)
+        video = video.volumex(0.7)
+        video.write_videofile(
+            str(cog_data_path(self)) + f"/{u_id}maryrave.mp4",
+            threads=1,
+            preset="superfast",
+            verbose=False,
+            logger=None,
+            temp_audiofile=str(cog_data_path(self) / f"{u_id}maryraveaudio.mp3")
             # ffmpeg_params=["-filter:a", "volume=0.5"]
         )
         clip.close()
