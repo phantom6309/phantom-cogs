@@ -15,9 +15,9 @@ logging.captureWarnings(False)
 
 CRAB_LINK = "https://youtu.be/gDLE3LikgUs"
 
-MIKUs_LINK = "https://youtu.be/qeJjQGF6gz4"
+MIKU_LINK = "https://youtu.be/qeJjQGF6gz4"
 
-MIKU_LINK = "https://youtu.be/zl70UdXp_ao"
+WEDNES_LINK = "https://youtu.be/zl70UdXp_ao"
 
 FONT_FILE = "https://github.com/matomo-org/travis-scripts/raw/master/fonts/Verdana.ttf"
 log = logging.getLogger("red.trusty-cogs.crabrave")
