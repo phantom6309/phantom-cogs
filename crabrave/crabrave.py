@@ -17,7 +17,7 @@ CRAB_LINK = "https://youtu.be/gDLE3LikgUs"
 
 MIKU_LINK = "https://youtu.be/qeJjQGF6gz4"
 
-WEDNESDAY_LINK = "https://www.youtube.com/embed/NakTu_VZxJ0"
+WEDNESDAY_LINK = "https://youtu.be/NakTu_VZxJ0"
 
 FONT_FILE = "https://github.com/matomo-org/travis-scripts/raw/master/fonts/Verdana.ttf"
 log = logging.getLogger("red.trusty-cogs.crabrave")
