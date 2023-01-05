@@ -356,7 +356,7 @@ class CrabRave(commands.Cog):
         video.close()
         return True
 
-    @commands.command(aliases=["wednesrave"])
+    @commands.command(aliases=["maryrave"])
     @commands.cooldown(1, 20, commands.BucketType.guild)
     @commands.max_concurrency(2, commands.BucketType.default)
     @checks.bot_has_permissions(attach_files=True)
