@@ -296,7 +296,15 @@ class Burc(BaseCog):
             definition = definition_data["anlam"]
             definitions.append(definition)
 
-        await ctx.send(f"Definitions of {word}: {', '.join(definitions)}")
+        if not definitions:
+            await ctx.send(f"No definitions found for {word}.")
+            return   
+
+        message = f"Definitions of {word}:\n"
+        for i, definition in enumerate(definitions):
+            message += f"{i+1}. {definition}\n"
+        await ctx.send(message)
+       
 
 
     
