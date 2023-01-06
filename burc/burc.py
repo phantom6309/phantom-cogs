@@ -290,14 +290,14 @@ class Burc(BaseCog):
            headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
            response = requests.get(URL, headers=headers)
            data = response.json()
+           
 
-           word = data[0]['madde']
-           meanings = [item['anlam'] for item in data[0]['anlamlarListe']]
-
+           meanings = []
+           for item in data[0]['anlamlarListe']:
+           meanings.append(item['anlam'])
            embed = discord.Embed(title=f"Definition of {word}", color=discord.Color.blue())
            embed.add_field(name="Meanings", value='\n'.join(meanings), inline=False)
            await ctx.send(embed=embed)
-    
 
     def cog_unload(self):
         self.bot.loop.create_task(self.session.close())
