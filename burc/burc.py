@@ -284,7 +284,7 @@ class Burc(BaseCog):
       sonuclar = tdk.ara('anlam')
       for s in sonuclar:
           for i in s.anlamlar():
-      await ctx.send(f'{anlamlar}')
+           await ctx.send(f'{anlamlar}')
 
     def cog_unload(self):
         self.bot.loop.create_task(self.session.close())
