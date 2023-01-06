@@ -284,21 +284,16 @@ class Burc(BaseCog):
            await ctx.send(embed=embed)
 
 
+
+
     @commands.command()
-    async def tdk(self, ctx, word:str):
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
-        URL = f"https://sozluk.gov.tr/gts?ara={word}"
-        r = requests.post(URL, headers=headers)
-        embed = discord.Embed(title="Kur")
+    async def tdk(self, ctx, word):
+        url = f"https://sozluk.gov.tr/gts?ara={word}"
+        response = requests.get(url)
+        data = response.json()
 
-        # Add the values from the response to the embed
-        for key, value in r.json().items():
-         embed.add_field(name=key, value=value)
+        definition = data[0]["anlamlarListe"][0]["anlam"]
+        await ctx.send(f"The definition of {word} is: {definition}")
+   
 
-        # Send the embed to the channel
-        await ctx.send(embed=embed)
     
-    def cog_unload(self):
-        self.bot.loop.create_task(self.session.close())
-
-    __del__ = cog_unload
