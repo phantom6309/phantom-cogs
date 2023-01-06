@@ -33,7 +33,7 @@ class Burc(BaseCog):
         r = data['description']
         r = str(translator.translate(r, dest='tr'))
         ch = 'text='
-        r2=r.split(ch, 2)[0]
+        r2=r.split(ch, 1)[1]
         ch = '.,'
         r3=r2.split(ch, 1)[0]
         await ctx.send(f'{"Akrep"} \n {r3}.')
@@ -163,7 +163,7 @@ class Burc(BaseCog):
         r = data['description']
         r = str(translator.translate(r, dest='tr'))
         ch = 'text='
-        r2=r.split(ch, 2)[0]
+        r2=r.split(ch, 1)[1]
         ch = '.,'
         r3=r2.split(ch, 1)[0]
         await ctx.send(f'{"Terazi"} \n {r3}.')
