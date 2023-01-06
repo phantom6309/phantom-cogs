@@ -291,7 +291,7 @@ class Burc(BaseCog):
            response = requests.get(URL, headers=headers)
            data = response.json()
            anlam = data['anlam']
-           await ctx.send(f'{anlam}'}
+           await ctx.send(f'{anlam}')
 
     def cog_unload(self):
         self.bot.loop.create_task(self.session.close())
