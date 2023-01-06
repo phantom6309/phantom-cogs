@@ -300,7 +300,7 @@ class Burc(BaseCog):
             await ctx.send(f"No definitions found for {word}.")
             return   
 
-        message = f"Definitions of {word}:\n"
+        message = f"{word} kelimesinin anlamları:\n"
         for i, definition in enumerate(definitions):
             message += f"{i+1}. {definition}\n"
         await ctx.send(message)
