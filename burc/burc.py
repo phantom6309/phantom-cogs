@@ -9,7 +9,7 @@ from googletrans import Translator
 from redbot.core import commands
 from redbot.core.utils.chat_formatting import box, humanize_list
 from redbot.core.utils.menus import DEFAULT_CONTROLS, menu
-import tdk
+
 # Libs
 import aiohttp
 
@@ -22,15 +22,8 @@ class Burc(BaseCog):
   
 
     
-    def get_definition(word):
-        api_response = requests.get(f'https://sozluk.gov.tr/gts?ara={word}')
-        word_definition = json.loads(api_response.text)
 
-        definition_text = ''
-        for meaning in word_definition['anlamlarListe']:
-          definition_text += f"{meaning['anlam']}\n"
 
-        return definition_text
 
 
     @commands.command()
@@ -293,7 +286,18 @@ class Burc(BaseCog):
 
     @commands.command()
     async def tdk(ctx, word):
-          definition_text = get_definition(word)
+          api_response = requests.get(f'https://sozluk.gov.tr/gts?ara={word}')
+
+          word_definition = json.loads(api_response.text)
+
+          definition_text = ''
+
+          for meaning in word_definition['anlamlarListe']:
+
+          definition_text += f"{meaning['anlam']}\n"
+
+          return definition_text
+          
           if definition_text:
              await ctx.send(definition_text)
           else:
