@@ -238,8 +238,8 @@ class Burc(BaseCog):
         await ctx.send(embed=embed)
 
 
-    @commands.command()
-    async def havadurumu(self, ctx, *, location):
+     @commands.command()
+     async def havadurumu(self, ctx, *, location):
         # Send a request to the OpenWeatherMap API to get the current weather
         # for the specified location
         r = requests.get(f'https://api.openweathermap.org/data/2.5/weather?q={location}&appid=a065235d36f27c780a5ac9f345c28194')
@@ -284,8 +284,8 @@ class Burc(BaseCog):
            #embed.add_field(name="address", value=Adres3)
            await ctx.send(embed=embed)
 
-     @commands.command()
-     async def tdk(ctx, word: str):
+    @commands.command()
+    async def tdk(ctx, word: str):
            URL = f"https://sozluk.gov.tr/gts?ara={word}"
            response = requests.get(URL)
            data = response.json()
