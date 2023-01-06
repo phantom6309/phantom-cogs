@@ -4,6 +4,7 @@
 import discord
 import requests
 import json
+from translate import Translator
 # Red
 from redbot.core import commands
 from redbot.core.utils.chat_formatting import box, humanize_list
@@ -29,7 +30,10 @@ class Burc(BaseCog):
         response = requests.post(endpoint, params=params)
         data = response.json()
         Yorum = data['description']
-        await ctx.send(f'{params} \n {Yorum}.')
+        translator= Translator(from_lang="en",to_lang="tr")
+        yorum = translator.translate('Yorum')
+        burc = translator.translate('params')
+        await ctx.send(f'{burc} \n {yorum}.')
         
        
 
