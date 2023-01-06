@@ -35,7 +35,7 @@ class Burc(BaseCog):
         yorum = r.json()
         yorum2 = yorum['text']
         burc = translator.translate(params, dest='tr')
-        await ctx.send(f'{params} \n {yorum}.')
+        await ctx.send(f'{params} \n {yorum2}.')
         
        
 
