@@ -284,24 +284,19 @@ class Burc(BaseCog):
            #embed.add_field(name="address", value=Adres3)
            await ctx.send(embed=embed)
 
-    @commands.command()
-    async def tdk(ctx, word:str):
-          api_response = requests.get(f'https://sozluk.gov.tr/gts?ara={word}')
+     @commands.command()
+     async def tdk(ctx, word: str):
+           URL = f"https://sozluk.gov.tr/gts?ara={word}"
+           response = requests.get(URL)
+           data = response.json()
 
-          word_definition = json.loads(api_response.text)
+           word = data[0]['madde']
+           meanings = [item['anlam'] for item in data[0]['anlamlarListe']]
 
-          definition_text = ''
-
-          for meaning in word_definition['anlamlarListe']:
-
-             definition_text += f"{meaning['anlam']}\n"
-
-          return definition_text
-          
-          if definition_text:
-             await ctx.send(definition_text)
-          else:
-             await ctx.send(f"I'm sorry, I couldn't find a definition for {word}")
+           embed = discord.Embed(title=f"Definition of {word}", color=discord.Color.blue())
+           embed.add_field(name="Meanings", value='\n'.join(meanings), inline=False)
+           await ctx.send(embed=embed)
+    
 
     def cog_unload(self):
         self.bot.loop.create_task(self.session.close())
