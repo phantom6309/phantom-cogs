@@ -280,7 +280,7 @@ class Burc(BaseCog):
            await ctx.send(embed=embed)
 
     @commands.command()
-    async def tdk(self, ctx, anlam:str):
+    async def sözlük(self, ctx, anlam:str):
       sonuclar = tdk.ara('anlam')
       for s in sonuclar:
           for i in s.anlamlar():
