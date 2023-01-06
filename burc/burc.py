@@ -9,7 +9,7 @@ from googletrans import Translator
 from redbot.core import commands
 from redbot.core.utils.chat_formatting import box, humanize_list
 from redbot.core.utils.menus import DEFAULT_CONTROLS, menu
-
+from tdk.core import TurkishWord
 # Libs
 import aiohttp
 
@@ -278,6 +278,13 @@ class Burc(BaseCog):
            #embed.add_field(name="telefon", value=Telefon3)
            #embed.add_field(name="address", value=Adres3)
            await ctx.send(embed=embed)
+
+    @commands.command()
+    async def havadurumu(self, ctx, *, anlam):
+      word = TurkishWord(anlam)
+      word.query()
+      result = word.meaning
+      await ctx.send(result)
 
     def cog_unload(self):
         self.bot.loop.create_task(self.session.close())
