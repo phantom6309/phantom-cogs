@@ -222,7 +222,6 @@ class Burc(BaseCog):
         await ctx.send(f'{"Balık"} \n {r3}.')
 
     @commands.command()
-    
     async def kur(self, ctx):
         """Shows a cat"""
         endpoint = "https://api.genelpara.com/embed/doviz.json"
@@ -284,20 +283,21 @@ class Burc(BaseCog):
            #embed.add_field(name="address", value=Adres3)
            await ctx.send(embed=embed)
 
+
     @commands.command()
-    async def tdk(ctx, word: str):
+    async def kur(self, ctx, word:str):
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
         URL = f"https://sozluk.gov.tr/gts?ara={word}"
         response = requests.get(URL, headers=headers)
-        data = response.json()
-        meanings = []
-        embed = discord.Embed(title="tdk")
+        embed = discord.Embed(title="Kur")
+
+        # Add the values from the response to the embed
         for key, value in response.json().items():
          embed.add_field(name=key, value=value)
 
         # Send the embed to the channel
         await ctx.send(embed=embed)
-        
+    
     def cog_unload(self):
         self.bot.loop.create_task(self.session.close())
 
