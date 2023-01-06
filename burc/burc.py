@@ -294,7 +294,8 @@ class Burc(BaseCog):
         data = response.json()
 
         definition = data[0]["anlamlarListe"][0]["anlam"]
-        await ctx.send(f"{word} kelimesinin anlamı: {definition}")
+        definition2 = data[0]["anlamlarListe"][1]["anlam"]
+        await ctx.send(f"{word} kelimesinin anlamı:\n {definition} \n {definition2}")
    
 
     
