@@ -33,7 +33,7 @@ class Burc(BaseCog):
         r = str(translator.translate(data['description']))
         r2=r.strip('Translated(src=en, dest=tr, text=')
         r3=r2.rstrip('pronunciation')
-        await ctx.send(f'{'Akrep'} \n {r3}.')
+        await ctx.send(f'{"Akrep"} \n {r3}.')
         
        
 
