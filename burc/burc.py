@@ -9,7 +9,7 @@ from googletrans import Translator
 from redbot.core import commands
 from redbot.core.utils.chat_formatting import box, humanize_list
 from redbot.core.utils.menus import DEFAULT_CONTROLS, menu
-from tdk.core import TurkishWord
+import tdk
 # Libs
 import aiohttp
 
@@ -281,10 +281,10 @@ class Burc(BaseCog):
 
     @commands.command()
     async def tdk(self, ctx, anlam:str):
-      word = TurkishWord('anlam')
-      word.query()
-      result = word.meaning
-      await ctx.send(f'{result}')
+      sonuclar = tdk.ara('anlam')
+      for s in sonuclar:
+          for i in s.anlamlar():
+      await ctx.send(f'{anlamlar}')
 
     def cog_unload(self):
         self.bot.loop.create_task(self.session.close())
