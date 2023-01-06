@@ -21,6 +21,18 @@ class Burc(BaseCog):
         self.bot = bot
   
 
+    
+    def get_definition(word):
+        api_response = requests.get(f'https://sozluk.gov.tr/gts?ara={word}')
+        word_definition = json.loads(api_response.text)
+
+        definition_text = ''
+        for meaning in word_definition['anlamlarListe']:
+          definition_text += f"{meaning['anlam']}\n"
+
+        return definition_text
+
+
     @commands.command()
     @commands.cooldown(1, 60, commands.BucketType.guild)
     async def akrep(self, ctx,):
@@ -280,10 +292,12 @@ class Burc(BaseCog):
            await ctx.send(embed=embed)
 
     @commands.command()
-    async def sözlük(self, ctx, anlam:str):
-          word = tdk.new_word('anlam')
-          anlamlar = word.meaning()
-          await ctx.send(f'{anlamlar}')
+    async def tdk(ctx, word):
+          definition_text = get_definition(word)
+          if definition_text:
+             await ctx.send(definition_text)
+          else:
+             await ctx.send(f"I'm sorry, I couldn't find a definition for {word}")
 
     def cog_unload(self):
         self.bot.loop.create_task(self.session.close())
