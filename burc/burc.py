@@ -285,7 +285,7 @@ class Burc(BaseCog):
            await ctx.send(embed=embed)
 
     @commands.command()
-    async def tdk(ctx, word):
+    async def tdk(ctx, word:str):
           api_response = requests.get(f'https://sozluk.gov.tr/gts?ara={word}')
 
           word_definition = json.loads(api_response.text)
