@@ -32,7 +32,7 @@ class Burc(BaseCog):
         Yorum = data['description']
         translator = Translator()
         r = str(translator.translate(Yorum, dest='tr'))
-        r2=r.lstrip('text=')
+        r2=r.lstrip('text')
         burc = translator.translate(params, dest='tr')
         await ctx.send(f'{params} \n {r2}.')
         
