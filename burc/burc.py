@@ -9,7 +9,7 @@ from googletrans import Translator
 from redbot.core import commands
 from redbot.core.utils.chat_formatting import box, humanize_list
 from redbot.core.utils.menus import DEFAULT_CONTROLS, menu
-from tdk import tdk
+import tdk
 # Libs
 import aiohttp
 
