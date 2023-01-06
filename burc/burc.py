@@ -32,10 +32,8 @@ class Burc(BaseCog):
         Yorum = data['description']
         translator = Translator()
         r = translator.translate(Yorum, dest='tr')
-        yorum = r.json()
-        yorum2 = yorum['text']
         burc = translator.translate(params, dest='tr')
-        await ctx.send(f'{params} \n {yorum2}.')
+        await ctx.send(f'{params} \n {r}.')
         
        
 
