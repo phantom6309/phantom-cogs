@@ -289,11 +289,10 @@ class Burc(BaseCog):
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
         URL = f"https://sozluk.gov.tr/gts?ara={word}"
         r = requests.post(URL, headers=headers)
-        response = r.json()
         embed = discord.Embed(title="Kur")
 
         # Add the values from the response to the embed
-        for key, value in response.json().items():
+        for key, value in r.json().items():
          embed.add_field(name=key, value=value)
 
         # Send the embed to the channel
