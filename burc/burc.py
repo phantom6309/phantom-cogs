@@ -291,13 +291,13 @@ class Burc(BaseCog):
         response = requests.get(URL, headers=headers)
         data = response.json()
         meanings = []
-        if data.get('anlamlarListe'):
-         for item in data['anlamlarListe']:
-            meanings.append(item['anlam'])
-        embed = discord.Embed(title=f"Definition of {word}", color=discord.Color.blue())
-        embed.add_field(name="Meanings", value='\n'.join(meanings), inline=False)
-        await ctx.send(embed=embed)
+        embed = discord.Embed(title="tdk")
+        for key, value in response.json().items():
+         embed.add_field(name=key, value=value)
 
+        # Send the embed to the channel
+        await ctx.send(embed=embed)
+        
     def cog_unload(self):
         self.bot.loop.create_task(self.session.close())
 
