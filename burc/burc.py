@@ -284,7 +284,7 @@ class Burc(BaseCog):
       word = TurkishWord(anlam)
       word.query()
       result = word.meaning
-      await ctx.send(result)
+      await ctx.send(f'{result})
 
     def cog_unload(self):
         self.bot.loop.create_task(self.session.close())
