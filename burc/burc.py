@@ -294,7 +294,7 @@ class Burc(BaseCog):
 
            meanings = []
            for item in data[0]['anlamlarListe']:
-           meanings.append(item['anlam'])
+            meanings.append(item['anlam'])
            embed = discord.Embed(title=f"Definition of {word}", color=discord.Color.blue())
            embed.add_field(name="Meanings", value='\n'.join(meanings), inline=False)
            await ctx.send(embed=embed)
