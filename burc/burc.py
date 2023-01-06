@@ -4,7 +4,7 @@
 import discord
 import requests
 import json
-from translate import Translator
+import translate
 # Red
 from redbot.core import commands
 from redbot.core.utils.chat_formatting import box, humanize_list
