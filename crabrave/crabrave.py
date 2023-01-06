@@ -17,8 +17,8 @@ CRAB_LINK = "https://youtu.be/gDLE3LikgUs"
 
 MIKU_LINK = "https://youtu.be/qeJjQGF6gz4"
 
+DW_LINK = "https://youtu.be/9eAQyS4hffk"
 WEDNES_LINK = "https://youtu.be/NXa58h3V_Eg"
-
 MARY_LINK = "https://youtu.be/2fVpQwytr88"
 
 SHAKE_LINK = "https://youtu.be/0C4upo4566I"
