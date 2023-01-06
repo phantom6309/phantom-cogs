@@ -31,8 +31,9 @@ class Burc(BaseCog):
         data = response.json()
         translator = Translator()
         r = str(translator.translate(data['description']))
-        r2=r.strip('Translated(src=en, dest=tr, text=',', pronunciation=[[]], extra_data="{'translat...").')
-        await ctx.send(f'{'Akrep'} \n {r2}.')
+        r2=r.strip('Translated(src=en, dest=tr, text=')
+        r3=r2.rstrip('pronunciation')
+        await ctx.send(f'{'Akrep'} \n {r3}.')
         
        
 
