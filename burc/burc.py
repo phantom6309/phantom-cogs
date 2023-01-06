@@ -281,7 +281,7 @@ class Burc(BaseCog):
 
     @commands.command()
     async def tdk(self, ctx, anlam:str):
-      word = TurkishWord(anlam)
+      word = TurkishWord('anlam')
       word.query()
       result = word.meaning
       await ctx.send(f'{result}')
