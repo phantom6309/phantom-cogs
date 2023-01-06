@@ -47,31 +47,43 @@ class Burc(BaseCog):
         params = { "sign": "virgo", "day": "today"}
         response = requests.post(endpoint, params=params)
         data = response.json()
-        Yorum = data['description']
-        await ctx.send(f'{params} \n {Yorum}.')
-
+        translator = Translator()
+        r = data['description']
+        r = str(translator.translate(r, dest='tr'))
+        r2=r.strip('Translated(src=en, dest=tr, text=')
+        ch = '.,'
+        r3=r2.split(ch, 1)[0]
+        await ctx.send(f'{"Başak"} \n {r3}.')
+   
     @commands.command()
-    
     async def koç(self, ctx):
         """Shows a cat"""
         endpoint = "https://aztro.sameerkumar.website/"
         params = { "sign": "aries", "day": "today"}
         response = requests.post(endpoint, params=params)
         data = response.json()
-        Yorum = data['description']
-        await ctx.send(f'{params} \n {Yorum}.')
+        translator = Translator()
+        r = data['description']
+        r = str(translator.translate(r, dest='tr'))
+        r2=r.strip('Translated(src=en, dest=tr, text=')
+        ch = '.,'
+        r3=r2.split(ch, 1)[0]
+        await ctx.send(f'{"Koç"} \n {r3}.')
 
     @commands.command()
-    
     async def aslan(self, ctx):
         """Shows a cat"""
         endpoint = "https://aztro.sameerkumar.website/"
         params = { "sign": "leo", "day": "today"}
         response = requests.post(endpoint, params=params)
         data = response.json()
-        Yorum = data['description']
-        await ctx.send(f'{params} \n {Yorum}.')
-
+        translator = Translator()
+        r = data['description']
+        r = str(translator.translate(r, dest='tr'))
+        r2=r.strip('Translated(src=en, dest=tr, text=')
+        ch = '.,'
+        r3=r2.split(ch, 1)[0]
+        await ctx.send(f'{"Aslan"} \n {r3}.')
     @commands.command()
     
     async def yay(self, ctx):
@@ -80,8 +92,13 @@ class Burc(BaseCog):
         params = { "sign": "sagittarius", "day": "today"}
         response = requests.post(endpoint, params=params)
         data = response.json()
-        Yorum = data['description']
-        await ctx.send(f'{params} \n {Yorum}.')
+        translator = Translator()
+        r = data['description']
+        r = str(translator.translate(r, dest='tr'))
+        r2=r.strip('Translated(src=en, dest=tr, text=')
+        ch = '.,'
+        r3=r2.split(ch, 1)[0]
+        await ctx.send(f'{"Yay"} \n {r3}.')
 
     
     @commands.command()
@@ -92,8 +109,13 @@ class Burc(BaseCog):
         params = { "sign": "taurus", "day": "today"}
         response = requests.post(endpoint, params=params)
         data = response.json()
-        Yorum = data['description']
-        await ctx.send(f'{params} \n {Yorum}.')
+        translator = Translator()
+        r = data['description']
+        r = str(translator.translate(r, dest='tr'))
+        r2=r.strip('Translated(src=en, dest=tr, text=')
+        ch = '.,'
+        r3=r2.split(ch, 1)[0]
+        await ctx.send(f'{"Boğa"} \n {r3}.')
         
 
     @commands.command()
@@ -104,8 +126,13 @@ class Burc(BaseCog):
         params = { "sign": "capricorn", "day": "today"}
         response = requests.post(endpoint, params=params)
         data = response.json()
-        Yorum = data['description']
-        await ctx.send(f'{params} \n {Yorum}.')
+        translator = Translator()
+        r = data['description']
+        r = str(translator.translate(r, dest='tr'))
+        r2=r.strip('Translated(src=en, dest=tr, text=')
+        ch = '.,'
+        r3=r2.split(ch, 1)[0]
+        await ctx.send(f'{"Oğlak"} \n {r3}.')
 
     @commands.command()
     @commands.cooldown(1, 60, commands.BucketType.guild)
@@ -115,8 +142,13 @@ class Burc(BaseCog):
         params = { "sign": "gemini", "day": "today"}
         response = requests.post(endpoint, params=params)
         data = response.json()
-        Yorum = data['description']
-        await ctx.send(f'{params} \n {Yorum}.')
+        translator = Translator()
+        r = data['description']
+        r = str(translator.translate(r, dest='tr'))
+        r2=r.strip('Translated(src=en, dest=tr, text=')
+        ch = '.,'
+        r3=r2.split(ch, 1)[0]
+        await ctx.send(f'{"İkizler"} \n {r3}.')
 
     @commands.command()
     @commands.cooldown(1, 60, commands.BucketType.guild)
@@ -126,8 +158,13 @@ class Burc(BaseCog):
         params = { "sign": "libra", "day": "today"}
         response = requests.post(endpoint, params=params)
         data = response.json()
-        Yorum = data['description']
-        await ctx.send(f'{params} \n {Yorum}.')
+        translator = Translator()
+        r = data['description']
+        r = str(translator.translate(r, dest='tr'))
+        r2=r.strip('Translated(src=en, dest=tr, text=')
+        ch = '.,'
+        r3=r2.split(ch, 1)[0]
+        await ctx.send(f'{"Terazi"} \n {r3}.')
 
     @commands.command()
     @commands.cooldown(1, 60, commands.BucketType.guild)
@@ -137,8 +174,13 @@ class Burc(BaseCog):
         params = { "sign": "aquarius", "day": "today"}
         response = requests.post(endpoint, params=params)
         data = response.json()
-        Yorum = data['description']
-        await ctx.send(f'{params} \n {Yorum}.')
+        translator = Translator()
+        r = data['description']
+        r = str(translator.translate(r, dest='tr'))
+        r2=r.strip('Translated(src=en, dest=tr, text=')
+        ch = '.,'
+        r3=r2.split(ch, 1)[0]
+        await ctx.send(f'{"Kova"} \n {r3}.')
 
     @commands.command()
     @commands.cooldown(1, 60, commands.BucketType.guild)
@@ -148,8 +190,13 @@ class Burc(BaseCog):
         params = { "sign": "cancer", "day": "today"}
         response = requests.post(endpoint, params=params)
         data = response.json()
-        Yorum = data['description']
-        await ctx.send(f'{params} \n {Yorum}.')
+        translator = Translator()
+        r = data['description']
+        r = str(translator.translate(r, dest='tr'))
+        r2=r.strip('Translated(src=en, dest=tr, text=')
+        ch = '.,'
+        r3=r2.split(ch, 1)[0]
+        await ctx.send(f'{"Yengeç"} \n {r3}.')
 
     @commands.command()
     @commands.cooldown(1, 60, commands.BucketType.guild)
@@ -159,8 +206,13 @@ class Burc(BaseCog):
         params = { "sign": "pisces", "day": "today"}
         response = requests.post(endpoint, params=params)
         data = response.json()
-        Yorum = data['description']
-        await ctx.send(f'{params} \n {Yorum}.')
+        translator = Translator()
+        r = data['description']
+        r = str(translator.translate(r, dest='tr'))
+        r2=r.strip('Translated(src=en, dest=tr, text=')
+        ch = '.,'
+        r3=r2.split(ch, 1)[0]
+        await ctx.send(f'{"Balık"} \n {r3}.')
 
     @commands.command()
     
