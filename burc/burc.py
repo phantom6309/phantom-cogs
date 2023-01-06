@@ -294,7 +294,7 @@ class Burc(BaseCog):
 
           for meaning in word_definition['anlamlarListe']:
 
-          definition_text += f"{meaning['anlam']}\n"
+             definition_text += f"{meaning['anlam']}\n"
 
           return definition_text
           
