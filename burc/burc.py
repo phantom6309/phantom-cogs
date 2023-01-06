@@ -29,12 +29,10 @@ class Burc(BaseCog):
         params = { "sign": "scorpio", "day": "today"}
         response = requests.post(endpoint, params=params)
         data = response.json()
-        Yorum = data['description']
         translator = Translator()
-        r = str(translator.translate(Yorum, dest='tr'))
-        r2=r.strip('Translated(src=en, dest=tr, text=')
-        burc = translator.translate(params, dest='tr')
-        await ctx.send(f'{params} \n {r2}.')
+        r = str(translator.translate(data['description']))
+        r2=r.strip('Translated(src=en, dest=tr, text=',', pronunciation=[[]], extra_data="{'translat...").')
+        await ctx.send(f'{'Akrep'} \n {r2}.')
         
        
 
