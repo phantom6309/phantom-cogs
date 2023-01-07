@@ -140,7 +140,7 @@ class Kelime(commands.Cog):
             self.scores = defaultdict(int)
             channel2 = self.game_channel
             await ctx.send(f"Yeni oyun {channel2} kanalında başladı!")
-            await ctx.send(f"Başlangıç kelimesi: {self.current_word}")
+            await channel2.send(f"Başlangıç kelimesi: {self.current_word}")
 
 
     @Cog.listener()
