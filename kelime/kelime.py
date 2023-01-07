@@ -134,7 +134,13 @@ class Kelime(commands.Cog):
             await ctx.send(f"Yeni oyun {ctx.channel.mention} kanalında başladı!")
             await ctx.send(f"Başlangıç kelimesi: {self.current_word}")
         else:
-            await ctx.send("Oyun zaten açık.")
+            self.current_word = self.word_list[randint(
+                0, len(self.word_list) - 1)]
+            self.winning_score = None
+            self.scores = defaultdict(int)
+            await ctx.send(f"Yeni oyun {ctx.channel.mention} kanalında başladı!")
+            await ctx.send(f"Başlangıç kelimesi: {self.current_word}")
+
 
     @Cog.listener()
     async def on_message(self, message: discord.Message):
