@@ -63,6 +63,7 @@ class Kelime(commands.Cog):
         await self.game_channel.send(f"{word} kelimesiyle biten kelime oynayamazsınız. Sıradaki kelime: {self.current_word}")
      if word in self.word_list and word not in self.used_words:
         self.used_words.append(word)
+        self.current_word = word
         self.scores[user.id] += len(word)
         emoji = '\N{THUMBS UP SIGN}'
         await message.add_reaction(emoji)
@@ -148,7 +149,7 @@ class Kelime(commands.Cog):
             test = kek.translate(lower_map)
             word = test.lower()
             if self.current_word and word[0].startswith(self.current_word[-1]) and word in self.word_list:
-                self.current_word = word
+                
                 await self.give_points(message.author, word, message)
                 if self.winning_score is not None:
                     user_score = self.scores[message.author.id]
