@@ -17,15 +17,9 @@ class Tarif(commands.Cog):
     @commands.command()
     async def tarif(self, ctx, yemek:str):
         scraper = scrape_me('https://yemek.com/tarif/{yemek}/')
-        scraper.title()
-        scraper.total_time()
-        scraper.yields()
-        scraper.ingredients()
+  
         yapılış = scraper.instructions()  # or alternatively for results as a Python list: scraper.instructions_list()
-        scraper.image()
-        scraper.host()
-        scraper.links()
-        scraper.nutrients() 
+
         await ctx.send(f'{yapılış}')
 
 
