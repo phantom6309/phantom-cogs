@@ -15,8 +15,8 @@ class Tarif(commands.Cog):
     @commands.command()
     async def tarif(self, ctx, *, r):
         for i in r:
-         if(i.isspace()):
-          r=r.replace(i,"-")
+            if (i.isspace()):
+                r = r.replace(i, "-")
         lower_map = {
             ord(u'ö'): u'o',
             ord(u'ç'): u'c',
@@ -27,24 +27,25 @@ class Tarif(commands.Cog):
         yemek = r.translate(lower_map)
         url = f"https://yemek.com/tarif/{yemek}"
         scraper = scrape_me(url)
-        yemekismi = scraper.title()
-        hazırlamasüresi = scraper.total_time()
-        kaçkişilik = scraper.yields()
-        malzemeler = scraper.ingredients()
-        photo = scraper.image()
-        besindeğer = scraper.nutrients()
-        yapılış = scraper.instructions()
-        embed = discord.Embed(title=yemekismi)
-        embed.add_field(name="Hazırlama süresi", value=hazırlamasüresi)
-        embed.add_field(name="Kaç Kişilik", value=kaçkişilik)
-        embed.add_field(name="Malzemeler", value=malzemeler)
-        embed.add_field(name="Besin Değeri", value=besindeğer)
-        embed.set_image(url=photo)
-        await ctx.send(embed=embed)
-        for i in range(ceil(len(yapılış) / 4096)):
+        
+        if scraper is None:
+            await ctx.send(f'Yemek bulunamadı')
+        else:
+         yemekismi = scraper.title()
+         hazırlamasüresi = scraper.total_time()
+         kaçkişilik = scraper.yields()
+         malzemeler = scraper.ingredients()
+         photo = scraper.image()
+         besindeğer = scraper.nutrients()
+         yapılış = scraper.instructions()
+         embed = discord.Embed(title=yemekismi)
+         embed.add_field(name="Hazırlama süresi", value=hazırlamasüresi)
+         embed.add_field(name="Kaç Kişilik", value=kaçkişilik)
+         embed.add_field(name="Malzemeler", value=malzemeler)
+         embed.add_field(name="Besin Değeri", value=besindeğer)
+         embed.set_image(url=photo)
+         await ctx.send(embed=embed)
+         for i in range(ceil(len(yapılış) / 4096)):
             embed2 = discord.Embed(title='Hazırlanışı')
             embed2.description = (yapılış[(4096*i):(4096*(i+1))])
             await ctx.send(embed=embed2)
-        error = getattr(error, "original", error)
-        if isinstance(error, TypeError):     
-         await ctx.send(f'Yemek bulunamadı') 
