@@ -38,6 +38,7 @@ class Tarif(commands.Cog):
         embed.add_field(name="Besin Değeri", value=besindeğer)
         embed.set_image(url=photo)
         await ctx.send(embed=embed)
+        await ctx.send(yemek)
         for i in range(ceil(len(yapılış) / 4096)):
             embed2 = discord.Embed(title='Hazırlanışı')
             embed2.description = (yapılış[(4096*i):(4096*(i+1))])
