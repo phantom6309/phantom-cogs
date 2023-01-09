@@ -2,7 +2,7 @@
 import discord
 from redbot.core import checks, commands, bot
 from recipe_scrapers import scrape_me
-
+from math import ceil
 
 class Tarif(commands.Cog):
     """başkalarının renklerine bakın"""
@@ -23,12 +23,14 @@ class Tarif(commands.Cog):
         besindeğer = scraper.nutrients()
         yapılış = scraper.instructions()
         embed = discord.Embed(title={yemekismi})
-        embed.add_field(name="hazırlama süresi", value=hazırlamasüresi)
-        embed.add_field(name="kaç kişilik", value=kaçkişilik)
-        embed.add_field(name="malzemeler", value=malzemeler)
-        embed.add_field(name="besindeğer", value=besindeğer)
-        embed2 = discord.Embed(title="hazırlanışı")
-        embed2.add_field(name="yapılış", value=yapılış)
-        embed2.add_field(name="photo", value=photo)
+        embed.add_field(name="Hazırlama Süresi", value=hazırlamasüresi)
+        embed.add_field(name="Kaç Kişilik", value=kaçkişilik)
+        embed.add_field(name="Malzemeler", value=malzemeler)
+        embed.add_field(name="Besin Değeri", value=besindeğer)
+        embed.add_field(name="photo", value=photo)
         await ctx.send(embed=embed)
-        await ctx.send(embed=embed2)
+        for i in range(ceil(len(yapılış) / 4096)):
+         embed2 = discord.Embed(title='Hazırlanışı')
+         embed2.description = (yapılış[(4096*i):(4096*(i+1))])
+         await ctx.send(embed=embed2)
+        
