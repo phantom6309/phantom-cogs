@@ -13,15 +13,15 @@ class Tarif(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def tarif(self, ctx, yemek):
+    async def tarif(self, ctx, r):
         lower_map = {
             ord(u'ö'): u'o',
             ord(u'ı'): u'i',
             ord(u'ş'): u's',
             ord(u'ü'): u'u',
         }
-        yemek = yemek.translate(lower_map)
-        yemek = '-'.join(yemek.split())
+        r2 = r.translate(lower_map)
+        yemek = '-'.join(r2.split())
         url = f"https://yemek.com/tarif/{yemek}"
         scraper = scrape_me(url)
         yemekismi = scraper.title()
