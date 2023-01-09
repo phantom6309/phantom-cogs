@@ -23,6 +23,7 @@ class Tarif(commands.Cog):
             ord(u'ş'): u's',
             ord(u'ü'): u'u',
             ord(u'ı'): u'i',
+            ord(u'ğ'): u'g',
         }
         yemek = r.translate(lower_map)
         url = f"https://yemek.com/tarif/{yemek}"
