@@ -13,7 +13,7 @@ class Tarif(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def tarif(self, ctx, r):
+    async def tarif(self, ctx, r:str):
         r = r.replace(' ', '-')
         lower_map = {
             ord(u'ö'): u'o',
@@ -22,6 +22,7 @@ class Tarif(commands.Cog):
             ord(u'ı'): u'i',
         }
         yemek = r.translate(lower_map)  
+        await ctx.send(yemek)
         url = f"https://yemek.com/tarif/{yemek}"
         scraper = scrape_me(url)
         yemekismi = scraper.title()
@@ -38,7 +39,7 @@ class Tarif(commands.Cog):
         embed.add_field(name="Besin Değeri", value=besindeğer)
         embed.set_image(url=photo)
         await ctx.send(embed=embed)
-        await ctx.send(yemek)
+        
         for i in range(ceil(len(yapılış) / 4096)):
             embed2 = discord.Embed(title='Hazırlanışı')
             embed2.description = (yapılış[(4096*i):(4096*(i+1))])
