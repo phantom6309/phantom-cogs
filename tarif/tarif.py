@@ -13,13 +13,13 @@ class Tarif(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def tarif(self, ctx, r2):
-        r = r2.replace('','-')
+    async def tarif(self, ctx, r):
         lower_map = {
             ord(u'ö'): u'o',
             ord(u'ş'): u's',
             ord(u'ü'): u'u',
             ord(u'ı'): u'i',
+            ord(u''): u'i',
         }
         yemek = r.translate(lower_map)  
         url = f"https://yemek.com/tarif/{yemek}"
