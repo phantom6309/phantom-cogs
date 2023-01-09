@@ -13,7 +13,7 @@ class Tarif(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def tarif(self, ctx, r):
+    async def tarif(self, ctx, r:str):
         lower_map = {
             ord(u'ö'): u'o',
             ord(u'ı'): u'i',
