@@ -14,14 +14,14 @@ class Tarif(commands.Cog):
 
     @commands.command()
     async def tarif(self, ctx, r:str):
-        r2 = r.replace(' ','-')
+        r2 = r2.replace(' ','-')
         lower_map = {
             ord(u'ö'): u'o',
             ord(u'ı'): u'i',
             ord(u'ş'): u's',
             ord(u'ü'): u'u',
         }
-        yemek = r2.translate(lower_map)  
+        yemek = r.translate(lower_map)  
         url = f"https://yemek.com/tarif/{yemek}"
         scraper = scrape_me(url)
         yemekismi = scraper.title()
