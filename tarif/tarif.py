@@ -28,5 +28,6 @@ class Tarif(commands.Cog):
         embed.add_field(name="malzemeler", value=malzemeler)
         embed.add_field(name="besindeğer", value=besindeğer)
         embed.add_field(name="yapılış", value=yapılış)
-        embed.set_image(photo)
+        embed.add_field(name="photo", value=photo)
+        
         await ctx.send(embed=embed)
