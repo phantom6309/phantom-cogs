@@ -21,7 +21,7 @@ class Tarif(commands.Cog):
             ord(u'ü'): u'u',
         }
         yemek = yemek.translate(lower_map)
-        yemek = yemek.replace(' ','-')
+        yemek = '-'.join(yemek.split())
         url = f"https://yemek.com/tarif/{yemek}"
         scraper = scrape_me(url)
         yemekismi = scraper.title()
