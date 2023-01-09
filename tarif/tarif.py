@@ -27,7 +27,8 @@ class Tarif(commands.Cog):
         embed.add_field(name="kaç kişilik", value=kaçkişilik)
         embed.add_field(name="malzemeler", value=malzemeler)
         embed.add_field(name="besindeğer", value=besindeğer)
-        embed.add_field(name="yapılış", value=yapılış)
-        embed.add_field(name="photo", value=photo)
-        
+        embed2 = discord.Embed(title="hazırlanışı")
+        embed2.add_field(name="yapılış", value=yapılış)
+        embed2.add_field(name="photo", value=photo)
         await ctx.send(embed=embed)
+        await ctx.send(embed=embed2)
