@@ -13,7 +13,7 @@ class Tarif(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def tarif(self, ctx, r):
+    async def tarif(self, ctx, *, r):
         for i in r:
          if(i.isspace()):
           r=r.replace(i,"-")
