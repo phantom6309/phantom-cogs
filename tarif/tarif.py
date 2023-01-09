@@ -24,9 +24,11 @@ class Tarif(commands.Cog):
             ord(u'ü'): u'u',
             ord(u'ı'): u'i',
         }
-        yemek = r.translate(lower_map)  
-        await ctx.send(yemek)
+        yemek = r.translate(lower_map)
         url = f"https://yemek.com/tarif/{yemek}"
+        error = getattr(error, "original", error)
+        if isinstance(error, TypeError):     
+         await ctx.send(f'Yemek bulunamadı') 
         scraper = scrape_me(url)
         yemekismi = scraper.title()
         hazırlamasüresi = scraper.total_time()
@@ -42,7 +44,6 @@ class Tarif(commands.Cog):
         embed.add_field(name="Besin Değeri", value=besindeğer)
         embed.set_image(url=photo)
         await ctx.send(embed=embed)
-        
         for i in range(ceil(len(yapılış) / 4096)):
             embed2 = discord.Embed(title='Hazırlanışı')
             embed2.description = (yapılış[(4096*i):(4096*(i+1))])
