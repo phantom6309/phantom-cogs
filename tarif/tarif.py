@@ -23,7 +23,7 @@ class Tarif(commands.Cog):
         besindeğer = scraper.nutrients()
         yapılış = scraper.instructions()
         embed = discord.Embed(title={yemekismi})
-        embed.add_field(name="Hazırlama Süresi", value=hazırlamasüresi)
+        embed.add_field(name="Hazırlama süresi", value=hazırlamasüresi)
         embed.add_field(name="Kaç Kişilik", value=kaçkişilik)
         embed.add_field(name="Malzemeler", value=malzemeler)
         embed.add_field(name="Besin Değeri", value=besindeğer)
