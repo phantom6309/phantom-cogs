@@ -26,9 +26,6 @@ class Tarif(commands.Cog):
         }
         yemek = r.translate(lower_map)
         url = f"https://yemek.com/tarif/{yemek}"
-        error = getattr(error, "original", error)
-        if isinstance(error, TypeError):     
-         await ctx.send(f'Yemek bulunamadı') 
         scraper = scrape_me(url)
         yemekismi = scraper.title()
         hazırlamasüresi = scraper.total_time()
@@ -48,3 +45,6 @@ class Tarif(commands.Cog):
             embed2 = discord.Embed(title='Hazırlanışı')
             embed2.description = (yapılış[(4096*i):(4096*(i+1))])
             await ctx.send(embed=embed2)
+        error = getattr(error, "original", error)
+        if isinstance(error, TypeError):     
+         await ctx.send(f'Yemek bulunamadı') 
