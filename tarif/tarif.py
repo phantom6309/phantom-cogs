@@ -18,7 +18,7 @@ class Tarif(commands.Cog):
             ord(u'ö'): u'o',
             ord(u'ı'): u'i',
             ord(u'ş'): u's',
-            ord(u' '): u'-',
+            ord(u''): u'-',
             ord(u'ü'): u'u',
         }
         yemek = yemek.translate(lower_map)
