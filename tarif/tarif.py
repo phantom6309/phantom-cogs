@@ -14,12 +14,12 @@ class Tarif(commands.Cog):
 
     @commands.command()
     async def tarif(self, ctx, r2:str):
-        r2 = r2.replace('','-')
-        r = r2.replace('ı','i')
+        r = r2.replace('','-')
         lower_map = {
             ord(u'ö'): u'o',
             ord(u'ş'): u's',
             ord(u'ü'): u'u',
+            ord(u'ı'): u'i',
         }
         yemek = r.translate(lower_map)  
         url = f"https://yemek.com/tarif/{yemek}"
