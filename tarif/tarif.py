@@ -19,6 +19,7 @@ class Tarif(commands.Cog):
           r=r.replace(i,"-")
         lower_map = {
             ord(u'ö'): u'o',
+            ord(u'ç'): u'c',
             ord(u'ş'): u's',
             ord(u'ü'): u'u',
             ord(u'ı'): u'i',
