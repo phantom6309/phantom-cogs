@@ -14,11 +14,10 @@ class Tarif(commands.Cog):
 
     @commands.command()
     async def tarif(self, ctx, r2:str):
-        r2 = r2.replace(' ','-')
+        r2 = r2.replace('','-')
         r = r2.replace('ı','i')
         lower_map = {
             ord(u'ö'): u'o',
-
             ord(u'ş'): u's',
             ord(u'ü'): u'u',
         }
