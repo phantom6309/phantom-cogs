@@ -6,8 +6,6 @@ import discord
 import sqlite3
 from collections import defaultdict
 from random import randint
-import locale
-locale.setlocale(locale.LC_ALL, 'tr_TR.utf8')
 import random
 
 class Kelime(commands.Cog):
