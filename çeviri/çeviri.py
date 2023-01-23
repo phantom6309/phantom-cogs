@@ -13,7 +13,7 @@ class Çeviri(commands.Cog):
         """çeviri temel komutu"""
         pass
 
-    @çeviri.commans(name="kanal")
+    @çeviri.commands(name="kanal")
     async def _kanal(self, ctx, channel: discord.TextChannel):
         self.channel_id = channel.id
         await ctx.send(f"Translate channel set to {channel.mention}")
