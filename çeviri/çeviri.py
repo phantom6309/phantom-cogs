@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import discord
 from redbot.core import commands
 import googletrans
@@ -6,9 +7,14 @@ class Çeviri(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.translator = googletrans.Translator()
+    
+    @commands.group()
+    async def çeviri(self, ctx: commands.Context) -> None:
+        """çeviri temel komutu"""
+        pass
 
-    @commands.command()
-    async def setchannel(self, ctx, channel: discord.TextChannel):
+    @çeviri.commans(name="kanal")
+    async def _kanal(self, ctx, channel: discord.TextChannel):
         self.channel_id = channel.id
         await ctx.send(f"Translate channel set to {channel.mention}")
 
