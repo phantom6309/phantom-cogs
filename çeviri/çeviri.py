@@ -9,11 +9,11 @@ class Çeviri(commands.Cog):
         self.translator = googletrans.Translator()
     
     @commands.group()
-    async def çeviri(self, ctx: commands.Context) -> None:
+    async def ceviri(self, ctx: commands.Context) -> None:
         """çeviri temel komutu"""
         pass
 
-    @çeviri.commands(name="kanal")
+    @ceviri.commands(name="kanal")
     async def _kanal(self, ctx, channel: discord.TextChannel):
         self.channel_id = channel.id
         await ctx.send(f"Translate channel set to {channel.mention}")
