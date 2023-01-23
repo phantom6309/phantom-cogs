@@ -17,6 +17,8 @@ class Çeviri(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
+        if message.author == self.bot.user:
+            return
         if message.channel.id == self.channel_id:
             src = self.translator.detect(message.content).lang
             dest = 'tr' if src == 'en' else 'en'
