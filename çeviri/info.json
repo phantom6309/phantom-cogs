@@ -1,0 +1,10 @@
+{
+  "author" : ["phantom"],
+  "bot_version": [3,0,0],
+  "install_msg" : "çeviri modülü",
+  "short" : "çeviri",
+  "description" : "iki yönlü çeviri",
+  "requirements" : ["googletrans"],
+  "tags" : ["çeviri"],
+  "hidden" : false
+}
