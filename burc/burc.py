@@ -28,20 +28,20 @@ class Burc(BaseCog):
 
     @commands.command()
     @commands.cooldown(1, 60, commands.BucketType.guild)
-    async def akrep(self, ctx,):
+    async def astro(self, ctx, sign: str, lang: str):
         """Shows a cat"""
         endpoint = "https://aztro.sameerkumar.website/"
-        params = { "sign": "scorpio", "day": "today"}
+        params = { "sign": 'sign', "day": "today"}
         response = requests.post(endpoint, params=params)
         data = response.json()
         translator = Translator()
         r = data['description']
-        r = str(translator.translate(r, dest='tr'))
+        r = str(translator.translate(r, dest='lang'))
         ch = 'text='
         r2=r.split(ch, 1)[1]
         ch = '.,'
         r3=r2.split(ch, 1)[0]
-        await ctx.send(f'{"Akrep"} \n {r3}.')
+        await ctx.send(f'{'sign'} \n {r3}.')
         
        
 
