@@ -41,7 +41,7 @@ class Burc(BaseCog):
         r2=r.split(ch, 1)[1]
         ch = '.,'
         r3=r2.split(ch, 1)[0]
-        await ctx.send(f'{'sign'} \n {r3}.')
+        await ctx.send(f'{sign} \n {r3}.')
         
        
 
