@@ -1,4 +1,4 @@
-# Post animal pics by Eslyium#1949 & Yukirin#0048
+
 
 # Discord
 import discord
@@ -15,7 +15,7 @@ import aiohttp
 
 BaseCog = getattr(commands, "Cog", object)
 class Burc(BaseCog):
-    """Animal commands."""
+    """"""
 
     def __init__(self, bot):
         self.bot = bot
@@ -27,9 +27,9 @@ class Burc(BaseCog):
 
 
     @commands.command()
-    @commands.cooldown(1, 60, commands.BucketType.guild)
+    @commands.cooldown(1, 2, commands.BucketType.guild)
     async def astro(self, ctx, sign: str, lang: str):
-        """Shows a cat"""
+        """Günlük burç yorumunuzu gösterir"""
         endpoint = "https://aztro.sameerkumar.website/"
         params = { "sign": sign, "day": "today"}
         response = requests.post(endpoint, params=params)
@@ -41,189 +41,16 @@ class Burc(BaseCog):
         r2=r.split(ch, 1)[1]
         ch = '.,'
         r3=r2.split(ch, 1)[0]
+        sign = str(translator.translate(sign, dest=lang))
         await ctx.send(f'{sign} \n {r3}.')
         
        
 
-    @commands.command()
     
-    async def başak(self, ctx):
-        """Shows a cat"""
-        endpoint = "https://aztro.sameerkumar.website/"
-        params = { "sign": "virgo", "day": "today"}
-        response = requests.post(endpoint, params=params)
-        data = response.json()
-        translator = Translator()
-        r = data['description']
-        r = str(translator.translate(r, dest='tr'))
-        r2=r.strip('Translated(src=en, dest=tr, text=')
-        ch = '.,'
-        r3=r2.split(ch, 1)[0]
-        await ctx.send(f'{"Başak"} \n {r3}.')
-   
-    @commands.command()
-    async def koç(self, ctx):
-        """Shows a cat"""
-        endpoint = "https://aztro.sameerkumar.website/"
-        params = { "sign": "aries", "day": "today"}
-        response = requests.post(endpoint, params=params)
-        data = response.json()
-        translator = Translator()
-        r = data['description']
-        r = str(translator.translate(r, dest='tr'))
-        r2=r.strip('Translated(src=en, dest=tr, text=')
-        ch = '.,'
-        r3=r2.split(ch, 1)[0]
-        await ctx.send(f'{"Koç"} \n {r3}.')
-
-    @commands.command()
-    async def aslan(self, ctx):
-        """Shows a cat"""
-        endpoint = "https://aztro.sameerkumar.website/"
-        params = { "sign": "leo", "day": "today"}
-        response = requests.post(endpoint, params=params)
-        data = response.json()
-        translator = Translator()
-        r = data['description']
-        r = str(translator.translate(r, dest='tr'))
-        r2=r.strip('Translated(src=en, dest=tr, text=')
-        ch = '.,'
-        r3=r2.split(ch, 1)[0]
-        await ctx.send(f'{"Aslan"} \n {r3}.')
-    @commands.command()
-    
-    async def yay(self, ctx):
-        """Shows a cat"""
-        endpoint = "https://aztro.sameerkumar.website/"
-        params = { "sign": "sagittarius", "day": "today"}
-        response = requests.post(endpoint, params=params)
-        data = response.json()
-        translator = Translator()
-        r = data['description']
-        r = str(translator.translate(r, dest='tr'))
-        r2=r.strip('Translated(src=en, dest=tr, text=')
-        ch = '.,'
-        r3=r2.split(ch, 1)[0]
-        await ctx.send(f'{"Yay"} \n {r3}.')
-
-    
-    @commands.command()
-    
-    async def boğa(self, ctx):
-        """Shows a cat"""
-        endpoint = "https://aztro.sameerkumar.website/"
-        params = { "sign": "taurus", "day": "today"}
-        response = requests.post(endpoint, params=params)
-        data = response.json()
-        translator = Translator()
-        r = data['description']
-        r = str(translator.translate(r, dest='tr'))
-        r2=r.strip('Translated(src=en, dest=tr, text=')
-        ch = '.,'
-        r3=r2.split(ch, 1)[0]
-        await ctx.send(f'{"Boğa"} \n {r3}.')
-        
-
-    @commands.command()
-    @commands.cooldown(1, 60, commands.BucketType.guild)
-    async def oğlak(self, ctx):
-        """Shows a cat"""
-        endpoint = "https://aztro.sameerkumar.website/"
-        params = { "sign": "capricorn", "day": "today"}
-        response = requests.post(endpoint, params=params)
-        data = response.json()
-        translator = Translator()
-        r = data['description']
-        r = str(translator.translate(r, dest='tr'))
-        r2=r.strip('Translated(src=en, dest=tr, text=')
-        ch = '.,'
-        r3=r2.split(ch, 1)[0]
-        await ctx.send(f'{"Oğlak"} \n {r3}.')
-
-    @commands.command()
-    @commands.cooldown(1, 60, commands.BucketType.guild)
-    async def ikizler(self, ctx):
-        """Shows a cat"""
-        endpoint = "https://aztro.sameerkumar.website/"
-        params = { "sign": "gemini", "day": "today"}
-        response = requests.post(endpoint, params=params)
-        data = response.json()
-        translator = Translator()
-        r = data['description']
-        r = str(translator.translate(r, dest='tr'))
-        r2=r.strip('Translated(src=en, dest=tr, text=')
-        ch = '.,'
-        r3=r2.split(ch, 1)[0]
-        await ctx.send(f'{"İkizler"} \n {r3}.')
-
-    @commands.command()
-    @commands.cooldown(1, 60, commands.BucketType.guild)
-    async def terazi(self, ctx):
-        """Shows a cat"""
-        endpoint = "https://aztro.sameerkumar.website/"
-        params = { "sign": "libra", "day": "today"}
-        response = requests.post(endpoint, params=params)
-        data = response.json()
-        translator = Translator()
-        r = data['description']
-        r = str(translator.translate(r, dest='tr'))
-        ch = 'text='
-        r2=r.split(ch, 1)[1]
-        ch = '.,'
-        r3=r2.split(ch, 1)[0]
-        await ctx.send(f'{"Terazi"} \n {r3}.')
-
-    @commands.command()
-    @commands.cooldown(1, 60, commands.BucketType.guild)
-    async def kova(self, ctx):
-        """Shows a cat"""
-        endpoint = "https://aztro.sameerkumar.website/"
-        params = { "sign": "aquarius", "day": "today"}
-        response = requests.post(endpoint, params=params)
-        data = response.json()
-        translator = Translator()
-        r = data['description']
-        r = str(translator.translate(r, dest='tr'))
-        r2=r.strip('Translated(src=en, dest=tr, text=')
-        ch = '.,'
-        r3=r2.split(ch, 1)[0]
-        await ctx.send(f'{"Kova"} \n {r3}.')
-
-    @commands.command()
-    @commands.cooldown(1, 60, commands.BucketType.guild)
-    async def yengeç(self, ctx):
-        """Shows a cat"""
-        endpoint = "https://aztro.sameerkumar.website/"
-        params = { "sign": "cancer", "day": "today"}
-        response = requests.post(endpoint, params=params)
-        data = response.json()
-        translator = Translator()
-        r = data['description']
-        r = str(translator.translate(r, dest='tr'))
-        r2=r.strip('Translated(src=en, dest=tr, text=')
-        ch = '.,'
-        r3=r2.split(ch, 1)[0]
-        await ctx.send(f'{"Yengeç"} \n {r3}.')
-
-    @commands.command()
-    @commands.cooldown(1, 60, commands.BucketType.guild)
-    async def balık(self, ctx):
-        """Shows a cat"""
-        endpoint = "https://aztro.sameerkumar.website/"
-        params = { "sign": "pisces", "day": "today"}
-        response = requests.post(endpoint, params=params)
-        data = response.json()
-        translator = Translator()
-        r = data['description']
-        r = str(translator.translate(r, dest='tr'))
-        r2=r.strip('Translated(src=en, dest=tr, text=')
-        ch = '.,'
-        r3=r2.split(ch, 1)[0]
-        await ctx.send(f'{"Balık"} \n {r3}.')
 
     @commands.command()
     async def kur(self, ctx):
-        """Shows a cat"""
+        """Güncel döviz kurunu gösterir"""
         endpoint = "https://api.genelpara.com/embed/doviz.json"
         
         response = requests.post(endpoint)
@@ -237,22 +64,7 @@ class Burc(BaseCog):
         await ctx.send(embed=embed)
 
 
-    @commands.command()
-    async def havadurumu(self, ctx, *, location):
-        # Send a request to the OpenWeatherMap API to get the current weather
-        # for the specified location
-        r = requests.get(f'https://api.openweathermap.org/data/2.5/weather?q={location}&appid=a065235d36f27c780a5ac9f345c28194')
-        weather_data = r.json()
-
-        # Extract the relevant information from the API response
-        city = weather_data['name']
-        country = weather_data['sys']['country']
-        temperature = weather_data['main']['temp']
-        temperature = temperature - 272
-        description = weather_data['weather'][0]['description']
-
-        # Send a message to the discord channel with the weather information
-        await ctx.send(f'The weather in {city}, {country} is currently {temperature} degrees and {description}.')
+    
    
     @commands.command()
     
