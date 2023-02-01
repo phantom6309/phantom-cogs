@@ -36,7 +36,7 @@ class Burc(BaseCog):
         data = response.json()
         translator = Translator()
         r = data['description']
-        r = str(translator.translate(r, dest='lang'))
+        r = str(translator.translate(r, dest=lang))
         ch = 'text='
         r2=r.split(ch, 1)[1]
         ch = '.,'
