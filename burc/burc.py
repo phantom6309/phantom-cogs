@@ -41,7 +41,6 @@ class Burc(BaseCog):
         r2=r.split(ch, 1)[1]
         ch = '.,'
         r3=r2.split(ch, 1)[0]
-        sign = str(translator.translate(sign, dest=lang))
         await ctx.send(f'{sign} \n {r3}.')
         
        
@@ -109,7 +108,7 @@ class Burc(BaseCog):
             definitions.append(definition)
 
         if not definitions:
-            await ctx.send(f"No definitions found for {word}.")
+            await ctx.send(f"{word} kelimesi için tanım bulunamadı.")
             return   
 
         message = f"{word} kelimesinin anlamları:\n"
