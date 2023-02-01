@@ -31,7 +31,7 @@ class Burc(BaseCog):
     async def astro(self, ctx, sign: str, lang: str):
         """Shows a cat"""
         endpoint = "https://aztro.sameerkumar.website/"
-        params = { "sign": 'sign', "day": "today"}
+        params = { "sign": sign, "day": "today"}
         response = requests.post(endpoint, params=params)
         data = response.json()
         translator = Translator()
