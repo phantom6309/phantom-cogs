@@ -4,6 +4,9 @@
     "name" : "Animal",
     "short" : "Post animal pics",
     "description" : "Post animal pics from API sites",
+    "requirements" : [
+        "googletrans"
+    ],
     "disabled" : false,
     "tags" : ["animal", "image", "picture", "cat", "dog", "fox", "pug"],
     "min_python_version": [3, 6, 0]
