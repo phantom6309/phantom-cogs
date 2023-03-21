@@ -107,7 +107,7 @@ class Profile(commands.Cog):
          embed.add_field(name="Cinsiyet", value=gender or "Bilinmiyor")
          embed.add_field(name="Şehir", value=city or "Bilinmiyor")
          embed.add_field(name="Meslek", value=occupation or "Bilinmiyor")
-         embed.add_field(name="Diziler", value=favorite_tv_show or "Bilinmiyor")
+         embed.add_field(name="Diziler", value=favorite_tv_shows or "Bilinmiyor")
          embed.add_field(name="Filmler", value=favorite_movies or "Bilinmiyor")
          embed.add_field(name="Hobiler", value=hobbies or "Bilinmiyor")
          embed.add_field(name="Hakkımda", value=about or "Bilinmiyor")
