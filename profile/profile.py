@@ -98,7 +98,7 @@ class Profile(commands.Cog):
          favorite_tv_shows = await self.config.member(member).favorite_tv_shows()
          favorite_movies = await self.config.member(member).favorite_movies()
          hobbies = await self.config.member(member).hobbies()
-         about_me = await self.config.member(member).about_me()
+         about = await self.config.member(member).about_me()
         
          embed = discord.Embed(title=f"{member.display_name}'nin profili", color=0x00ff00)
          embed.set_thumbnail(url=member.avatar_url)
