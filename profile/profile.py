@@ -6,7 +6,7 @@ from redbot.core import Config
 class Profile(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.config = Config.get_conf(self, identifier=7895645342)
+        self.config = Config.get_conf(self, identifier=7364528762)
         self.config.register_member( name=None, 
             age=None, 
             gender=None,
