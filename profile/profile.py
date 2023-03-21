@@ -111,5 +111,5 @@ class Profile(commands.Cog):
          embed.add_field(name="Filmler", value=favorite_movies or "Bilinmiyor")
          embed.add_field(name="Hobiler", value=hobbies or "Bilinmiyor")
          embed.add_field(name="Hakkımda", value=about or "Bilinmiyor")
-         embed.set_image(url=member.avatar_url_as(size=720))
+         embed.set_image(url=member.avatar_url_as(size=768))
          await ctx.send(embed=embed)
