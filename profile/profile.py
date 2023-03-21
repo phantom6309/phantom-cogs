@@ -7,8 +7,7 @@ class Profile(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=7895645342)
-        self.config.register_member(
-            name=None, 
+        self.config.register_member( name=None, 
             age=None, 
             gender=None,
             city=None, 
@@ -16,8 +15,7 @@ class Profile(commands.Cog):
             favorite_tv_shows=None, 
             favorite_movies=None,
             hobbies=None,
-            about=None
-        )
+            about=None)
 
     @commands.group()
     async def profil(self, ctx: commands.Context) -> None:
@@ -64,7 +62,9 @@ class Profile(commands.Cog):
         await self.config.member(ctx.author).about.set(about.content)
         
         await ctx.send("Profiliniz başarıyla oluşturuldu!")
-        
+
+    
+
     @profil.command(name="değiştir")
     async def _değiştir(self, ctx, field: str):
      fields = {
@@ -76,48 +76,40 @@ class Profile(commands.Cog):
         "en sevdiğiniz tv programı": "favorite_tv_shows",
         "en sevdiğiniz film": "favorite_movies",
         "hobiler": "hobbies",
-        "hakkımda": "about_me"
-    }
-    field = fields.get(field.lower())
-    if not field:
+        "hakkımda": "about"
+     }
+     field = fields.get(field.lower())
+     if not field:
         return await ctx.send("Geçersiz alan adı!")
-    await ctx.author.send(f"Lütfen yeni {field} değerini girin.")
-    value = await self.bot.wait_for('message', check=lambda m: m.author == ctx.author)
-    await self.config.member(ctx.author).set_raw(field, value=value.content)
-    await ctx.send(f"{field} değeri başarıyla güncellendi!")
+     await ctx.author.send(f"Lütfen yeni {field} değerini girin.")
+     value = await self.bot.wait_for('message', check=lambda m: m.author == ctx.author)
+     await self.config.member(ctx.author).set_raw(field, value=value.content)
+     await ctx.send(f"{field} değeri başarıyla güncellendi!")
 
-@profil.command(name="göster")
-async def _göster(self, ctx, member: discord.Member = None):
-    if member is None:
-        member = ctx.author
-
-    name = await self.config.member(member).name()
-    age = await self.config.member(member).age()
-    gender = await self.config.member(member).gender()
-    city = await self.config.member(member).city()
-    occupation = await self.config.member(member).occupation()
-    favorite_tv_shows = await self.config.member(member).favorite_tv_shows()
-    favorite_movies = await self.config.member(member).favorite_movies()
-    hobbies = await self.config.member(member).hobbies()
-    about_me = await self.config.member(member).about_me()
-
-    embed = discord.Embed(title=f"{member.display_name}'s Profile", color=0x00ff00)
-    embed.set_thumbnail(url=member.avatar_url)
-    fields = [
-        ("İsim", name or "Bilinmiyor", True),
-        ("Yaş", age or "Bilinmiyor", True),
-        ("Cinsiyet", gender or "Bilinmiyor", True),
-        ("Şehir", city or "Bilinmiyor", False),
-        ("Meslek", occupation or "Bilinmiyor", False),
-        ("En Sevdiğiniz TV Programları", favorite_tv_shows or "Bilinmiyor", False),
-        ("En Sevdiğiniz Filmler", favorite_movies or "Bilinmiyor", False),
-        ("Hobiler", hobbies or "Bilinmiyor", False),
-        ("Hakkımda", about_me or "Bilinmiyor", False),
-    ]
-    for name, value, inline in fields:
-        embed.add_field(name=name, value=value, inline=inline)
-    embed.set_image(url=member.avatar_url_as(size=1024))
-    await ctx.send(embed=embed)
-
-    
-    
+    @profil.command(name="göster")
+    async def _göster(self, ctx, member: discord.Member= None):
+         if member == None:
+          member = ctx.author
+        name = await self.config.member(member).name()
+        age = await self.config.member(member).age()
+        gender = await self.config.member(member).gender()
+        city = await self.config.member(member).city()
+        occupation = await self.config.member(member).occupation()
+        favorite_tv_shows = await self.config.member(member).favorite_tv_shows()
+        favorite_movies = await self.config.member(member).favorite_movies()
+        hobbies = await self.config.member(member).hobbies()
+        about_me = await self.config.member(member).about_me()
+        
+        embed = discord.Embed(title=f"{member.display_name}'nin profili", color=0x00ff00)
+        embed.set_thumbnail(url=member.avatar_url)
+        embed.add_field(name="İsim", value=name or "Bilinmiyor")
+        embed.add_field(name="Yaş", value=age or "Bilinmiyor")
+        embed.add_field(name="Cinsiyet", value=gender or "Bilinmiyor")
+        embed.add_field(name="Şehir", value=city or "Bilinmiyor")
+        embed.add_field(name="Meslek", value=occupation or "Bilinmiyor")
+        embed.add_field(name="Diziler", value=favorite_tv_show or "Bilinmiyor")
+        embed.add_field(name="Filmler", value=favorite_movies or "Bilinmiyor")
+        embed.add_field(name="Hobiler", value=hobbies or "Bilinmiyor")
+        embed.add_field(name="Hakkımda", value=about or "Bilinmiyor")
+        embed.set_image(url=member.avatar_url_as(size=720))
+        await ctx.send(embed=embed)
