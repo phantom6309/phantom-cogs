@@ -65,8 +65,8 @@ class Profile(commands.Cog):
         
         await ctx.send("Profiliniz başarıyla oluşturuldu!")
         
-     @profil.command(name="değiştir")
-     async def _değiştir(self, ctx, field: str):
+    @profil.command(name="değiştir")
+    async def _değiştir(self, ctx, field: str):
        fields = {
         "isim": "name",
         "yaş": "age",
