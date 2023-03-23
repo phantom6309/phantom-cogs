@@ -2,4 +2,5 @@
 from .gununsorusu import Gununsorusu
 
 async def setup(bot):
-    bot.add_cog(Gununsorusu(bot))
+    cog = Gununsorusu(bot)
+    await bot.add_cog(cog)
