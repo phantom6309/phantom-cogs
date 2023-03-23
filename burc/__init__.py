@@ -1,4 +1,5 @@
 from .burc import Burc
 
-def setup(bot):
-    bot.add_cog(Burc(bot))
+async def setup(bot):
+    cog = Burc(bot)
+    await bot.add_cog(cog)
