@@ -5,7 +5,7 @@
     "short" : "Post animal pics",
     "description" : "Post animal pics from API sites",
     "requirements" : [
-        "googletrans"
+        "googletrans","requests"
     ],
     "disabled" : false,
     "tags" : ["animal", "image", "picture", "cat", "dog", "fox", "pug"],
