@@ -2,4 +2,5 @@
 from .kelime import Kelime
 
 async def setup(bot):
-    bot.add_cog(Kelime(bot))
+    cog = Kelime(bot)
+    await bot.add_cog(cog)
