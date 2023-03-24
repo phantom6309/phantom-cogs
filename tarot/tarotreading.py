@@ -72,7 +72,7 @@ class TarotReading(commands.Cog):
         pass
 
     @tarot.command(name="life")
-    async def _life(self, ctx: commands.Context, user: Optional[discord.Member] = None) -> None:
+    async def _hayat(self, ctx: commands.Context, user: Optional[discord.Member] = None) -> None:
         """
         Tek seferlik hayat okuması !tarot hayat @üye ile bakılabilir.
         Üye belirtilmez ise sizin falınız gösterilir.
