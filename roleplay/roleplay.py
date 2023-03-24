@@ -20,7 +20,7 @@ log.addHandler(console)
 class Roleplay(commands.Cog):
     """Interact with people!"""
 
-    def __init__(self):
+    def __init__(self,bot):
         self.config = Config.get_conf(self, identifier=842364413)
         default_global = {
             "hugs": [
