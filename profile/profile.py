@@ -101,7 +101,7 @@ class Profile(commands.Cog):
          about = await self.config.member(member).about()
         
          embed = discord.Embed(title=f"{member.display_name}'nin profili", color=0x00ff00)
-         embed.set_thumbnail(url=member.avatar_url)
+         embed.set_thumbnail(url=member.avatar.url)
          embed.add_field(name="İsim", value=name or "Bilinmiyor", inline=True)
          embed.add_field(name="Yaş", value=age or "Bilinmiyor", inline=True)
          embed.add_field(name="Cinsiyet", value=gender or "Bilinmiyor", inline=True)
@@ -111,5 +111,5 @@ class Profile(commands.Cog):
          embed.add_field(name="Filmler", value=favorite_movies or "Bilinmiyor", inline=True)
          embed.add_field(name="Hobiler", value=hobbies or "Bilinmiyor", inline=False)
          embed.add_field(name="Hakkımda", value=about or "Bilinmiyor", inline=False)
-         embed.set_image(url=member.avatar_url_as(size=512))
+         embed.set_image(url=member.avatar.url_as(size=512))
          await ctx.send(embed=embed)
