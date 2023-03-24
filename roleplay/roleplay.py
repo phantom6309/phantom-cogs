@@ -15,10 +15,9 @@ else:
     console.setLevel(logging.INFO)
 log.addHandler(console)
 
-BaseCog = getattr(commands, "Cog", object)
 
 
-class Roleplay(BaseCog):
+class Roleplay(commands.Cog):
     """Interact with people!"""
 
     def __init__(self):
