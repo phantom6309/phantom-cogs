@@ -2,4 +2,5 @@
 from .profile import Profile
 
 async def setup(bot):
-    bot.add_cog(Profile(bot))
+    cog = Profile(bot)
+    await bot.add_cog(cog)
