@@ -71,10 +71,10 @@ class TarotReading(commands.Cog):
         """Receive a tarot reading"""
         pass
 
-    @tarot.command(name="life")
+    @tarot.command(name="hayat")
     async def _hayat(self, ctx: commands.Context, user: Optional[discord.Member] = None) -> None:
         """
-        Tek seferlik hayat okuması !tarot hayat @üye ile bakılabilir.
+        Tüm hayatınız için yorum alın.!tarot hayat @üye ile bakılabilir.
         Üye belirtilmez ise sizin falınız gösterilir.
         """
         card_meaning = ["Past", "Present", "Future", "Potential", "Reason"]
@@ -105,10 +105,8 @@ class TarotReading(commands.Cog):
     @tarot.command(name="fal")
     async def _fal(self, ctx: commands.Context, user: Optional[discord.Member] = None) -> None:
         """
-        Unique reading as of this very moment.
-
-        `[user]` Optional user you want to view a tarot reading for.
-        If no user is provided this will run for the user who is running the command.
+        Hayatınızın şuan ki kısmı için yorum alın.!tarot fal @üye ile bakılabilir.
+        Üye belirtilmez ise sizin falınız gösterilir.
         """
         card_meaning = ["Geçmiş", "Şimdi", "Gelecek", "Potansiyel", "Sebep"]
         if user is None:
