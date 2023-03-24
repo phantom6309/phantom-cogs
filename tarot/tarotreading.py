@@ -162,6 +162,6 @@ class TarotReading(commands.Cog):
             url=kart.card_url,
         )
         embed.timestamp = ctx.message.created_at
-        embed.set_author(name=user.name, icon_url=user.avatar_url)
+        embed.set_author(name=user.name, icon_url=user.avatar.url)
         embed.set_image(url=kart.card_img)
         await ctx.send(embed=embed)
