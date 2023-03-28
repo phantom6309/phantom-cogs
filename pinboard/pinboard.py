@@ -10,11 +10,11 @@ class Pinboard(commands.Cog):
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
-        if self.reaction_emoji and payload.emoji == self.reaction_emoji:
-            channel = self.bot.get_channel(payload.channel_id)
+        if self.reaction_emoji and self.copy_channel_id and payload.emoji.name == self.reaction_emoji:
+            channel = await self.bot.fetch_channel(payload.channel_id)
             message = await channel.fetch_message(payload.message_id)
             if message.author != self.bot.user: # Ignore messages sent by the bot itself
-                copy_channel = self.bot.get_channel(self.copy_channel_id)
+                copy_channel = await self.bot.fetch_channel(self.copy_channel_id)
                 await copy_channel.send(f'**{message.author}**: {message.content}')
 
     @commands.group()
