@@ -1,7 +1,7 @@
 {
     "author" : ["phantom"],
-    "install_msg" : "gününsorusu",
-    "name" : "günün sorusu",
+    "install_msg" : "teşekkürler kurulum için ",
+    "name" : "pinboard",
     "short" : "",
     "description" : "",
     "required_cogs": {},
