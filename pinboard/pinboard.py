@@ -16,6 +16,7 @@ class Pinboard(commands.Cog):
             if message.author != self.bot.user: # Ignore messages sent by the bot itself
                 copy_channel = self.bot.get_channel(self.copy_channel_id)
                 await copy_channel.send(f'**{message.author}**: {message.content}')
+
     @commands.group()
     async def pinboard(self, ctx: commands.Context) -> None:
         """Receive a tarot reading"""
