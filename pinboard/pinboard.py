@@ -1,6 +1,6 @@
 
 import discord
-from red.core import commands
+from redbot.core import commands
 
 class Pinboard(commands.Cog):
     def __init__(self, bot):
