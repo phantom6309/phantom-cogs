@@ -32,5 +32,3 @@ class Pinboard(commands.Cog):
         self.reaction_emoji = emoji
         await ctx.send(f'Reaction emoji set to {emoji}')
 
-def setup(bot):
-    bot.add_cog(CopyMessages(bot))
