@@ -1,6 +1,6 @@
 
 import discord
-from discord.ext import commands
+from red.core import commands
 
 class Pinboard(commands.Cog):
     def __init__(self, bot):
@@ -18,16 +18,16 @@ class Pinboard(commands.Cog):
                 await copy_channel.send(f'**{message.author}**: {message.content}')
 
     @commands.group()
-    async def pinboard(self, ctx: commands.Context) -> None:
-        """Receive a tarot reading"""
+    async def sabitleme(self, ctx: commands.Context) -> None:
+        """Sabitleme """
         pass
 
-    @pinboard.command(name="kanal")
+    @sabitleme.command(name="kanal")
     async def _kanal(self, ctx, channel: discord.TextChannel):
         self.copy_channel_id = channel.id
         await ctx.send(f'Copy channel set to {channel.mention}')
 
-    @pinboard.command(name="emoji")
+    @sabitleme.command(name="emoji")
     async def emoji(self, ctx, emoji: str):
         self.reaction_emoji = emoji
         await ctx.send(f'Reaction emoji set to {emoji}')
