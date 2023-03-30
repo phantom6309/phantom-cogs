@@ -2,5 +2,5 @@
 from .gununsorusu import Gununsorusu
 
 def setup(bot):
-    bot.add_cog(Gününsorusu(bot))
+    bot.add_cog(Gununsorusu(bot))
 
