@@ -4,7 +4,6 @@
 import discord
 import requests
 import json
-import pyaztro
 from googletrans import Translator
 # Red
 from redbot.core import commands
@@ -20,38 +19,7 @@ class Burc(BaseCog):
 
     def __init__(self, bot):
         self.bot = bot
-  
-
-    
-
-
-
-
-    @commands.command()
-    @commands.cooldown(1, 2, commands.BucketType.guild)
-    async def astro(self, ctx, sign: str, lang: str):
-        """Günlük burç yorumunuzu gösterir"""
-        endpoint = "https://aztro.sameerkumar.website/"
-        params = { "sign": sign, "day": "today"}
-        response = requests.post(endpoint, params=params)
-        data = response.json()
-        translator = Translator()
-        r = data['description']
-        r = str(translator.translate(r, dest=lang))
-        ch = 'text='
-        r2=r.split(ch, 1)[1]
-        ch = '.,'
-        r3=r2.split(ch, 1)[0]
-        await ctx.send(f'{sign} \n {r3}.')
-        
-    @commands.command()
-    @commands.cooldown(1, 2, commands.BucketType.guild)
-    async def fal(self, ctx, sign: str, lang: str):
-        """Günlük burç yorumunuzu gösterir"""
-        horoscope = pyaztro.Aztro(sign)
-        r=horoscope.description
-        r = str(translator.translate(r, dest=lang))
-        await ctx.send(f'{sign} \n {r}.')  
+ 
 
     
 
