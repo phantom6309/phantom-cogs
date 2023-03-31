@@ -4,6 +4,7 @@
 import discord
 import requests
 import json
+import pyaztro
 from googletrans import Translator
 # Red
 from redbot.core import commands
@@ -43,7 +44,14 @@ class Burc(BaseCog):
         r3=r2.split(ch, 1)[0]
         await ctx.send(f'{sign} \n {r3}.')
         
-       
+    @commands.command()
+    @commands.cooldown(1, 2, commands.BucketType.guild)
+    async def fal(self, ctx, sign: str, lang: str):
+        """Günlük burç yorumunuzu gösterir"""
+        horoscope = pyaztro.Aztro(sign)
+        r=horoscope.description
+        r = str(translator.translate(r, dest=lang))
+        await ctx.send(f'{sign} \n {r}.')  
 
     
 
