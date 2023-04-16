@@ -34,7 +34,7 @@ class Deemix(commands.Cog):
            await ctx.send(files=[file])
         except Exception:
              log.error("Error sending song", exc_info=True)
-              pass
+             pass
         try:
               os.remove(fp)
         except Exception:
