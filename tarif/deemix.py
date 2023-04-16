@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import discord
 from redbot.core import checks, commands, bot
-from deemix import deezerdownlader
+from deemix import deezerdownlad
 from math import ceil
 
 
