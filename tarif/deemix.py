@@ -10,7 +10,7 @@ from pydeezer import Deezer, Downloader
 
 from pydeezer.constants import track_formats
 
-class MusicCog(commands.Cog):
+class Deezer(commands.Cog):
 
     def __init__(self, bot):
 
