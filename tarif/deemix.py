@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import discord
 from redbot.core import checks, commands, bot
-import deemix
+from deemix import deezerdownlader
 from math import ceil
 
 
@@ -15,7 +15,7 @@ class Deemix(commands.Cog):
     async def download(self, ctx, url):
         try:
             # Download the song using Deemix
-            song_path = deemix.download_track(url)
+            song_path = deezerdownload.download_track(url, quality='FLAC')
             
             # Send the song to Discord
             with open(song_path, 'rb') as f:
