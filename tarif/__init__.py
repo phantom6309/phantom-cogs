@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from .tarif import Tarif
+from .deemix import Deemix
 
 async def setup(bot):
-    bot.add_cog(Tarif(bot))
+    bot.add_cog(Deemix(bot))
