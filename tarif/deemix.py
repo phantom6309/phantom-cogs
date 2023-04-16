@@ -22,6 +22,11 @@ class Deemix(commands.Cog):
         
         track = search_results[0]
         track_id = track["info"]["ID"]
+        try:
+            track_info = deezer.get_track(track_id)["info"]
+        except KeyError:
+            await ctx.send(f"Could not find information for track {track_id}.")
+            return
         track_name = track["info"]["title"]
         download_dir = cog_data_path(self)
         downloader = Downloader(deezer, [track_id], download_dir,
