@@ -1,136 +1,42 @@
 # -*- coding: utf-8 -*-
-import discord
-from redbot.core import checks, commands, bot
 
-
-
-
-
+from redbot.core import commands
 from pydeezer import Deezer, Downloader
-
 from pydeezer.constants import track_formats
+from redbot.core.data_manager import cog_data_path
+
+deezer = Deezer()
 
 class Deemix(commands.Cog):
-
     def __init__(self, bot):
-
         self.bot = bot
 
-        self.deezer = Deezer() # Create a Deezer object
-
+    @commands.command(name='search_track')
+    async def download(self, ctx, *search_query):
+        query = ' '.join(search_query)
+        search_results = deezer.search_tracks(query)
         
-
-    @commands.command()
-
-    async def download(self, ctx, track_id):
-
-        """Download a track and send it to the channel"""
-
-        # Get information about the track
-
-        track = self.deezer.get_track(track_id)
-
-        track_info = track["info"]
-
+        if len(search_results) == 0:
+            await ctx.send("No search results found.")
+            return
         
-
-        # Download the track
-
-        download_dir = "downloads/"
-
-        track["download"](download_dir, quality=track_formats.MP3_320)
-
-        
-
-        # Send the track to the channel
-
-        with open(download_dir + track_info["title"] + ".mp3", "rb") as f:
-
-            file = discord.File(f)
-
-            await ctx.send(file=file)
-
-    
-
-    @commands.command()
-
-    async def download_album(self, ctx, album_id):
-
-        """Download all tracks in an album and send them to the channel"""
-
-        # Get information about the album
-
-        album = self.deezer.get_album(album_id)
-
-        album_title = album["title"]
-
-        tracks = album["tracks"]["data"]
-
-        
-
-        # Download the tracks
-
-        download_dir = "downloads/"
-
-        list_of_ids = [str(track["id"]) for track in tracks]
-
-        downloader = Downloader(self.deezer, list_of_ids, download_dir,
-
-                                quality=track_formats.MP3_320, concurrent_downloads=2)
-
+        track = search_results[0]
+        track_id = track["info"]["ID"]
+        track_name = track["info"]["title"]
+        download_dir = cog_data_path(self)
+        downloader = Downloader(deezer, [track_id], download_dir,
+                                quality=track_formats.FLAC, concurrent_downloads=2)
         downloader.start()
-
-        
-
-        # Send the tracks to the channel
-
-        for track in tracks:
-
-            with open(download_dir + track["title"] + ".mp3", "rb") as f:
-
-                file = discord.File(f)
-
-                await ctx.send(file=file)
-
-    
-
-    @commands.command()
-
-    async def download_playlist(self, ctx, playlist_id):
-
-        """Download all tracks in a playlist and send them to the channel"""
-
-        # Get information about the playlist
-
-        playlist = self.deezer.get_playlist(playlist_id)
-
-        playlist_title = playlist["title"]
-
-        tracks = playlist["tracks"]["data"]
-
-        
-
-        # Download the tracks
-
-        download_dir = "downloads/"
-
-        list_of_ids = [str(track["id"]) for track in tracks]
-
-        downloader = Downloader(self.deezer, list_of_ids, download_dir,
-
-                                quality=track_formats.MP3_320, concurrent_downloads=2)
-
-        downloader.start()
-
-        
-
-        # Send the tracks to the channel
-
-        for track in tracks:
-
-            with open(download_dir + track["title"] + ".mp3", "rb") as f:
-
-                file = discord.File(f)
-
-                await ctx.send(file=file)
+        filename = f"{track_name}.mp3"
+        fp = cog_data_path(self) / filename
+        file = discord.File(str(fp), filename=filename)
+        try:
+           await ctx.send(files=[file])
+        except Exception:
+             log.error("Error sending song", exc_info=True)
+              pass
+        try:
+              os.remove(fp)
+        except Exception:
+             log.error("Error deleting song", exc_info=True)
 
