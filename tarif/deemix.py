@@ -5,7 +5,7 @@ from redbot.core.data_manager import cog_data_path
 from deezloader import Login
 
 
-class MusicCog(commands.Cog):
+class Deemix(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=7364528762)
