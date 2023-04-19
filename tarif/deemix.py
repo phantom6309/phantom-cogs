@@ -1,47 +1,39 @@
 # -*- coding: utf-8 -*-
 
 from redbot.core import commands
-from pydeezer import Deezer, Downloader
-from pydeezer.constants import track_formats
 from redbot.core.data_manager import cog_data_path
+from deezloader import Login
 
-deezer = Deezer()
 
-class Deemix(commands.Cog):
+class MusicCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
-    @commands.command(name='search_track')
-    async def download(self, ctx, *search_query):
-        query = ' '.join(search_query)
-        search_results = deezer.search_tracks(query)
+        self.config = Config.get_conf(self, identifier=7364528762)
+        self.config.register_guilds(email=None, password=None)
         
-        if len(search_results) == 0:
-            await ctx.send("No search results found.")
-            return
         
-        track = search_results[0]
-        track_id = track["info"]["ID"]
-        try:
-            track_info = deezer.get_track(track_id)["info"]
-        except KeyError:
-            await ctx.send(f"Could not find information for track {track_id}.")
-            return
-        track_name = track["info"]["title"]
-        download_dir = cog_data_path(self)
-        downloader = Downloader(deezer, [track_id], download_dir,
-                                quality=track_formats.FLAC, concurrent_downloads=2)
-        downloader.start()
-        filename = f"{track_name}.mp3"
-        fp = cog_data_path(self) / filename
-        file = discord.File(str(fp), filename=filename)
-        try:
-           await ctx.send(files=[file])
-        except Exception:
-             log.error("Error sending song", exc_info=True)
-             pass
-        try:
-              os.remove(fp)
-        except Exception:
-             log.error("Error deleting song", exc_info=True)
-
+    
+    @commands.command()
+    @checks.admin_or_permissions(manage_guild=True)
+    async def setbaz(self, ctx, mail,passw):
+     await self.config.guild(ctx.guild).email.set(mail)
+     await self.config.guild(ctx.guild).password.set(passw)
+     await ctx.send("profil ayarlandı!")
+        
+    @commands.command()
+    async def download(self, ctx, url,quality):
+       email = await self.config.guild(ctx.guild).email()
+       password = await self.config.guild(ctx.guild).password() 
+       downloa = Login(
+	    email = my_deezer_email,
+	    password = my_deezer_password
+        )
+       downloa.download_trackspo(
+	    #YOUR SPOTIFY TRACK LINK,
+	    output_dir =str(cog_data_path(self) / url),
+	    quality_download = quality,
+	    recursive_quality = True,
+	    recursive_download = True,
+	    not_interface = True,
+	    method_save = 2
+        )
