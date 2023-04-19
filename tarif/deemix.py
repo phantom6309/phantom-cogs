@@ -3,7 +3,7 @@ import discord
 from redbot.core import checks,commands,Config 
 from redbot.core.data_manager import cog_data_path
 import deezloader
-
+from deezloader import Login
 
 class Deemix(commands.Cog):
     def __init__(self, bot):
