@@ -23,7 +23,7 @@ class Deemix(commands.Cog):
        arl = await self.config.token()
        downloa = Login(arl) 
        downloa.download_trackdee(url,
-	output_dir = str(cog_data_path(self) / track),
+	output_dir = str(cog_data_path(self) / ),
 	quality_download = quality,
 	recursive_quality = False,
 	recursive_download = False,
