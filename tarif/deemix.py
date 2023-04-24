@@ -27,6 +27,6 @@ class Deemix(commands.Cog):
 	quality_download = quality,
 	recursive_quality = False,
 	recursive_download = False,
-        not_interface = False
+        not_interface = False,
         method_save = 2
         )
