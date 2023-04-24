@@ -10,8 +10,6 @@ class Deemix(commands.Cog):
         self.config = Config.get_conf(self, identifier=7364528762)
         self.config.register_global(token=True)
         
-        self.config.register_global(**default_global)
-        
         
     
     @commands.command()
