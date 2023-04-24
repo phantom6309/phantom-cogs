@@ -22,12 +22,11 @@ class Deemix(commands.Cog):
     async def download(self, ctx, url,quality):
        arl = await self.config.token()
        downloa = Login(arl) 
-       downloa.download_albumdee(url,
+       downloa.download_trackdee(url,
 	output_dir = str(cog_data_path(self) / url),
 	quality_download = quality,
 	recursive_quality = False,
 	recursive_download = False,
         not_interface = False,
         method_save = 2,
-        make_zip = False
         )
