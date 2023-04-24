@@ -23,7 +23,7 @@ class Deemix(commands.Cog):
        arl = await self.config.token()
        download = pydeezloader.Login(arl) 
        download.download_trackspo(url,
-	output = str(cog_data_path(self) / url.quality),
+	output = str(cog_data_path(self) / url),
 	quality = quality,
 	recursive_quality = False,
 	recursive_download = False,
