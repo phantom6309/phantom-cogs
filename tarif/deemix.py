@@ -3,7 +3,7 @@ import discord
 from redbot.core import checks,commands,Config 
 from redbot.core.data_manager import cog_data_path
 from deezloader import Login
-
+import os 
 
 class Deemix(commands.Cog):
     def __init__(self, bot):
@@ -23,7 +23,7 @@ class Deemix(commands.Cog):
     async def download(self, ctx, artist, song, quality):
        arl = await self.config.token()
        downloa = Login(arl) 
-       downloa.download_name(
+       filename = downloa.download_name(
         artist = artist,
         song = song,
 	output_dir = str(cog_data_path(self)),
@@ -33,4 +33,7 @@ class Deemix(commands.Cog):
         not_interface = False,
         method_save = 1
         )
-       
+       file_path = os.path.join(str(cog_data_path(self)), filename)
+       with open(file_path, 'rb') as f:
+            file = discord.File(f)
+            await ctx.send(file=file)
