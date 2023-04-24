@@ -8,20 +8,21 @@ class Deemix(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=7364528762)
-        self.config.register_guild(token=None
-         )
+        self.config.register_global(token=True)
+        
+        self.config.register_global(**default_global)
         
         
     
     @commands.command()
     @checks.admin_or_permissions(manage_guild=True)
     async def setbaz(self, ctx, token):
-     await self.config.guild(ctx.guild).token.set(token)
+     await self.config.token.set(token)
      await ctx.send("profil ayarlandı!")
         
     @commands.command()
     async def download(self, ctx, url,quality):
-       arl = await self.config.guild(ctx.guild).arl()
+       arl = await self.config.guild(ctx.guild).token()
        download = pydeezloader.Login(arl) 
        download.download_trackspo(url,
 	output = str(cog_data_path(self) / url.quality),
