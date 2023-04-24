@@ -9,8 +9,10 @@ class Deemix(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=7364528762)
-        self.config.register_global(token=True)
+        self.config.register_global(token=True,
         fp = str(bundled_data_path(self))
+        )
+        
         
     
     @commands.command()
