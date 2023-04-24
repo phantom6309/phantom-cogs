@@ -32,4 +32,4 @@ class Deemix(commands.Cog):
         not_interface = False,
         method_save = 1
         )
-       
+       await ctx.send (song_metadata['album'])
