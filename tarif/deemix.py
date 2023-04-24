@@ -36,8 +36,8 @@ class Deemix(commands.Cog):
         )
        await ctx.send("İndirme tamamlandı,linkten ulaşabilirsiniz.http://phantom2158.ezconnect.to/portal/apis/fileExplorer/share_link.cgi?link=vdi-9ig2aT3ueycISO5KTA")
 
-     @commands.command()
-     async def downspo(self, ctx, url, quality):
+    @commands.command()
+    async def downspo(self, ctx, url, quality):
        arl = await self.config.token()
        downloa = Login(arl) 
        downloa.download_trackspo(
