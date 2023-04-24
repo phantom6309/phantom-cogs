@@ -30,4 +30,3 @@ class Deemix(commands.Cog):
 	quality = quality,
 	recursive_quality = False,
 	recursive_download = False
-	
