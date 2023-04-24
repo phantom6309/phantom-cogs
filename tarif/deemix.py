@@ -20,7 +20,7 @@ class Deemix(commands.Cog):
         
     @commands.command()
     async def download(self, ctx, url,quality):
-       arl = await self.config.get_raw(token)
+       arl = await self.config.token()
        download = pydeezloader.Login(arl) 
        download.download_trackspo(url,
 	output = str(cog_data_path(self) / url.quality),
