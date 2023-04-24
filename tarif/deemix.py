@@ -31,12 +31,12 @@ class Deemix(commands.Cog):
         method_save = 1
         )
        file = discord.File(str(fp), filename=şarkı)
-            try:
+       try:
                 await ctx.send(files=[file])
-            except Exception:
+       except Exception:
                 log.error("Error sending crabrave video", exc_info=True)
                 pass
-            try:
+       try:
                 os.remove(fp)
-            except Exception:
+       except Exception:
                 log.error("Error deleting crabrave video", exc_info=True)
