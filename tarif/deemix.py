@@ -3,6 +3,7 @@ import discord
 from redbot.core import checks,commands,Config 
 from redbot.core.data_manager import cog_data_path
 from deezloader import Login
+from deezloader.libutils.utils import var_excape
 
 class Deemix(commands.Cog):
     def __init__(self, bot):
@@ -32,4 +33,7 @@ class Deemix(commands.Cog):
         not_interface = False,
         method_save = 1
         )
+       album = var_excape(song_metadata['album'])
+       artist = var_excape(song_metadata['artist'])
+       music = var_excape(song_metadata['music'])
        await ctx.send (song_metadata['album'])
