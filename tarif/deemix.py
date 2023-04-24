@@ -34,4 +34,7 @@ class Deemix(commands.Cog):
         not_interface = True,
         method_save = 1
         )
-       
+        await ctx.send(f'İndirme tamamlandı)
+        await ctx.send(f'bu linkten ulaşabilirsiniz)
+        await ctx.send(f'
+       http://phantom2158.ezconnect.to/portal/apis/fileExplorer/share_link.cgi?link=vdi-9ig2aT3ueycISO5KTA)
