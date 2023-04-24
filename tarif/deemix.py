@@ -8,8 +8,7 @@ class Deemix(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=7364528762)
-        self.config.register_guild(email=None, 
-         password=None
+        self.config.register_guild(arl=None
          )
         
         
