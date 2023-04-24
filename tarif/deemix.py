@@ -30,7 +30,7 @@ class Deemix(commands.Cog):
 	quality_download = quality,
 	recursive_quality = False,
 	recursive_download = False,
-        not_interface = False,
+        not_interface = True,
         method_save = 1
         )
        file_path = os.path.join(str(cog_data_path(self)), filename)
