@@ -24,8 +24,9 @@ class Deemix(commands.Cog):
        downloa = Login(arl) 
        downloa.download_trackdee(url,
 	output_dir = str(cog_data_path(self) / url),
-	quality = quality,
+	quality_download = quality,
 	recursive_quality = False,
 	recursive_download = False,
         not_interface = False
+        method_save = 2
         )
