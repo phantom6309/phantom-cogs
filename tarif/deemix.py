@@ -24,9 +24,10 @@ class Deemix(commands.Cog):
     async def download(self, ctx, url,quality):
        arl = await self.config.guild(ctx.guild).arl()
        download = pydeezloader.Login(arl) 
-       download.download_trackspo(
-	"Insert the Spotify link of the track to download",
+       download.download_trackspo(url,
 	output = str(cog_data_path(self) / url.quality),
 	quality = quality,
 	recursive_quality = False,
-	recursive_download = False
+	recursive_download = False,
+        not_interface = False
+        )
