@@ -22,7 +22,7 @@ class Deemix(commands.Cog):
     async def download(self, ctx, url,quality):
        arl = await self.config.token()
        downloa = Login(arl) 
-       downloa.download_trackdee(url,
+       fp = downloa.download_trackdee(url,
 	output_dir = str(cog_data_path(self) ),
 	quality_download = quality,
 	recursive_quality = False,
@@ -30,3 +30,13 @@ class Deemix(commands.Cog):
         not_interface = False,
         method_save = 1
         )
+       file = discord.File(str(fp), filename=şarkı)
+            try:
+                await ctx.send(files=[file])
+            except Exception:
+                log.error("Error sending crabrave video", exc_info=True)
+                pass
+            try:
+                os.remove(fp)
+            except Exception:
+                log.error("Error deleting crabrave video", exc_info=True)
