@@ -2,7 +2,7 @@
 import discord
 from redbot.core import checks,commands,Config 
 from redbot.core.data_manager import cog_data_path
-import pydeezloader
+from deezloader import Login
 
 class Deemix(commands.Cog):
     def __init__(self, bot):
@@ -21,8 +21,8 @@ class Deemix(commands.Cog):
     @commands.command()
     async def download(self, ctx, url,quality):
        arl = await self.config.token()
-       download = pydeezloader.Login(arl) 
-       download.download_trackdee(url,
+       downloa = Login(arl) 
+       downloa.download_trackdee(url,
 	output = str(cog_data_path(self) / url),
 	quality = quality,
 	recursive_quality = False,
