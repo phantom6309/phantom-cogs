@@ -28,6 +28,6 @@ class Deemix(commands.Cog):
 	recursive_quality = False,
 	recursive_download = False,
         not_interface = False,
-        method_save = 2
+        method_save = 2,
         make_zip = False
         )
