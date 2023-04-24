@@ -26,8 +26,8 @@ class Deemix(commands.Cog):
        download = pydeezloader.Login(arl) 
        download.download_trackspo(
 	"Insert the Spotify link of the track to download",
-	output = str(cog_data_path(self) /),
-	quality = "MP3_320",
+	output = str(cog_data_path(self) / url.quality),
+	quality = quality,
 	recursive_quality = False,
 	recursive_download = False
 	not_interface = False
