@@ -10,7 +10,7 @@ class Deemix(commands.Cog):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=7364528762)
         self.config.register_global(token=True)
-        
+        fp = str(bundled_data_path(self))
         
     
     @commands.command()
@@ -26,7 +26,7 @@ class Deemix(commands.Cog):
        downloa.download_name(
         artist = artist,
         song = song,
-	output_dir = str(bundled_data_path(self),
+	output_dir = fp,
 	quality_download = quality,
 	recursive_quality = False,
 	recursive_download = False,
