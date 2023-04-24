@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import discord
 from redbot.core import checks,commands,Config 
+from redbot.core.data_manager import bundled_data_path
 from redbot.core.data_manager import cog_data_path
 from deezloader import Login
 
@@ -25,7 +26,7 @@ class Deemix(commands.Cog):
        downloa.download_name(
         artist = artist,
         song = song,
-	output_dir = str(str(cog_data_path(self))/data),
+	output_dir = str(bundled_data_path(self),
 	quality_download = quality,
 	recursive_quality = False,
 	recursive_download = False,
