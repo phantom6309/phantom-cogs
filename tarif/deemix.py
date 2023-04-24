@@ -22,7 +22,7 @@ class Deemix(commands.Cog):
     async def download(self, ctx, artist, song, quality):
        arl = await self.config.token()
        downloa = Login(arl) 
-       downloa.download_name(url,
+       downloa.download_name(
         artist = artist,
         song = song,
 	output_dir = str(cog_data_path(self) ),
