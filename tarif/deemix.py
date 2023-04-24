@@ -8,15 +8,15 @@ class Deemix(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=7364528762)
-        self.config.register_guild(arl=None
+        self.config.register_guild(token=None
          )
         
         
     
     @commands.command()
     @checks.admin_or_permissions(manage_guild=True)
-    async def setbaz(self, ctx, arl):
-     await self.config.guild(ctx.guild).arl.set(arl)
+    async def setbaz(self, ctx, token):
+     await self.config.guild(ctx.guild).token.set(token)
      await ctx.send("profil ayarlandı!")
         
     @commands.command()
