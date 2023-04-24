@@ -25,7 +25,7 @@ class Deemix(commands.Cog):
        downloa.download_name(
         artist = artist,
         song = song,
-	output_dir = str(cog_data_path(self))/data,
+	output_dir = str(cog_data_path(self))/"data",
 	quality_download = quality,
 	recursive_quality = False,
 	recursive_download = False,
