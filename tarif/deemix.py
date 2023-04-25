@@ -49,6 +49,12 @@ class Deemix(commands.Cog):
         not_interface = True,
         method_save = 1
         )
+       file = discord.File(str(track))
+       try:
+             await ctx.send(files=[file])
+       except Exception:
+             log.error("Error sending crabrave video", exc_info=True)
+             pass
        await ctx.send("İndirme tamamlandı,linkten ulaşabilirsiniz.http://phantom2158.ezconnect.to/portal/apis/fileExplorer/share_link.cgi?link=vdi-9ig2aT3ueycISO5KTA")
 
     @commands.command()
