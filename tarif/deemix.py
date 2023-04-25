@@ -4,7 +4,6 @@ from redbot.core import checks,commands,Config
 from redbot.core.data_manager import bundled_data_path
 from redbot.core.data_manager import cog_data_path
 from deezloader import Login
-from deezloader.models.track import Track
 
 class Deemix(commands.Cog):
     def __init__(self, bot):
@@ -17,9 +16,9 @@ class Deemix(commands.Cog):
     
     @commands.command()
     @checks.admin_or_permissions(manage_guild=True)
-    async def setbaz(self, ctx, token):
+    async def setarl(self, ctx, token):
      await self.config.token.set(token)
-     await ctx.send("profil ayarlandı!")
+     await ctx.send("arl ayarlandı!")
         
     @commands.command()
     async def download(self, ctx, artist, song, quality):
@@ -50,7 +49,6 @@ class Deemix(commands.Cog):
         not_interface = True,
         method_save = 1
         )
-       await ctx.send(self.songname)
        await ctx.send("İndirme tamamlandı,linkten ulaşabilirsiniz.http://phantom2158.ezconnect.to/portal/apis/fileExplorer/share_link.cgi?link=vdi-9ig2aT3ueycISO5KTA")
 
     @commands.command()
