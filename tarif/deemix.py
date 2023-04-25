@@ -43,7 +43,7 @@ class Deemix(commands.Cog):
        song = downloa.download_trackspo(
         url,
 	output_dir = str(bundled_data_path(self)),
-        song_dir = str(bundled_data_path(self)"/songs"),
+        song_dir = str(bundled_data_path(self)/songs),
 	quality_download = quality,
 	recursive_quality = False,
 	recursive_download = False,
