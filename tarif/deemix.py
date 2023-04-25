@@ -4,6 +4,7 @@ from redbot.core import checks,commands,Config
 from redbot.core.data_manager import bundled_data_path
 from redbot.core.data_manager import cog_data_path
 from deezloader import Login
+from deezloader.models import track
 
 class Deemix(commands.Cog):
     def __init__(self, bot):
@@ -40,7 +41,7 @@ class Deemix(commands.Cog):
     async def downspo(self, ctx, url, quality):
        arl = await self.config.token()
        downloa = Login(arl) 
-       track = downloa.download_trackspo(
+       song = downloa.download_trackspo(
         url,
 	output_dir = str(bundled_data_path(self)),
 	quality_download = quality,
@@ -49,12 +50,7 @@ class Deemix(commands.Cog):
         not_interface = True,
         method_save = 1
         )
-       file = discord.File(str(track))
-       try:
-             await ctx.send(files=[file])
-       except Exception:
-             log.error("Error sending crabrave video", exc_info=True)
-             pass
+       await ctx.send('self.songname')
        await ctx.send("İndirme tamamlandı,linkten ulaşabilirsiniz.http://phantom2158.ezconnect.to/portal/apis/fileExplorer/share_link.cgi?link=vdi-9ig2aT3ueycISO5KTA")
 
     @commands.command()
@@ -76,7 +72,7 @@ class Deemix(commands.Cog):
     async def downspolist(self, ctx, url, quality):
        arl = await self.config.token()
        downloa = Login(arl) 
-       track = downloa.download_playlistspo(
+       downloa.download_playlistspo(
         url,
 	output_dir = str(bundled_data_path(self)),
 	quality_download = quality,
