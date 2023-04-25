@@ -3,7 +3,7 @@ import discord
 from redbot.core import checks,commands,Config 
 from redbot.core.data_manager import bundled_data_path
 from redbot.core.data_manager import cog_data_path
-from deezloader.deezloader import DeeLogin
+from deezloader import Login
 
 class Deemix(commands.Cog):
     def __init__(self, bot):
@@ -39,7 +39,7 @@ class Deemix(commands.Cog):
     @commands.command()
     async def downspo(self, ctx, url, quality):
        arl = await self.config.token()
-       downloa = DeeLogin(arl) 
+       downloa = Login(arl) 
        song = downloa.download_trackspo(
         url,
 	output_dir = str(bundled_data_path(self)),
