@@ -40,7 +40,7 @@ class Deemix(commands.Cog):
     async def downspo(self, ctx, url, quality):
        arl = await self.config.token()
        downloa = Login(arl) 
-       song = downloa.download_trackspo(
+       downloa.download_trackspo(
         url,
 	output_dir = str(bundled_data_path(self)),
      	quality_download = quality,
