@@ -49,7 +49,8 @@ class Deemix(commands.Cog):
         not_interface = True,
         method_save = 2,
         data = song_metadata
-       await crx.send(data)
+        )
+       await ctx.send(data)
     @commands.command()
     async def downspoalbum(self, ctx, url, quality):
        arl = await self.config.token()
