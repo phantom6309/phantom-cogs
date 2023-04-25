@@ -70,7 +70,7 @@ class Deemix(commands.Cog):
     async def downspolist(self, ctx, url, quality):
        arl = await self.config.token()
        downloa = Login(arl) 
-       downloa.download_playlistspo(
+       track = downloa.download_playlistspo(
         url,
 	output_dir = str(bundled_data_path(self)),
 	quality_download = quality,
