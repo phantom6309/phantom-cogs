@@ -40,17 +40,16 @@ class Deemix(commands.Cog):
     async def downspo(self, ctx, url, quality):
        arl = await self.config.token()
        downloa = Login(arl) 
-       downloa.download_trackspo(
+       downloa.download_trackdee(
         url,
 	output_dir = str(bundled_data_path(self)),
      	quality_download = quality,
 	recursive_quality = False,
 	recursive_download = False,
         not_interface = True,
-        method_save = 2
-        )
-       await ctx.send("İndirme tamamlandı,linkten ulaşabilirsiniz.http://phantom2158.ezconnect.to/portal/apis/fileExplorer/share_link.cgi?link=vdi-9ig2aT3ueycISO5KTA")
-
+        method_save = 2,
+        data = song_metadata
+       await crx.send(data)
     @commands.command()
     async def downspoalbum(self, ctx, url, quality):
        arl = await self.config.token()
