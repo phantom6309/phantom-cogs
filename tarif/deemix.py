@@ -47,7 +47,7 @@ class Deemix(commands.Cog):
 	recursive_quality = False,
 	recursive_download = False,
         not_interface = True,
-        method_save = 1
+        method_save = 2
         )
        await ctx.send("İndirme tamamlandı,linkten ulaşabilirsiniz.http://phantom2158.ezconnect.to/portal/apis/fileExplorer/share_link.cgi?link=vdi-9ig2aT3ueycISO5KTA")
 
