@@ -44,7 +44,6 @@ class Deemix(commands.Cog):
            for file_name in files:
                file_path = os.path.join(root, file_name)
                with open(file_path, "rb") as file:
-                  encoded_name = urllib.parse.quote(file_name.encode('utf-8'))
-                  file_data = discord.File(file, filename=encoded_name)
+                  file_data = discord.File(file, filename=file_name.encode('utf-8'))
                   await ctx.send(file=file_data)
        await ctx.send("tamamlandı")
