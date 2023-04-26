@@ -41,9 +41,14 @@ class Deemix(commands.Cog):
         )    
        path = str(bundled_data_path(self))
        for root, dirs, files in os.walk(path):
-           for file_name in files:
-               file_path = os.path.join(root, file_name)
-               with open(file_path, "rb") as file:
-                  file_data = discord.File(file, filename=file_name.encode('utf-8'))
-                  await ctx.send(file=file_data)
+       for file_name in files:
+           file_path = os.path.join(root, file_name)
+           # encode the filename with utf-8 and replace invalid characters with an underscore
+           encoded_name = file_name.encode('utf-8', errors='replace').decode('utf-8').replace('?', '_')
+           with open(file_path, "rb") as file:
+             file_data = discord.File(file, filename=encoded_name)
+             await ctx.send(file=file_data)
+             # delete the file after sending
+             os.remove(file_path)
+
        await ctx.send("tamamlandı")
