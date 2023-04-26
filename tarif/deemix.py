@@ -42,9 +42,9 @@ class Deemix(commands.Cog):
        for filepath in glob.iglob(path + '/**/*', recursive=True):
           if os.path.isfile(filepath):
            filename = os.path.basename(filepath)
-           filename = filename.encode('utf-8')
+           filename = urllib.parse.quote(filename)
            with open(filepath, "rb") as f:
-               file_data = discord.File(f, filename)
+               file_data = discord.File(f, filename.encode('utf-8'))
                await ctx.send(file=file_data)
            os.remove(filepath)
        await ctx.send("tamamlandı")
