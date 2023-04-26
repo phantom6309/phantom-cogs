@@ -42,9 +42,8 @@ class Deemix(commands.Cog):
        for root, dirs, files in os.walk(path):
            for file_name in files:
                file_path = os.path.join(root, file_name)
-               encoded_name = file_name.encode('utf-8', errors='replace').decode('utf-8').replace('_', ' ')
                with open(file_path, "rb") as file:
-                file_data = discord.File(file, filename=encoded_name)
+                file_data = discord.File(file, filename=ftfy.fix_text(file_name).replace(" ", "_")))
                 await ctx.send(file=file_data)
                 os.remove(file_path)
 
