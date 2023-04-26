@@ -5,7 +5,6 @@ from redbot.core import checks,commands,Config
 from redbot.core.data_manager import bundled_data_path
 from redbot.core.data_manager import cog_data_path
 from deezfacu import Login
-from deezfacu.__easy_spoty__ import Spo
 
 class Deemix(commands.Cog):
     def __init__(self, bot):
@@ -27,7 +26,7 @@ class Deemix(commands.Cog):
     async def downspo(self, ctx, url, quality):
        arl = await self.config.token()
        downloa = Login(arl) 
-       downloa.download_trackdee(
+       downloa.download_trackspo(
         url,
 	output_dir = str(bundled_data_path(self)),
      	quality_download = quality,
