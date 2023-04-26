@@ -47,6 +47,6 @@ class Deemix(commands.Cog):
          decoded_filename = filename.encode('iso-8859-1').decode('utf-8')
          with open(file_path, "rb") as f:
              file_data = discord.File(f, filename=decoded_filename)
-             await ctx.send(file=file_data)
+         await ctx.send(file=file_data)
          os.remove(file_path)
     await ctx.send("tamamlandı")
