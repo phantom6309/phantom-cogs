@@ -5,7 +5,7 @@
     "short" : "",
     "description" : "",
     "required_cogs": {},
-    "requirements": [],
+    "requirements": ["deezfacu","wget==3.2","twine==3.1.1","pyperclip==1.7.0"],
     "min_bot_version": "3.1.8",
     "max_bot_version": "0.0.0",
     "tags": [],
