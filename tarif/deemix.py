@@ -42,6 +42,7 @@ class Deemix(commands.Cog):
        for filepath in glob.iglob(path + '/**/*', recursive=True):
           if os.path.isfile(filepath):
            filename = os.path.basename(filepath)
+           filename = filename.encode('utf-8')
            with open(filepath, "rb") as f:
                file_data = discord.File(f, filename)
                await ctx.send(file=file_data)
