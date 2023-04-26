@@ -25,7 +25,7 @@ class Deemix(commands.Cog):
         
     
     @commands.command()
-    async def downspo(self, ctx, url, quality = None):
+    async def parça(self, ctx, url, quality = None):
        if quality == None:
           quality = "FLAC"
        arl = await self.config.token()
@@ -38,6 +38,32 @@ class Deemix(commands.Cog):
 	recursive_download = False,
         not_interface = True,
         method_save = 1,
+        )    
+       path = str(bundled_data_path(self))
+       for filepath in glob.iglob(path + '/**/*', recursive=True):
+          if os.path.isfile(filepath):
+           filename = os.path.basename(filepath)
+           with open(filepath, "rb") as f:
+               download_link = send_to_transfersh(filepath, clipboard=False)
+               await ctx.send(download_link)
+           os.remove(filepath)
+       await ctx.send("tamamlandı")
+
+    @commands.command()
+    async def albüm(self, ctx, url, quality = None):
+       if quality == None:
+          quality = "FLAC"
+       arl = await self.config.token()
+       downloa = Login(arl) 
+       downloa.download_albumspo(
+        url,
+	output_dir = str(bundled_data_path(self)),
+     	quality_download = quality,
+	recursive_quality = False,
+	recursive_download = False,
+        not_interface = True,
+        method_save = 1,
+        make_zip = True
         )    
        path = str(bundled_data_path(self))
        for filepath in glob.iglob(path + '/**/*', recursive=True):
