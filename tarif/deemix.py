@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import discord
+import os
 from redbot.core import checks,commands,Config 
 from redbot.core.data_manager import bundled_data_path
 from redbot.core.data_manager import cog_data_path
