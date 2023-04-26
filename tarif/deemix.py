@@ -6,9 +6,9 @@ from redbot.core.data_manager import bundled_data_path
 from redbot.core.data_manager import cog_data_path
 from deezfacu import Login
 import glob
-import transfersh_client.app
-transfersh_client.app.send_to_transfersh()
-from transfersh_client.app import download_link
+from transfersh_client.app import send_to_transfersh
+from send_to_transfersh import download_link
+
 class Deemix(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
