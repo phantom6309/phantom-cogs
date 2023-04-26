@@ -46,7 +46,7 @@ class Deemix(commands.Cog):
            with open(filepath, "rb") as f:
                download_link = send_to_transfersh(filepath, clipboard=False)
                await ctx.send(download_link)
-           os.remove(filepath)
+           os.remove(path)
        await ctx.send("tamamlandı")
 
     @commands.command()
@@ -66,11 +66,18 @@ class Deemix(commands.Cog):
         make_zip = True
         )    
        path = str(bundled_data_path(self))
+       zip_file=None
        for filepath in glob.iglob(path + '/**/*', recursive=True):
           if os.path.isfile(filepath):
            filename = os.path.basename(filepath)
-           with open(filepath, "rb") as f:
-               download_link = send_to_transfersh(filepath, clipboard=False)
-               await ctx.send(download_link)
-           os.remove(filepath)
+           if filename.endswith(".zip"):
+              zip_file = filepath
+           elif zip_file is not None:
+                os.remove(path)
+       if zip_file is None:
+        await ctx.send("Could not find ZIP file")
+        return
+       download_link = send_to_transfersh(zip_file, clipboard=False)
+       os.remove(path)
+       await ctx.send(download_link)
        await ctx.send("tamamlandı")
