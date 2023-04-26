@@ -6,6 +6,7 @@ from redbot.core.data_manager import bundled_data_path
 from redbot.core.data_manager import cog_data_path
 from deezfacu import Login
 import glob
+import urllib.parse
 
 class Deemix(commands.Cog):
     def __init__(self, bot):
