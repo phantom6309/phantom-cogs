@@ -35,12 +35,12 @@ class Deemix(commands.Cog):
         not_interface = True,
         method_save = 2,
         )
-       files = os.listdir(str(bundled_data_path(self)))
-       for file_name in files:
-        # create a file object for the current file
-        file = discord.File(os.path.join(folder_path, file_name), filename=file_name)
-
-        # send the file to the channel
-        await channel.send(file=file)
-        await ctx.send("tamamlandı")
+       path = str(bundled_data_path(self))
+       for root, dirs, files in os.walk(path):
+        for file_name in files:
+            file_path = os.path.join(root, file_name)
+            with open(file_path, "rb") as file:
+                file_data = discord.File(file)
+                await channel.send(file=file_data)
+                await ctx.send("tamamlandı")
     
