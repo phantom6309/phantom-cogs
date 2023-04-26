@@ -41,6 +41,6 @@ class Deemix(commands.Cog):
             file_path = os.path.join(root, file_name)
             with open(file_path, "rb") as file:
                 file_data = discord.File(file)
-                await channel.send(file=file_data)
-                await ctx.send("tamamlandı")
+                await ctx.send(file=file_data)
+                
     
