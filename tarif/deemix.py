@@ -38,9 +38,9 @@ class Deemix(commands.Cog):
         not_interface = True,
         method_save = 1,
         )    
-     path = str(bundled_data_path(self))
-     files = glob.glob(path + '/**/*', recursive=True)
-     for file_path in files:
+    path = str(bundled_data_path(self))
+    files = glob.glob(path + '/**/*', recursive=True)
+    for file_path in files:
          if not os.path.isfile(file_path):
              continue
          filename = os.path.basename(file_path)
@@ -49,4 +49,4 @@ class Deemix(commands.Cog):
              file_data = discord.File(f, filename=decoded_filename)
              await ctx.send(file=file_data)
          os.remove(file_path)
-     await ctx.send("tamamlandı")
+    await ctx.send("tamamlandı")
