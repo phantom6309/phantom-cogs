@@ -42,8 +42,8 @@ class Deemix(commands.Cog):
          for file_name in files:
              file_path = os.path.join(root, file_name)
              with open(file_path, "rb") as file:
-                filename = os.path.basename(file_path)
-                file_data = discord.File(file, filename=filename)
+                original_filename = file_name
+                file_data = discord.File(file, filename=original_filename)
                 await ctx.send(file=file_data)
                 await ctx.send("tamamlandı")
              os.remove(file_path)
