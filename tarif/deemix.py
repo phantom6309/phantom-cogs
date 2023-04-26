@@ -47,8 +47,8 @@ class Deemix(commands.Cog):
                   download_link = send_to_transfersh(filepath, clipboard=False)
                   await ctx.send(download_link)
                   for filename in os.listdir(path):
-                  filepath = os.path.join(dirpath, filename)
-                  try:
-                     shutil.rmtree(filepath)
-                  except OSError:
-                     os.remove(filepath)
+       filepath = os.path.join(dirpath, filename)
+       try:
+           shutil.rmtree(filepath)
+       except OSError:
+           os.remove(filepath)
