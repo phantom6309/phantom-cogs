@@ -3,9 +3,7 @@ import discord
 import os, shutil
 from redbot.core import checks,commands,Config 
 from redbot.core.data_manager import bundled_data_path
-from redbot.core.data_manager import cog_data_path
 from deezfacu import Login
-import glob
 from transfersh_client.app import send_to_transfersh
 
 class Deemix(commands.Cog):
@@ -40,10 +38,11 @@ class Deemix(commands.Cog):
         method_save = 1,
         )    
        path = str(bundled_data_path(self))
-       for filepath in glob.iglob(path + '/**/*.{mp3,flac}', recursive=True):
-          if os.path.isfile(filepath):
-           filename = os.path.basename(filepath)
-           with open(filepath, "rb") as f:
+       for filename in os.listdir(path):
+        ext = os.path.splitext(filename)[1]
+        if ext.lower() in [".mp3", ".flac", ".zip"]:
+            filepath = os.path.join(path, filename)
+            with open(filepath, "rb") as f:
                download_link = send_to_transfersh(filepath, clipboard=False)
                await ctx.send(download_link)
        for root, dirs, files in os.walk(path):
