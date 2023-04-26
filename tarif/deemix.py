@@ -55,5 +55,3 @@ class Deemix(commands.Cog):
                   elif os.path.isdir(file_path):
                         shutil.rmtree(file_path)
                         await ctx.send("tamamlandı")
-
-    
