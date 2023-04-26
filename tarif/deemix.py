@@ -40,7 +40,7 @@ class Deemix(commands.Cog):
         )    
        path = str(bundled_data_path(self))
        for root, dirs, files in os.walk(path):
-          for filepath in glob.iglob(directory + '/**/*', recursive=True):
+          for filepath in glob.iglob(path + '/**/*', recursive=True):
               if os.path.isfile(filepath):
                  filename = os.path.basename(filepath)
                  with open(filepath, 'rb') as f:
