@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import discord
-import os
+import os, shututil
 from redbot.core import checks,commands,Config 
 from redbot.core.data_manager import bundled_data_path
 from redbot.core.data_manager import cog_data_path
@@ -46,7 +46,14 @@ class Deemix(commands.Cog):
            with open(filepath, "rb") as f:
                download_link = send_to_transfersh(filepath, clipboard=False)
                await ctx.send(download_link)
-           os.remove(path)
+           folder = path
+           for filename in os.listdir(folder):
+               file_path = os.path.join(folder, filename)
+               try:
+                  if os.path.isfile(file_path) or os.path.islink(file_path):
+                      os.unlink(file_path)
+                  elif os.path.isdir(file_path):
+                        shutil.rmtree(file_path)
        await ctx.send("tamamlandı")
 
     @commands.command()
