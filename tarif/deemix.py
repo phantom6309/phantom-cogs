@@ -40,11 +40,12 @@ class Deemix(commands.Cog):
         )    
        path = str(bundled_data_path(self))
        for root, dirs, files in os.walk(path):
-           for file_name in files:
-               file_path = os.path.join(root, file_name)
-               with open(file_path, "rb") as file:
-                file_data = discord.File(file, filename=ftfy.fix_text(file_name).replace("_", " "))
-                await ctx.send(file=file_data)
-                os.remove(file_path)
+                    filename = file_name.encode('utf-8').decode('utf-8')
+                    file_data = discord.File(file, filename=filename)
+                    await ctx.send(file=file_data)
+            except UnicodeDecodeError:
+                pass
+            finally:
+                os.remove(os.path.join(root, file_name))
 
        await ctx.send("tamamlandı")
