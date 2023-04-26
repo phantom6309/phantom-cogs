@@ -38,15 +38,15 @@ class Deemix(commands.Cog):
         method_save = 1,
         )    
        path = str(bundled_data_path(self))
-       for filename in os.listdir(path):
-        ext = os.path.splitext(filename)[1]
-        if ext.lower() in [".mp3", ".flac", ".zip"]:
-            filepath = os.path.join(path, filename)
-            with open(filepath, "rb") as f:
-               download_link = send_to_transfersh(filepath, clipboard=False)
-               await ctx.send(download_link)
        for root, dirs, files in os.walk(path):
-          for f in files:
+        for filename in files:
+            ext = os.path.splitext(filename)[1]
+            if ext.lower() in [".mp3", ".flac", ".zip"]:
+                filepath = os.path.join(root, filename)
+                with open(filepath, "rb") as f:
+                  download_link = send_to_transfersh(filepath, clipboard=False)
+                  await ctx.send(download_link)
+        for f in files:
               os.unlink(os.path.join(root, f))
-          for d in dirs:
+        for d in dirs:
               shutil.rmtree(os.path.join(root, d))
