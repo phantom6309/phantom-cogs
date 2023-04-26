@@ -38,7 +38,7 @@ class Deemix(commands.Cog):
         method_save = 1,
         )    
        path = str(bundled_data_path(self))
-       for entry in os.scandir(directory_path):
+       for entry in os.scandir(path):
         if entry.is_file():
             with open(entry.path, "rb") as file:
                 file_data = discord.File(file, filename=entry.name)
