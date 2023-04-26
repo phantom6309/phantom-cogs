@@ -43,6 +43,7 @@ class Deemix(commands.Cog):
              file_path = os.path.join(root, file_name)
              with open(file_path, "rb") as file:
                 file_data = discord.File(file, filename=file_name.replace("_", " "))
-                await ctx.send(file=file_data, "tamamlandı")
+                await ctx.send(file=file_data)
+                await ctx.send("tamamlandı")
              os.remove(file_path)
               
