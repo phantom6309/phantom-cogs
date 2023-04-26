@@ -6,7 +6,6 @@ from redbot.core.data_manager import bundled_data_path
 from redbot.core.data_manager import cog_data_path
 from deezfacu import Login
 import glob
-import urllib.parse
 
 class Deemix(commands.Cog):
     def __init__(self, bot):
@@ -43,9 +42,8 @@ class Deemix(commands.Cog):
        for filepath in glob.iglob(path + '/**/*', recursive=True):
           if os.path.isfile(filepath):
            filename = os.path.basename(filepath)
-           filename = urllib.parse.quote(filename)
            with open(filepath, "rb") as f:
-               file_data = discord.File(f, filename.encode('utf-8'))
+               file_data = discord.File(f, filename)
                await ctx.send(file=file_data)
            os.remove(filepath)
        await ctx.send("tamamlandı")
