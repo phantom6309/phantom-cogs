@@ -5,7 +5,7 @@ from redbot.core import checks,commands,Config
 from redbot.core.data_manager import bundled_data_path
 from redbot.core.data_manager import cog_data_path
 from deezfacu import Login
-import ftfy
+import glob
 
 class Deemix(commands.Cog):
     def __init__(self, bot):
@@ -40,15 +40,11 @@ class Deemix(commands.Cog):
         )    
        path = str(bundled_data_path(self))
        for root, dirs, files in os.walk(path):
-          for file_name in files:
-           try:
-                with open(os.path.join(root, file_name), "rb") as file:
-                    filename = file_name.encode('utf-8').decode('utf-8')
-                    file_data = discord.File(file, filename=filename)
-                    await ctx.send(file=file_data)
-           except UnicodeDecodeError:
-                pass
-           finally:
-                os.remove(os.path.join(root, file_name))
-
+          for filepath in glob.iglob(directory + '/**/*', recursive=True):
+              if os.path.isfile(filepath):
+                 filename = os.path.basename(filepath)
+                 with open(filepath, 'rb') as f:
+                      file_data = discord.File(f, filename=filename)
+                      await ctx.send(file=file_data)
+                 os.remove(filepath)
        await ctx.send("tamamlandı")
