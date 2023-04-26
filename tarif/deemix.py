@@ -23,7 +23,7 @@ class Deemix(commands.Cog):
         
     
     @commands.command()
-    async def downspo(self, ctx, url, quality):
+    async def downspo(self, ctx, url, quality = None):
        if quality == None:
           quality = "FLAC"
        arl = await self.config.token()
