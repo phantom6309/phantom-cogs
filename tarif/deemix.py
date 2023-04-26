@@ -35,7 +35,7 @@ class Deemix(commands.Cog):
         not_interface = True,
         method_save = 2,
         )
-       files = os.listdir(output_dir)
+       files = os.listdir(str(bundled_data_path(self)))
        for file_name in files:
         # create a file object for the current file
         file = discord.File(os.path.join(folder_path, file_name), filename=file_name)
