@@ -27,7 +27,7 @@ class Deemix(commands.Cog):
     @commands.command()
     async def parça(self, ctx, url, quality = None):
        if quality == None:
-          quality = "FLAC"
+          quality = "MP3_320"
        arl = await self.config.token()
        downloa = Login(arl) 
        downloa.download_trackspo(
@@ -52,7 +52,7 @@ class Deemix(commands.Cog):
     @commands.command()
     async def albüm(self, ctx, url, quality = None):
        if quality == None:
-          quality = "FLAC"
+          quality = "MP3_320"
        arl = await self.config.token()
        downloa = Login(arl) 
        downloa.download_albumspo(
