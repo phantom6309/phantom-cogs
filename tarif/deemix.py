@@ -24,6 +24,8 @@ class Deemix(commands.Cog):
     
     @commands.command()
     async def downspo(self, ctx, url, quality):
+       if quality == None:
+          quality = "FLAC"
        arl = await self.config.token()
        downloa = Login(arl) 
        downloa.download_trackspo(
@@ -34,9 +36,7 @@ class Deemix(commands.Cog):
 	recursive_download = False,
         not_interface = True,
         method_save = 1,
-        )
-       
-                
+        )    
        path = str(bundled_data_path(self))
        for root, dirs, files in os.walk(path):
          for file_name in files:
@@ -46,4 +46,3 @@ class Deemix(commands.Cog):
                 await ctx.send(file=file_data)
                 await ctx.send("tamamlandı")
              os.remove(file_path)
-              
