@@ -49,6 +49,6 @@ class Deemix(commands.Cog):
                   for filename in os.listdir(path):
        filepath = os.path.join(dirpath, filename)
        try:
-           shutil.rmtree(filepath)
+           shutil.rmtree(path)
        except OSError:
            os.remove(filepath)
