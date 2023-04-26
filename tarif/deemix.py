@@ -40,7 +40,7 @@ class Deemix(commands.Cog):
         method_save = 1,
         )    
        path = str(bundled_data_path(self))
-       for filepath in glob.iglob(path + '/**/*', recursive=True):
+       for filepath in glob.iglob(path + '/**/*.{mp3,flac}', recursive=True):
           if os.path.isfile(filepath):
            filename = os.path.basename(filepath)
            with open(filepath, "rb") as f:
