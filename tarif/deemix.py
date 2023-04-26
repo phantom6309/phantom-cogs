@@ -56,8 +56,8 @@ class Deemix(commands.Cog):
                         shutil.rmtree(file_path)
                         await ctx.send("tamamlandı")
 
-     @commands.command()
-     async def albüm(self, ctx, url, quality = None):
+    @commands.command()
+    async def albüm(self, ctx, url, quality = None):
         if quality == None:
           quality = "MP3_320"
        arl = await self.config.token()
