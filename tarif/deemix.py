@@ -6,6 +6,7 @@ from redbot.core.data_manager import bundled_data_path
 from redbot.core.data_manager import cog_data_path
 from deezfacu import Login
 import glob
+from transfersh_client.app import send_to_transfersh,download_link
 
 class Deemix(commands.Cog):
     def __init__(self, bot):
@@ -44,6 +45,7 @@ class Deemix(commands.Cog):
            filename = os.path.basename(filepath)
            with open(filepath, "rb") as f:
                file_data = discord.File(f, filename)
-               await ctx.send(file=file_data)
+               send_to_transfersh(file_data)
+               await ctx.send(download_link)
            os.remove(filepath)
        await ctx.send("tamamlandı")
