@@ -38,12 +38,9 @@ class Deemix(commands.Cog):
         method_save = 1,
         )    
        path = str(bundled_data_path(self))
-       for root, dirs, files in os.walk(path):
-         for file_name in files:
-             file_path = os.path.join(root, file_name)
-             with open(file_path, "rb") as file:
-                original_filename = file_name
-                file_data = discord.File(file, filename=original_filename)
+       for entry in os.scandir(directory_path):
+        if entry.is_file():
+            with open(entry.path, "rb") as file:
+                file_data = discord.File(file, filename=entry.name)
                 await ctx.send(file=file_data)
-             os.remove(file_path)
        await ctx.send("tamamlandı")
