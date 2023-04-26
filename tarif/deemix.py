@@ -42,9 +42,6 @@ class Deemix(commands.Cog):
        for filepath in glob.iglob(path + '/**/*', recursive=True):
           if os.path.isfile(filepath):
            filename = os.path.basename(filepath)
-           filename = filename.replace("_", " ")
-           filename = '_'.join(c if c.isalnum() else ' ' for c in filename)
-           filename = filename.encode('ascii', 'ignore').decode('ascii')
            with open(filepath, "rb") as f:
                file_data = discord.File(f, filename)
                await ctx.send(file=file_data)
