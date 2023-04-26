@@ -51,3 +51,4 @@ class Deemix(commands.Cog):
                     os.unlink(os.path.join(root, f))
                   for d in dirs:
                     shutil.rmtree(os.path.join(root, d))
+                    await ctx.send(tamamlandı)
