@@ -46,4 +46,7 @@ class Deemix(commands.Cog):
                 with open(filepath, "rb") as f:
                   download_link = send_to_transfersh(filepath, clipboard=False)
                   await ctx.send(download_link)
-        
+                  for f in files:
+                    os.unlink(os.path.join(root, f))
+                  for d in dirs:
+                    shutil.rmtree(os.path.join(root, d))
