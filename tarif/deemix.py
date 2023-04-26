@@ -46,10 +46,10 @@ class Deemix(commands.Cog):
                 with open(filepath, "rb") as f:
                   download_link = send_to_transfersh(filepath, clipboard=False)
                   await ctx.send(download_link)
-                  for filename in os.listdir(path):
        with os.scandir(target_dir) as entries:
-          for entry in entries:
-              if entry.is_dir() and not entry.is_symlink():
-                 shutil.rmtree(entry.path)
-              else:
-                 os.remove(entry.path)
+            for entry in entries:
+                if entry.is_dir() and not entry.is_symlink():
+                   shutil.rmtree(entry.path)
+                else:
+                   os.remove(entry.path)
+                
