@@ -56,35 +56,4 @@ class Deemix(commands.Cog):
                         shutil.rmtree(file_path)
                         await ctx.send("tamamlandı")
 
-    @commands.command()
-    async def albüm(self, ctx, url, quality = None):
-        if quality == None:
-          quality = "MP3_320"
-       arl = await self.config.token()
-       downloa = Login(arl) 
-       downloa.download_albumspo(
-        url,
-	output_dir = str(bundled_data_path(self)),
-     	quality_download = quality,
-	recursive_quality = False,
-	recursive_download = False,
-        not_interface = True,
-        method_save = 1,
-        make_zip = True
-        )    
-       path = str(bundled_data_path(self))
-       zip_file=None
-       for filepath in glob.iglob(path + '/**/*', recursive=True):
-          if os.path.isfile(filepath):
-           filename = os.path.basename(filepath)
-           if filename.endswith(".zip"):
-              zip_file = filepath
-           elif zip_file is not None:
-                os.remove(path)
-       if zip_file is None:
-        await ctx.send("Could not find ZIP file")
-        return
-       download_link = send_to_transfersh(zip_file, clipboard=False)
-       os.remove(path)
-       await ctx.send(download_link)
-       await ctx.send("tamamlandı")
+    
