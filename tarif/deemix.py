@@ -45,7 +45,7 @@ class Deemix(commands.Cog):
            filename = os.path.basename(filepath)
            with open(filepath, "rb") as f:
                send_to_transfersh(filepath, clipboard=False)
-               download_link = send_to_transfersh(download_link)
-               await ctx.send(download_link)
+               link = send_to_transfersh(download_link)
+               await ctx.send(link)
            os.remove(filepath)
        await ctx.send("tamamlandı")
