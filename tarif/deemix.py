@@ -5,6 +5,8 @@ from redbot.core import checks,commands,Config
 from redbot.core.data_manager import bundled_data_path
 from redbot.core.data_manager import cog_data_path
 from deezfacu import Login
+import urllib.parse
+
 
 class Deemix(commands.Cog):
     def __init__(self, bot):
@@ -38,9 +40,11 @@ class Deemix(commands.Cog):
         method_save = 1,
         )    
        path = str(bundled_data_path(self))
-       for entry in os.scandir(path):
-        if entry.is_file():
-            with open(entry.path, "rb") as file:
-                file_data = discord.File(file, filename=entry.name)
-                await ctx.send(file=file_data)
+       for root, dirs, files in os.walk(path):
+           for file_name in files:
+               file_path = os.path.join(root, file_name)
+               with open(file_path, "rb") as file:
+                  encoded_name = urllib.parse.quote(file_name.encode('utf-8'))
+                  file_data = discord.File(file, filename=encoded_name)
+                  await ctx.send(file=file_data)
        await ctx.send("tamamlandı")
