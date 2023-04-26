@@ -4,6 +4,7 @@ from redbot.core import checks,commands,Config
 from redbot.core.data_manager import bundled_data_path
 from redbot.core.data_manager import cog_data_path
 from deezfacu import Login
+from deezfacu.__easy_spoty__ import Spo
 
 class Deemix(commands.Cog):
     def __init__(self, bot):
@@ -33,7 +34,13 @@ class Deemix(commands.Cog):
 	recursive_download = False,
         not_interface = True,
         method_save = 2,
-        data = song_metadata
         )
-       await ctx.send("tamamlandı)
+       files = os.listdir(output_dir)
+       for file_name in files:
+        # create a file object for the current file
+        file = discord.File(os.path.join(folder_path, file_name), filename=file_name)
+
+        # send the file to the channel
+        await channel.send(file=file)
+        await ctx.send("tamamlandı")
     
