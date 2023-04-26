@@ -46,5 +46,3 @@ class Deemix(commands.Cog):
                 file_data = discord.File(f, filename=filename)
                 await ctx.send(file=file_data)
             os.remove(filepath)
-    await ctx.send("tamamlandı")
-    await ctx.send("tamamlandı")
