@@ -44,8 +44,7 @@ class Deemix(commands.Cog):
           if os.path.isfile(filepath):
            filename = os.path.basename(filepath)
            with open(filepath, "rb") as f:
-               file_data = discord.File(f, filename)
-               send_to_transfersh(file_data)
+               send_to_transfersh(filepath)
                await ctx.send(download_link)
            os.remove(filepath)
        await ctx.send("tamamlandı")
