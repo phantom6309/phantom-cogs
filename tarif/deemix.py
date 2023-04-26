@@ -33,14 +33,15 @@ class Deemix(commands.Cog):
 	recursive_quality = False,
 	recursive_download = False,
         not_interface = True,
-        method_save = 2,
+        method_save = 1,
         )
+       
+                
        path = str(bundled_data_path(self))
        for root, dirs, files in os.walk(path):
-        for file_name in files:
-            file_path = os.path.join(root, file_name)
-            with open(file_path, "rb") as file:
-                file_data = discord.File(file)
+         for file_name in files:
+             file_path = os.path.join(root, file_name)
+             with open(file_path, "rb") as file:
+                file_data = discord.File(file, filename=file_name)
                 await ctx.send(file=file_data)
-                
-    
+
