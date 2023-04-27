@@ -3,7 +3,7 @@ import discord
 from redbot.core import commands
 from bs4 import BeautifulSoup
 import requests
-from math import ceil 
+import re
 class Astro(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
