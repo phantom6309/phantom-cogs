@@ -20,7 +20,7 @@ class Astro(commands.Cog):
     async def astro(self, ctx, burc:str):
         member = ctx.author
         burc = burc.lower()
-        soup = await self.get_burc_yorum(burc)
+        soup = str(await self.get_burc_yorum(burc))
         burc_url = f"https://i.elle.com.tr/elle-test-images/elle_{burc}.jpg"
         emotions = re.search(r'Emotions: (.+?)</p>', soup).group(1)
         await ctx.send(emotions)
