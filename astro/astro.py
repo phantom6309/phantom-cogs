@@ -3,7 +3,7 @@ import discord
 from redbot.core import commands
 from bs4 import BeautifulSoup
 import requests
-
+from math import ceil 
 class Astro(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -22,4 +22,7 @@ class Astro(commands.Cog):
         burc = burc.lower()
         soup = await self.get_burc_yorum(burc)
         burc_url = f"https://i.elle.com.tr/elle-test-images/elle_{burc}.jpg"
-        await ctx.send(soup)
+        for i in range(ceil(len(soup) / 4096)):
+            embed = discord.Embed(title='Hello World')
+            embed.description = (my_text[(4096*i):(4096*(i+1))])
+            await ctx.send(embed=embed)
