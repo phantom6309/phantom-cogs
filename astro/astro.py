@@ -2,6 +2,7 @@
 import discord
 from redbot.core import commands
 from bs4 import BeautifulSoup
+from googletrans import Translator
 import requests
 import re
 class Astro(commands.Cog):
