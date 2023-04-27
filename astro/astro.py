@@ -31,4 +31,5 @@ class Astro(commands.Cog):
         money = re.search(r'Money: (.+?)</p>', soup).group(1)
         travel = re.search(r'Travel: (.+?)</p>', soup).group(1)
         personal = re.search(r'Personal: (.+?)</p>', soup).group(1)
-        await ctx.send(emotions,personal)
+        await ctx.send(emotions)
+        await ctx.send(personal)
