@@ -17,7 +17,7 @@ class Astro(commands.Cog):
         return burc_yorumu
 
     @commands.command(name="burç")
-    async def burç(self, ctx, burc:str):
+    async def astro(self, ctx, burc:str):
         member = ctx.author
         burc = burc.lower()
         burc_yorumu = await self.get_burc_yorum(burc)
