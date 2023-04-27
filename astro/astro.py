@@ -16,7 +16,7 @@ class Astro(commands.Cog):
         burc_yorumu = soup.find("div", class_="parah_{burc}_horocope").get_text().strip()
         return burc_yorumu
 
-    @commands.command(name="burç")
+    @commands.command()
     async def astro(self, ctx, burc:str):
         member = ctx.author
         burc = burc.lower()
