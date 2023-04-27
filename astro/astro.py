@@ -11,10 +11,10 @@ class Astro(commands.Cog):
 
     async def get_burc_yorum(self, burc):
         url = f"https://astrotalk.com/horoscope/todays-horoscope/{burc}"
-        page = requests.get(url).text
+        page = requests.get(url)
         soup = BeautifulSoup(page, "html.parser")
-        burc_yorumu = soup.find("div", class_="parah_{burc}_horocope")
-        return soup
+        burc_yorumu = soup.find("div", class_=f"parah_{burc}_horocope").text
+        return burc_yorumu
 
     @commands.command()
     async def astro(self, ctx, burc:str):
@@ -22,7 +22,4 @@ class Astro(commands.Cog):
         burc = burc.lower()
         soup = await self.get_burc_yorum(burc)
         burc_url = f"https://i.elle.com.tr/elle-test-images/elle_{burc}.jpg"
-        for i in range(ceil(len(soup) / 4096)):
-            embed = discord.Embed(title='Hello World')
-            embed.description = (soup[(4096*i):(4096*(i+1))])
-            await ctx.send(embed=embed)
+        await ctx.send(soup)
