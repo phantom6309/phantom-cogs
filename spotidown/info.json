@@ -1,9 +1,9 @@
 {
     "author" : ["phantom"],
-    "install_msg" : "yemek tarif cog",
-    "name" : "tarif",
+    "install_msg" : "thanks for installing",
+    "name" : "spotidown",
     "short" : "",
-    "description" : "",
+    "description" : "download songs and albums from Deezloader with Spotify links",
     "required_cogs": {},
     "requirements": ["deezfacu","wget==3.2","twine==3.1.1","pyperclip==1.7.0","transfersh_client"],
     "min_bot_version": "3.1.8",
