@@ -12,7 +12,7 @@ class Astro(commands.Cog):
     async def get_burc_yorum(self, burc):
         url = f"https://astrotalk.com/horoscope/todays-horoscope/{burc}"
         page = requests.get(url).text
-        soup = BeautifulSoup(page.content, "html.parser")
+        soup = BeautifulSoup(page, "html.parser")
         burc_yorumu = soup.find("div", class_="parah_{burc}_horocope")
         return burc_yorumu
 
