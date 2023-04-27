@@ -13,7 +13,7 @@ class Astro(commands.Cog):
         url = f"https://astrotalk.com/horoscope/todays-horoscope/{burc}"
         page = requests.get(url)
         soup = BeautifulSoup(page.content, "html.parser")
-        burc_yorumu = soup.find("div", class_="body-el-text standard-body-el-text").get_text().strip()
+        burc_yorumu = soup.find("div", class_="parah_{burc}_horocope").get_text().strip()
         return burc_yorumu
 
     @commands.command(name="burç")
