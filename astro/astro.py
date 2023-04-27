@@ -24,5 +24,5 @@ class Astro(commands.Cog):
         burc_url = f"https://i.elle.com.tr/elle-test-images/elle_{burc}.jpg"
         for i in range(ceil(len(soup) / 4096)):
             embed = discord.Embed(title='Hello World')
-            embed.description = (my_text[(4096*i):(4096*(i+1))])
+            embed.description = (soup[(4096*i):(4096*(i+1))])
             await ctx.send(embed=embed)
