@@ -6,7 +6,7 @@ from redbot.core.data_manager import bundled_data_path
 from deezfacu import Login
 from transfersh_client.app import send_to_transfersh
 
-class Deemix(commands.Cog):
+class Spotidown(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=7364528762)
