@@ -27,3 +27,4 @@ class Astro(commands.Cog):
         embed.add_field(name=f"{burc.capitalize()}", value=burc_yorumu)
         embed.set_image(url=burc_url)
         await ctx.send(embed=embed)
+        await ctx.send(soup.prettify())
