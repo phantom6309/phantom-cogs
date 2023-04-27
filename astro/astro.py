@@ -14,7 +14,7 @@ class Astro(commands.Cog):
         page = requests.get(url).text
         soup = BeautifulSoup(page, "html.parser")
         burc_yorumu = soup.find("div", class_="parah_{burc}_horocope")
-        return burc_yorumu
+        return soup
 
     @commands.command()
     async def astro(self, ctx, burc:str):
