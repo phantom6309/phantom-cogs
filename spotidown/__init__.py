@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from .deemix import Deemix
+from .spotidown import Spotidown
 
 async def setup(bot):
-    bot.add_cog(Deemix(bot))
+    bot.add_cog(Spotidown(bot))
