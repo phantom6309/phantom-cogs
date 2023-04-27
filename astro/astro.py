@@ -22,4 +22,5 @@ class Astro(commands.Cog):
         burc = burc.lower()
         soup = await self.get_burc_yorum(burc)
         burc_url = f"https://i.elle.com.tr/elle-test-images/elle_{burc}.jpg"
-        await ctx.send(soup)
+        emotions = re.search(r'Emotions: (.+?)</p>', soup).group(1)
+        await ctx.send(emotions)
