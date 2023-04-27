@@ -1,0 +1,10 @@
+{
+    "author" : ["Phantom"],
+    "install_msg" : "thanks for installing",
+    "name" : "Astro",
+    "short" : "",
+    "description" : "Daily Horoscope",
+    "tags" : [""],
+    "requirements" : ["bs4","requests"]
+    "end_user_data_statement": " "
+}
