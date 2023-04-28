@@ -24,7 +24,7 @@ class Astro(commands.Cog):
         emotions = str(translator.translate(soup, dest="tr"))
 
         # Use regular expressions to extract individual horoscope sections
-        personal = re.search(r'Kişisel: (.+?)</p>', emotions)                        
+        personal = re.search(r'Kişisel: (.+?)</p>', emotions).group(1)                        
         travel = re.search(r"Seyahat: (.+?)\n\n", emotions)
         money = re.search(r"Para: (.+?)\n\n", emotions)
         career = re.search(r"Kariyer: (.+?)\n\n", emotions)
