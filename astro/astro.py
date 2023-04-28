@@ -1,10 +1,9 @@
 import discord
-from redbot.core import commands
-from bs4 import BeautifulSoup
-from googletrans import Translator
-import requests
 import re
-
+from googletrans import Translator
+from bs4 import BeautifulSoup
+import requests
+from redbot.core import commands
 
 class Astro(commands.Cog):
     def __init__(self, bot):
@@ -16,34 +15,29 @@ class Astro(commands.Cog):
         soup = BeautifulSoup(page, "html.parser")
         burc_yorumu = soup.find("div", class_=f"parah_aries_horocope")
         return burc_yorumu
-    
+        
     @commands.command()
     async def astro(self, ctx, burc:str):
-        member = ctx.author
         burc = burc.lower()
         translator = Translator()
         soup = str(await self.get_burc_yorum(burc))
-        emotions = str(translator.translate(soup, dest="tr"))
-        
-        personal_match = re.search(r"Kişisel: (.+?)\n\n", emotions)
-        personal = personal_match.group(1) if personal_match else None
-        
-        travel_match = re.search(r"Seyahat: (.+?)\n\n", emotions)
-        travel = travel_match.group(1) if travel_match else None
-        
-        money_match = re.search(r"Para: (.+?)\n\n", emotions)
-        money = money_match.group(1) if money_match else None
-        
-        career_match = re.search(r"Kariyer: (.+?)\n\n", emotions)
-        career = career_match.group(1) if career_match else None
-        
-        health_match = re.search(r"Sağlık: (.+?)\n\n", emotions)
-        health = health_match.group(1) if health_match else None
-        
-        feelings_match = re.search(r"Duygular: (.+?)\n\n", emotions)
-        feelings = feelings_match.group(1) if feelings_match else None
-        
-        embed = discord.Embed(title=f"Today's horoscope for {burc.capitalize()}",
-                              description=f"**Kişisel**: {personal}\n\n**Seyahat**: {travel}\n\n**Para**: {money}\n\n**Kariyer**: {career}\n\n**Sağlık**: {health}\n\n**Duygular**: {feelings}")
-        
+        emotions = str(translator.translate(soup, dest="tr").text)
+
+        # Use regular expressions to extract individual horoscope sections
+        personal = re.search(r"Kişisel: (.+?)</p>", emotions).group(1).                         
+        travel = re.search(r"Seyahat: (.+?)\n\n", emotions).group(1)
+        money = re.search(r"Para: (.+?)\n\n", emotions).group(1)
+        career = re.search(r"Kariyer: (.+?)\n\n", emotions).group(1)
+        health = re.search(r"Sağlık: (.+?)\n\n", emotions).group(1)
+        feelings = re.search(r"Duygular: (.+?)$", emotions).group(1)
+
+        # Create an embed with the horoscope sections as titles and descriptions
+        embed = discord.Embed(title=f"{burc.upper()} Burcu Günlük Yorumu", color=0xffd700)
+        embed.add_field(name="Kişisel", value=personal, inline=False)
+        embed.add_field(name="Seyahat", value=travel, inline=False)
+        embed.add_field(name="Para", value=money, inline=False)
+        embed.add_field(name="Kariyer", value=career, inline=False)
+        embed.add_field(name="Sağlık", value=health, inline=False)
+        embed.add_field(name="Duygular", value=feelings, inline=False)
+
         await ctx.send(embed=embed)
