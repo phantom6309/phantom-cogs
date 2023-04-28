@@ -25,8 +25,8 @@ class Astro(commands.Cog):
         soup = str(await self.get_burc_yorum(burc))
         burc_url = f"https://i.elle.com.tr/elle-test-images/elle_{burc}.jpg"
         emotions = re.search(r'Emotions: (.+?)</p>', soup).group(1)
-        emotions = str(translator.translate.translated(emotions, dest="tr"))
-
+        emotions = str(translator.translate(emotions, dest="tr"))
+        emotions = re.search(r'text=(.+?).,', soup).group(1)
         career = re.search(r'Career: (.+?)</p>', soup).group(1)
         health = re.search(r'Health: (.+?)</p>', soup).group(1)
         money = re.search(r'Money: (.+?)</p>', soup).group(1)
