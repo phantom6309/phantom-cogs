@@ -51,3 +51,4 @@ class Astro(commands.Cog):
 
         await ctx.send(embed=embed)
         await ctx.send(love)
+        await ctx.send(emotions)
