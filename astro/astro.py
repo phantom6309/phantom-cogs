@@ -30,7 +30,7 @@ class Astro(commands.Cog):
         soup = str(await self.get_burc_yorum(burc))
         output = str(await self.get_burc_yorum2(burc))
         emotions = str(translator.translate(soup, dest="tr"))
-        love = str(translator.translate(output, dest="tr"))
+        output = str(translator.translate(output, dest="tr"))
         # Use regular expressions to extract individual horoscope sections
         personal = re.search(r'Kişisel: (.+?)</p>', emotions).group(1)                        
         travel = re.search(r'Seyahat: (.+?)</p>', emotions).group(1)
