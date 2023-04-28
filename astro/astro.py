@@ -26,7 +26,7 @@ class Astro(commands.Cog):
         # Use regular expressions to extract individual horoscope sections
         personal = re.search(r'Kişisel: (.+?)</p>', emotions).group(1)                        
         travel = re.search(r'Seyahat: (.+?)</p>', emotions).group(1)
-        money = re.search(r'Para: (.+?)\n\n", emotions).group(1)
+        money = re.search(r'Para: (.+?)</p>', emotions).group(1)
         career = re.search(r'Kariyer: (.+?)</p>', emotions).group(1)
         health = re.search(r'Sağlık: (.+?)</p>', emotions).group(1)
         feelings = re.search(r'Duygular: (.+?)</p>', emotions).group(1)
