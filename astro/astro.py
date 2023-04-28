@@ -25,11 +25,11 @@ class Astro(commands.Cog):
 
         # Use regular expressions to extract individual horoscope sections
         personal = re.search(r'Kişisel: (.+?)</p>', emotions).group(1)                        
-        travel = re.search(r"Seyahat: (.+?)\n\n", emotions)
-        money = re.search(r"Para: (.+?)\n\n", emotions)
-        career = re.search(r"Kariyer: (.+?)\n\n", emotions)
-        health = re.search(r"Sağlık: (.+?)\n\n", emotions)
-        feelings = re.search(r"Duygular: (.+?)$", emotions)
+        travel = re.search(r"Seyahat: (.+?)\n\n", emotions).group(1)
+        money = re.search(r"Para: (.+?)\n\n", emotions).group(1)
+        career = re.search(r"Kariyer: (.+?)\n\n", emotions).group(1)
+        health = re.search(r"Sağlık: (.+?)\n\n", emotions).group(1)
+        feelings = re.search(r"Duygular: (.+?)$", emotions).group(1)
 
         # Create an embed with the horoscope sections as titles and descriptions
         embed = discord.Embed(title=f"{burc.upper()} Burcu Günlük Yorumu", color=0xffd700)
