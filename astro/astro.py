@@ -42,6 +42,7 @@ class Astro(commands.Cog):
         end_index = output.find("</p>", start_index)
         love = output[start_index:end_index]
         embed = discord.Embed(title=f"{burc.upper()} Burcu Günlük Yorumu", color=0xffd700)
+        embed.set_thumbnail(url=member.avatar_url)
         embed.add_field(name="Kişisel", value=personal, inline=False)
         embed.add_field(name="Seyahat", value=travel, inline=False)
         embed.add_field(name="Para", value=money, inline=False)
