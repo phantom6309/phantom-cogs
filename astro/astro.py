@@ -23,14 +23,7 @@ class Astro(commands.Cog):
         burc = burc.lower()
         translator = Translator()
         soup = str(await self.get_burc_yorum(burc))
-        burc_url = f"https://i.elle.com.tr/elle-test-images/elle_{burc}.jpg"
-        emotions = re.search(r'Emotions: (.+?)</p>', soup).group(1)
-        emotions = str(translator.translate(emotions, dest="tr"))
-        emotions = re.search(r'text=(.+?).,', soup)
-        career = re.search(r'Career: (.+?)</p>', soup).group(1)
-        health = re.search(r'Health: (.+?)</p>', soup).group(1)
-        money = re.search(r'Money: (.+?)</p>', soup).group(1)
-        travel = re.search(r'Travel: (.+?)</p>', soup).group(1)
-        personal = re.search(r'Personal: (.+?)</p>', soup).group(1)
+
+        emotions = str(translator.translate(soup, dest="tr"))
         await ctx.send(emotions)
         await ctx.send(personal)
