@@ -41,6 +41,7 @@ class Astro(commands.Cog):
         start_index = output.find("<p>") + len("<p>")
         end_index = output.find("</p>", start_index)
         love = output[start_index:end_index]
+        burc_url = f"https://cdn.shopify.com/s/files/1/1325/0879/articles/headers-zodiac-sign-astrology-personality-positives-negatives-cheat-sheet-{burç}_1500x.png"
         embed = discord.Embed(title=f"{burc.upper()} Burcu Günlük Yorumu", color=0xffd700)
         embed.set_thumbnail(url=ctx.author.avatar_url)
         embed.add_field(name="Kişisel", value=personal, inline=False)
@@ -50,4 +51,5 @@ class Astro(commands.Cog):
         embed.add_field(name="Sağlık", value=health, inline=False)
         embed.add_field(name="Duygular", value=feelings, inline=False)
         embed.add_field(name="Aşk", value=love, inline=False)
+        embed.set_image(url=burc_url)
         await ctx.send(embed=embed)
