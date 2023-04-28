@@ -28,7 +28,7 @@ class Astro(commands.Cog):
         burc = burc.lower()
         translator = Translator()
         soup = str(await self.get_burc_yorum(burc))
-        soup2 = str(await self.get_burc_yorum2(burc))
+        output = str(await self.get_burc_yorum2(burc))
         emotions = str(translator.translate(soup, dest="tr"))
         love = str(translator.translate(soup2, dest="tr"))
         # Use regular expressions to extract individual horoscope sections
@@ -38,8 +38,9 @@ class Astro(commands.Cog):
         career = re.search(r'Kariyer: (.+?)</p>', emotions).group(1)
         health = re.search(r'Sağlık: (.+?)</p>', emotions).group(1)
         feelings = re.search(r'Duygular: (.+?)</p>', emotions).group(1)
-        love2 = re.search(r'<p> (.+?) </p>', love)
-        # Create an embed with the horoscope sections as titles and descriptions
+        start_index = output.find("<p>") + len("<p>")
+        end_index = output.find("</p>", start_index)
+        love = output[start_index:end_index]
         embed = discord.Embed(title=f"{burc.upper()} Burcu Günlük Yorumu", color=0xffd700)
         embed.add_field(name="Kişisel", value=personal, inline=False)
         embed.add_field(name="Seyahat", value=travel, inline=False)
@@ -49,8 +50,3 @@ class Astro(commands.Cog):
         embed.add_field(name="Duygular", value=feelings, inline=False)
         embed.add_field(name="Aşk", value=love, inline=False)
         await ctx.send(embed=embed)
-        await ctx.send(self.get_burc_yorum2(burc))
-        await ctx.send(soup2)
-        await ctx.send(love)
-        await ctx.send(love2)
-
