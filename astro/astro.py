@@ -29,8 +29,7 @@ class Astro(commands.Cog):
         translator = Translator()
         soup = str(await self.get_burc_yorum(burc))
         soup2 = str(await self.get_burc_yorum2(burc))
-        emotions = str(translator.translate(soup, dest="tr"))
-        love = str(translator.translate(soup2, dest="tr"))
+        emotions = str(translator.translate(soup,soup2, dest="tr"))
         # Use regular expressions to extract individual horoscope sections
         personal = re.search(r'Kişisel: (.+?)</p>', emotions).group(1)                        
         travel = re.search(r'Seyahat: (.+?)</p>', emotions).group(1)
@@ -49,3 +48,4 @@ class Astro(commands.Cog):
         embed.add_field(name="Duygular", value=feelings, inline=False)
         embed.add_field(name="Aşk", value=love2, inline=False)
         await ctx.send(embed=embed)
+        await ctx.send(emotions)
