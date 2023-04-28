@@ -49,4 +49,5 @@ class Astro(commands.Cog):
         embed.add_field(name="Duygular", value=feelings, inline=False)
         embed.add_field(name="Aşk", value=love, inline=False)
         await ctx.send(embed=embed)
+        await ctx.send(soup2)
         await ctx.send(love)
