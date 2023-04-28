@@ -21,7 +21,7 @@ class Astro(commands.Cog):
         burc = burc.lower()
         translator = Translator()
         soup = str(await self.get_burc_yorum(burc))
-        emotions = str(translator.translate(soup, dest="tr").text)
+        emotions = str(translator.translate(soup, dest="tr"))
 
         # Use regular expressions to extract individual horoscope sections
         personal = re.search(r'Kişisel: (.+?)</p>', emotions)                        
