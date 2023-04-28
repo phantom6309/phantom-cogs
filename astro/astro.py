@@ -17,10 +17,10 @@ class Astro(commands.Cog):
         return burc_yorumu
 
     async def get_burc_yorum2(self, burc):  
-        url2 = f"https://astrotalk.com/todays-love-horoscope/{burc}"
-        page2 = requests.get(url2).text
-        soup2 = BeautifulSoup(page2, "html.parser")
-        burc_yorumu2 = soup2.find("div", class_=f"parah_aries_horocope")
+        url = f"https://astrotalk.com/todays-love-horoscope/{burc}"
+        page = requests.get(url).text
+        soup = BeautifulSoup(page, "html.parser")
+        burc_yorumu2 = soup.find("div", class_=f"parah_aries_horocope")
         return burc_yorumu2
 
     @commands.command()
