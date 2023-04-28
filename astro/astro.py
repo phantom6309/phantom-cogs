@@ -38,7 +38,7 @@ class Astro(commands.Cog):
         career = re.search(r'Kariyer: (.+?)</p>', emotions).group(1)
         health = re.search(r'Sağlık: (.+?)</p>', emotions).group(1)
         feelings = re.search(r'Duygular: (.+?)</p>', emotions).group(1)
-        love = re.search(r'<p> (.+?) </p>', love)
+        love2 = re.search(r'<p> (.+?) </p>', love)
         # Create an embed with the horoscope sections as titles and descriptions
         embed = discord.Embed(title=f"{burc.upper()} Burcu Günlük Yorumu", color=0xffd700)
         embed.add_field(name="Kişisel", value=personal, inline=False)
@@ -49,4 +49,8 @@ class Astro(commands.Cog):
         embed.add_field(name="Duygular", value=feelings, inline=False)
         embed.add_field(name="Aşk", value=love, inline=False)
         await ctx.send(embed=embed)
-        await ctx.send(emotions)
+        await ctx.send(self.get_burc_yorum2(burc))
+        await ctx.send(soup2)
+        await ctx.send(love)
+        await ctx.send(love2)
+
