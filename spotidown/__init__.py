@@ -2,4 +2,5 @@
 from .spotidown import Spotidown
 
 async def setup(bot):
-    bot.add_cog(Spotidown(bot))
+    cog = Spotidown(bot)
+    await bot.add_cog(cog)
