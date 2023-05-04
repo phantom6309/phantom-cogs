@@ -29,7 +29,7 @@ class Astro(commands.Cog):
      app_commands.Choice(name="Akrep", value="scorpio"),
      app_commands.Choice(name="İkizler", value="gemini"),
          ])
-    async def astro(self, interaction: discord.Interaction, burc: Burc):
+    async def astro(self, interaction: discord.Interaction, burc: burc):
         burc = burc.lower()
         translator = Translator()
         soup = str(await self.get_burc_yorum(burc))
