@@ -23,8 +23,13 @@ class Astro(commands.Cog):
         burc_yorumu2 = soup.find("div", class_=f"parah_aries_horocope")
         return burc_yorumu2
 
-    @commands.command()
-    async def astro(self, ctx, burc:str):
+    @app_commands.command()
+    @app_commands.describe(burc="burcunuzu seçiniz")
+    @app_commands.choices(color=[
+     app_commands.Choice(name="Akrep", value="scorpio"),
+     app_commands.Choice(name="İkizler", value="gemini"),
+         ])
+       async def astro(self, interaction: discord.Interaction, burc: Burc):
         burc = burc.lower()
         translator = Translator()
         soup = str(await self.get_burc_yorum(burc))
