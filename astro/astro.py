@@ -24,12 +24,12 @@ class Astro(commands.Cog):
         return burc_yorumu2
 
     @app_commands.command()
-    @app_commands.describe(burc="burcunuzu seçiniz")
-    @app_commands.choices(burc=[
+    @app_commands.describe(astro="burcunuzu seçiniz")
+    @app_commands.choices(astro=[
      app_commands.Choice(name="Akrep", value="scorpio"),
      app_commands.Choice(name="İkizler", value="gemini"),
          ])
-    async def astro(self, interaction: discord.Interaction, burc):
+    async def Astro(self, interaction: discord.Interaction, astro:Astro):
         burc = burc.lower()
         translator = Translator()
         soup = str(await self.get_burc_yorum(burc))
