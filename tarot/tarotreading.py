@@ -66,7 +66,7 @@ class TarotReading(commands.Cog):
         colour = "".join([choice("0123456789ABCDEF") for x in range(6)])
         return int(colour, 16)
 
-    @commands.group()
+    @commands.hybrid_group()
     async def tarot(self, ctx: commands.Context) -> None:
         """Tarot okuması alın"""
         pass
