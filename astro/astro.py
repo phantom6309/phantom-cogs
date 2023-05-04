@@ -43,7 +43,7 @@ class Astro(commands.Cog):
         love = output[start_index:end_index]
         burc_url = f"https://cdn.shopify.com/s/files/1/1325/0879/articles/headers-zodiac-sign-astrology-personality-positives-negatives-cheat-sheet-{burc}_1500x.png"
         embed = discord.Embed(title=f"{burc.upper()} Burcu Günlük Yorumu", color=0xffd700)
-        embed.set_thumbnail(url=ctx.author.avatar_url)
+        embed.set_thumbnail(url=ctx.author.avatar)
         embed.add_field(name="Kişisel", value=personal, inline=False)
         embed.add_field(name="Seyahat", value=travel, inline=False)
         embed.add_field(name="Para", value=money, inline=False)
