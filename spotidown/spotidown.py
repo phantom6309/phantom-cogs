@@ -54,7 +54,7 @@ class Spotidown(commands.Cog):
                    os.remove(entry.path)
 
 
-    @commands.command()
+    @commands.hybrid_command()
     async def spoalbüm(self, ctx, url, quality = None):
        if quality == None:
           quality = "MP3_320"
