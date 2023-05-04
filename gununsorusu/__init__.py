@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from .gununsorusu import Gununsorusu
 
-def setup(bot):
-    bot.add_cog(Gununsorusu(bot))
+async def setup(bot):
+    cog = Gununsorusu(bot)
+    await bot.add_cog(cog)
 
