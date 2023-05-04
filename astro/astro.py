@@ -3,7 +3,7 @@ import re
 from googletrans import Translator
 from bs4 import BeautifulSoup
 import requests
-from redbot.core import commands
+from redbot.core import commands,app_commands
 
 class Astro(commands.Cog):
     def __init__(self, bot):
