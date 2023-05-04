@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from .pinboard import Pinboard
 
-def setup(bot):
-    bot.add_cog(Pinboard(bot))
+async def setup(bot):
+    cog = Pinboard(bot)
+    await bot.add_cog(cog)
