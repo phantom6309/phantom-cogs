@@ -1,4 +1,5 @@
 from .astro import Astro
 
-def setup(bot):
-    bot.add_cog(Astro(bot))
+async def setup(bot):
+    cog = Astro(bot)
+    await bot.add_cog(cog)
