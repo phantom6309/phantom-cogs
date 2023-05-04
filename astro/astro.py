@@ -25,7 +25,7 @@ class Astro(commands.Cog):
 
     @app_commands.command()
     @app_commands.describe(burc="burcunuzu seçiniz")
-    @app_commands.choices(color=[
+    @app_commands.choices(burc=[
      app_commands.Choice(name="Akrep", value="scorpio"),
      app_commands.Choice(name="İkizler", value="gemini"),
          ])
