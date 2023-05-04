@@ -28,7 +28,7 @@ class Astro(commands.Cog):
     @app_commands.choices(burc=[
      app_commands.Choice(name="Akrep", value="scorpio"),
      app_commands.Choice(name="İkizler", value="gemini"),
-         ])
+    ])
     async def burc(self, interaction: discord.Interaction, burc):
         burc = Astro.lower()
         translator = Translator()
