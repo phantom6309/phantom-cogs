@@ -3,7 +3,7 @@ import re
 from googletrans import Translator
 from bs4 import BeautifulSoup
 import requests
-from redbot.core import commands,app_commands
+from redbot.core import commands
 
 class Astro(commands.Cog):
     def __init__(self, bot):
@@ -23,13 +23,9 @@ class Astro(commands.Cog):
         burc_yorumu2 = soup.find("div", class_=f"parah_aries_horocope")
         return burc_yorumu2
 
-    @app_commands.command()
-    @app_commands.describe(burc="burcunuzu seçiniz")
-    @app_commands.choices(burc=[
-     app_commands.Choice(name="Akrep", value="scorpio"),
-     app_commands.Choice(name="İkizler", value="gemini"),
-    ])
-    async def burc(self, interaction: discord.Interaction, burc:burc):
+    @commands.command()
+    async def astro(self, ctx, burc:str):
+        burc = burc.lower()
         translator = Translator()
         soup = str(await self.get_burc_yorum(burc))
         output = str(await self.get_burc_yorum2(burc))
