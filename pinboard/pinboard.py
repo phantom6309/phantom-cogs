@@ -5,7 +5,7 @@ from redbot.core import commands
 class Pinboard(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.reaction_emoji = None
+        self.reaction_emoji = :pushpin:
         self.copy_channel_id = 123456789 # Replace with the ID of the channel you want to copy messages to
 
     @commands.Cog.listener()
