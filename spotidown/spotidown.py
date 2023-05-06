@@ -15,14 +15,14 @@ class Spotidown(commands.Cog):
         
         
     
-    @commands.command()
+    @commands.hybrid_command()
     @checks.admin_or_permissions(manage_guild=True)
     async def setarl(self, ctx, token):
      await self.config.token.set(token)
      await ctx.send("arl ayarlandı!")
         
     
-    @commands.command()
+    @commands.hybrid_command()
     async def spoparça(self, ctx, url, quality = None):
        if quality == None:
           quality = "MP3_320"
