@@ -1,0 +1,19 @@
+{
+
+    "author" : ["Phantom"],
+
+    "install_msg" : "thanks for installing",
+
+    "name" : "Insta",
+
+    "short" : "",
+
+    "description" : "Download from instagram",
+
+    "tags" : [""],
+
+    "requirements" : ["instaloader"]
+
+    "end_user_data_statement": " "
+
+}
