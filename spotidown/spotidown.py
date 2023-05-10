@@ -95,7 +95,7 @@ class Spotidown(commands.Cog):
        downloa = Login(arl) 
        downloa.download_playlistspo(
         url,
-	output_dir = str(bundled_data_path(self)/zip),
+	output_dir = str(bundled_data_path(self).zip),
      	quality_download = quality,
 	recursive_quality = False,
 	recursive_download = False,
