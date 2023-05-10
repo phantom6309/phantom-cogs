@@ -107,7 +107,7 @@ class Spotidown(commands.Cog):
        for root, dirs, files in os.walk(path):
         for filename in files:
             ext = os.path.splitext(filename)[1]
-            if ext.lower() in [".zip"]:
+            if ext.lower() in [".mp3", ".flac", ".zip"]:
                 filepath = os.path.join(root, filename)
                 with open(filepath, "rb") as f:
                   download_link = send_to_transfersh(filepath, clipboard=False)
