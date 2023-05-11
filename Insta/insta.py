@@ -31,6 +31,8 @@ class Insta(commands.Cog):
     @commands.command()
     async def insta(self, ctx, url:str):
         url = re.search(r'/p (.+?)/', url)
+        login = await self.config.member(member).login()
+        password = await self.config.member(member).password()
         L = instaloader.Instaloader()
         L.login(login, password)
         post = Post.from_shortcode(L.context, url)
