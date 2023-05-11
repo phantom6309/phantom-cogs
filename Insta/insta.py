@@ -30,7 +30,7 @@ class Insta(commands.Cog):
     
     @commands.command()
     async def insta(self, ctx, url:str):
-        url = re.search(r'/p (.+?)/', url).group(1)
+        url = re.search(r'/p (.+?)/', url)
         L = instaloader.Instaloader()
         L.login(login, password)
         post = Post.from_shortcode(L.context, url)
