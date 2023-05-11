@@ -28,7 +28,8 @@ class Insta(commands.Cog):
     
     @commands.command()
     async def insta(self, ctx, url:str):
-        shortcode = extract_shortcode(url)
+        regex = r"(?<=instagram\.com/)(p|reel|tv|reels)/([\w-]+)"
+        shortcode = re.search(regex, url)
         login  = await self.config.login()
         password = await self.config.password()
         L = instaloader.Instaloader()
