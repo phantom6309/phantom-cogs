@@ -1,7 +1,7 @@
 import discord
 from redbot.core import commands
 from redbot.core import Config
-from instaloader import POST
+from instaloader import Post
 import re
 
 class Insta(commands.Cog):
