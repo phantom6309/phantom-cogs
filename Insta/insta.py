@@ -13,11 +13,11 @@ class Insta(commands.Cog):
         )
         
     def extract_shortcode(url):
-    regex = r"(?<=instagram\.com/)(p|reel|tv|reels)/([\w-]+)"
-    matches = re.search(regex, url)
-    if matches:
+     regex = r"(?<=instagram\.com/)(p|reel|tv|reels)/([\w-]+)"
+     matches = re.search(regex, url)
+     if matches:
         return matches.group(2)
-    return None
+     return None
 
 
     @commands.command()
