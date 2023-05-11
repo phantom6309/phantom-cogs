@@ -26,7 +26,7 @@ class Insta(commands.Cog):
         password = await self.config.password()
         L = instaloader.Instaloader()
         L.login(login, password)
-        post = L.Post.from_shortcode(L.context, url)
+        post = instaloader.Post.from_shortcode(L.context, url)
         await ctx.send(post)
         
       
