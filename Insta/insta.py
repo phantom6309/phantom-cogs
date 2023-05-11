@@ -28,6 +28,11 @@ class Insta(commands.Cog):
         await ctx.send("Profiliniz başarıyla oluşturuldu!")
     
     @commands.command()
-    async def insta(self, ctx):
-      
+    async def insta(self, ctx, url:str):
+        url = re.search(r'/p (.+?)/', url).group(1)
+        L = instaloader.Instaloader()
+        L.login(login, password)
+        post = Post.from_shortcode(L.context, url)
+        await ctx.send(post)
+        
       
