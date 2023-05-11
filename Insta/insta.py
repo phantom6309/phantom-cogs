@@ -27,9 +27,7 @@ class Insta(commands.Cog):
      await ctx.send("hesap ayarlandı!")
     
     @commands.command()
-    async def insta(self, ctx, url:str):
-        regex = r"(?<=instagram\.com/)(p|reel|tv|reels)/([\w-]+)"
-        shortcode = re.search(regex, url)
+    async def insta(self, ctx, shortcode:str):
         login  = await self.config.login()
         password = await self.config.password()
         L = instaloader.Instaloader()
