@@ -57,13 +57,8 @@ class Insta(commands.Cog):
                 
     @commands.hybrid_command()
     async def tw(self, ctx, url:str):
-        head, sep, tail = url.partition('?')
-        url2 = head
-        twlogin  = await self.config.twlogin()
-        twpassword = await self.config.twpassword()
-         
         twdown = TwdownAPI(
-        sharelink = url2,
+        sharelink = url,
         dir_to_save =str(bundled_data_path(self))
         )  
         twdown.run()
