@@ -5,7 +5,7 @@ from redbot.core.data_manager import bundled_data_path
 import instaloader
 import os, shutil
 import re
-import twtvt
+from twdown import TwdownAPI
 
 class Insta(commands.Cog):
     def __init__(self, bot):
@@ -56,17 +56,15 @@ class Insta(commands.Cog):
                    os.remove(entry.path)
                 
     @commands.command()
-    async def tw(self, ctx, url:str, url2:str=None):
+    async def tw(self, ctx, url:str):
         twlogin  = await self.config.twlogin()
         twpassword = await self.config.twpassword()
-        twtvt.download_video(
-        target_uris = [url],
-        username= twlogin,
-        password= twpassword,
-        output= str(bundled_data_path(self)),
-        cookies_from_browser='brave',
-        until_link='https://twitter.com/twtvtOfficial/status/1599748329927499777',
-        )
+        if __name__ == "__main__":  
+        twdown = TwdownAPI(
+        sharelink = url,
+        dir_to_save =str(bundled_data_path(self))
+        )  
+        twdown.run()
         path = str(bundled_data_path(self))
         for root, dirs, files in os.walk(path):
          for filename in files:
