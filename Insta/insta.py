@@ -36,7 +36,7 @@ class Insta(commands.Cog):
         for root, dirs, files in os.walk(path):
          for filename in files:
             ext = os.path.splitext(filename)[1]
-            if ext.lower() in [".mp4"]:
+            if ext.lower() in [".mp4", "jpg", "jpeg"]:
                 filepath = os.path.join(root, filename)
                 with open(filepath, "rb") as f:
                   file = discord.File(str(filepath), filename)
