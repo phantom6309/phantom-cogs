@@ -32,8 +32,8 @@ class Insta(commands.Cog):
             post = instaloader.Post.from_shortcode(L.context, url.split("/")[-2])
             L.download_video_thumbnails = False
             L.dirname_pattern = download_loc
-            f=L.download_post(post, download_loc)
-            await ctx.send(f)
+            file=L.download_post(post, download_loc)
+            await ctx.send(file)
             with os.scandir(download_loc) as entries:
              for entry in entries:
                 if entry.is_dir() and not entry.is_symlink():
