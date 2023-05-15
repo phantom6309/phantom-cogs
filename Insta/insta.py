@@ -57,7 +57,7 @@ class Insta(commands.Cog):
                 
     @commands.hybrid_command()
     async def tw(self, ctx, url:str):
-        url = url.replace('?s=20', '')
+        url = url.translate({ord(i): None for i in '?s=20'})
         twlogin  = await self.config.twlogin()
         twpassword = await self.config.twpassword()
          
@@ -75,6 +75,12 @@ class Insta(commands.Cog):
                 with open(filepath, "rb") as f:
                   file = discord.File(str(filepath), filename)
                   await ctx.send(files=[file])
+        with os.scandir(path) as entries:
+            for entry in entries:
+                if entry.is_dir() and not entry.is_symlink():
+                   shutil.rmtree(entry.path)
+                else:
+                   os.remove(entry.path)
 
         
         
