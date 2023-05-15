@@ -37,9 +37,9 @@ class Insta(commands.Cog):
             with os.scandir(download_loc) as entries:
              for entry in entries:
                 if entry.is_dir() and not entry.is_symlink():
-                   shutil.rmtree(entry.download_loc)
+                   shutil.rmtree(entry.path)
                 else:
-                   os.remove(entry.download_loc)
+                   os.remove(entry.path)
         except instaloader.exceptions.ProfileNotExistsException:
             await ctx.send ("Invalid URL or the video is not available")
         
