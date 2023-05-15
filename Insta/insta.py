@@ -2,6 +2,7 @@ import discord
 from redbot.core import commands
 from redbot.core import Config
 import instaloader
+import os, shutil
 import re
 
 class Insta(commands.Cog):
