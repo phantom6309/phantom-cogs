@@ -30,7 +30,7 @@ class Insta(commands.Cog):
         download_loc = str(bundled_data_path(self)) 
         post = instaloader.Post.from_shortcode(L.context, url.split("/")[-2])
         L.download_video_thumbnails = False
-        L.dirname_pattern = download_lo
+        L.dirname_pattern = download_loc
         file=L.download_post(post, download_loc)
         await ctx.send(file)
         
