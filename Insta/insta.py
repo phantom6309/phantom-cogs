@@ -32,7 +32,21 @@ class Insta(commands.Cog):
         L.download_video_thumbnails = False
         L.dirname_pattern = download_loc
         file=L.download_post(post, download_loc)
-        await ctx.send(file)
+        path = str(bundled_data_path(self))
+        for root, dirs, files in os.walk(path):
+         for filename in files:
+            ext = os.path.splitext(filename)[1]
+            if ext.lower() in [".mp4"]:
+                filepath = os.path.join(root, filename)
+                with open(filepath, "rb") as f:
+                  file = discord.File(str(filepath), filename)
+                  await ctx.send(files=[file])
+        with os.scandir(path) as entries:
+            for entry in entries:
+                if entry.is_dir() and not entry.is_symlink():
+                   shutil.rmtree(entry.path)
+                else:
+                   os.remove(entry.path)
         
         
       
