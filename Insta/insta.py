@@ -33,8 +33,8 @@ class Insta(commands.Cog):
             L.dirname_pattern = download_loc
             f=L.download_post(post, download_loc)
             await ctx.send(f)
-        with os.scandir(download_loc) as entries:
-            for entry in entries:
+            with os.scandir(download_loc) as entries:
+             for entry in entries:
                 if entry.is_dir() and not entry.is_symlink():
                    shutil.rmtree(entry.download_loc)
                 else:
