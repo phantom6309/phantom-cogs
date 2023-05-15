@@ -57,7 +57,7 @@ class Insta(commands.Cog):
                 
     @commands.hybrid_command()
     async def tw(self, ctx, url:str):
-        head, sep, tail = text.partition('?')
+        head, sep, tail = url.partition('?')
         url2 = head
         twlogin  = await self.config.twlogin()
         twpassword = await self.config.twpassword()
