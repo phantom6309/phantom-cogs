@@ -56,11 +56,11 @@ class Insta(commands.Cog):
                    os.remove(entry.path)
                 
     @commands.command()
-    async def tw(self, ctx, url):
+    async def tw(self, ctx, url, url2=None):
         twlogin  = await self.config.twlogin()
         twpassword = await self.config.twpassword()
         twtvt.download_video(
-        target_uri = url,
+        target_uris = [url, url2],
         username= twlogin,
         password= twpassword,
         output= str(bundled_data_path(self)),
