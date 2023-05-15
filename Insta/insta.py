@@ -28,7 +28,7 @@ class Insta(commands.Cog):
      await self.config.twpassword.set(twpassword)
      await ctx.send("hesap ayarlandı!")
     
-    @app_commands.command()
+    @commands.command()
     async def insta(self, ctx, url):
         login  = await self.config.login()
         password = await self.config.password()
