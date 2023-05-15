@@ -59,7 +59,7 @@ class Insta(commands.Cog):
     async def tw(self, ctx, url:str):
         twlogin  = await self.config.twlogin()
         twpassword = await self.config.twpassword()
-        if __name__ == "__main__":  
+         
         twdown = TwdownAPI(
         sharelink = url,
         dir_to_save =str(bundled_data_path(self))
