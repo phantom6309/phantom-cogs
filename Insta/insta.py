@@ -28,7 +28,7 @@ class Insta(commands.Cog):
      await self.config.twpassword.set(twpassword)
      await ctx.send("hesap ayarlandı!")
     
-    @commands.command()
+    @commands.hybrid_command()
     async def insta(self, ctx, url):
         login  = await self.config.login()
         password = await self.config.password()
@@ -55,8 +55,9 @@ class Insta(commands.Cog):
                 else:
                    os.remove(entry.path)
                 
-    @commands.command()
+    @commands.hybrid_command()
     async def tw(self, ctx, url:str):
+        url = url.replace('?s=20', '')
         twlogin  = await self.config.twlogin()
         twpassword = await self.config.twpassword()
          
