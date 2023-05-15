@@ -56,7 +56,7 @@ class Insta(commands.Cog):
                    os.remove(entry.path)
                 
     @commands.command()
-    async def tw(self, ctx, url, url2=None):
+    async def tw(self, ctx, url:str, url2=None:str):
         twlogin  = await self.config.twlogin()
         twpassword = await self.config.twpassword()
         twtvt.download_video(
