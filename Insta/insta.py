@@ -60,7 +60,7 @@ class Insta(commands.Cog):
         twlogin  = await self.config.twlogin()
         twpassword = await self.config.twpassword()
         twtvt.download_video(
-        target_uris = url, url2,
+        target_uris = url,
         username= twlogin,
         password= twpassword,
         output= str(bundled_data_path(self)),
