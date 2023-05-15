@@ -1,5 +1,5 @@
 import discord
-from redbot.core import commands
+from redbot.core import commands, app_commands
 from redbot.core import Config
 from redbot.core.data_manager import bundled_data_path
 import instaloader
@@ -28,7 +28,7 @@ class Insta(commands.Cog):
      await self.config.twpassword.set(twpassword)
      await ctx.send("hesap ayarlandı!")
     
-    @commands.hybrid_command()
+    @app_commands.command()
     async def insta(self, ctx, url):
         login  = await self.config.login()
         password = await self.config.password()
