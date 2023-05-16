@@ -92,7 +92,7 @@ class Insta(commands.Cog):
         for url in urls:
             twdown = TwdownAPI(
                 sharelink=url,
-                dir_to_save=str(bundled_data_path(bot))
+                dir_to_save=str(bundled_data_path(self))
             )
             twdown.run()
             path = str(bundled_data_path(bot))
