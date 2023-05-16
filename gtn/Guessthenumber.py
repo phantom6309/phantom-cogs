@@ -33,12 +33,12 @@ class GuessTheNumber(commands.Cog):
     @commands.command()
     @commands.guild_only()
     @commands.max_concurrency(1, commands.BucketType.channel)
-    async def gtn(self, ctx: commands.Context, miktar):
+    async def gtn(self, ctx: commands.Context, miktar:str):
         """
         sayı tahmin oyununu başlatın.
         """
         user: discord.Member = ctx.author
-        number = random.randint(1, miktar:str)
+        number = random.randint(1, miktar)
         await ctx.send(f"1 ile 1000 arasında bir sayı seçtim!")
 
         def check(m):
