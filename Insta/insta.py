@@ -81,7 +81,7 @@ class Insta(commands.Cog):
 
 
     @commands.Cog.listener()
-    async def on_message(message):
+    async def on_message(self, message: discord.Message):
      if message.author.bot:
         return
 
