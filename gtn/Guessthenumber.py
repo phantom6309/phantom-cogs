@@ -14,7 +14,7 @@ log = logging.getLogger("red.sravan.gtn")
 
 class GuessTheNumber(commands.Cog):
     """
-    A simple gtn game.
+    sayı tahmin oyunu.
     """
 
     def __init__(self, bot: Red) -> None:
@@ -35,11 +35,11 @@ class GuessTheNumber(commands.Cog):
     @commands.max_concurrency(1, commands.BucketType.channel)
     async def gtn(self, ctx: commands.Context):
         """
-        Start a gtn event.
+        sayı tahmin oyununu başlatın.
         """
         user: discord.Member = ctx.author
-        number = random.randint(1, 10)
-        await ctx.send(f"A random number between 1 and 1000 has been selected. Guess the number!")
+        number = random.randint(1, 1000)
+        await ctx.send(f"1 ile 1000 arasında bir sayı seçtim!")
 
         def check(m):
             return m.author == ctx.author and m.channel == ctx.channel
@@ -55,12 +55,12 @@ class GuessTheNumber(commands.Cog):
                 if guessed_number == number:
                     winem = discord.Embed()
                     winem.set_author(
-                        name=f"{guess.author.display_name} has won the gtn event",
+                        name=f"{guess.author.display_name} oyunu kazandı!",
                         icon_url=guess.author.avatar.url,
                     )
                     winem.color = await ctx.embed_colour()
-                    winem.add_field(name="Number guessed", value=f"> {guess.content}")
-                    winem.set_footer(text="Thanks for playing!")
+                    winem.add_field(name="Seçilen sayı", value=f"> {guess.content}")
+                    winem.set_footer(text="oynadığınız için teşekkürler!")
                     winem.set_thumbnail(url=ctx.guild.icon.url)
                     await guess.reply(embed=winem, content=ctx.author.mention)
                     started = False
@@ -69,8 +69,8 @@ class GuessTheNumber(commands.Cog):
                 elif guessed_number > number:
                     await guess.add_reaction("🔽")  # Up arrow
 
-            if guess.content.lower() == "cancel" and guess.author.id == ctx.author.id:
-                await ctx.send(f"{user.mention} has cancelled the gtn event.")
+            if guess.content.lower() == "iptal" and guess.author.id == ctx.author.id:
+                await ctx.send(f"{user.mention} oyunu iptal etti")
                 started = False
                 break
 
