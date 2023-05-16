@@ -39,7 +39,7 @@ class GuessTheNumber(commands.Cog):
         """
         user: discord.Member = ctx.author
         number = random.randint(1, miktar )
-        await ctx.send(f"1 ile 1000 arasında bir sayı seçtim!")
+        await ctx.send(f"1 ile {miktar} arasında bir sayı seçtim!")
 
         def check(m):
             return  m.channel == ctx.channel
