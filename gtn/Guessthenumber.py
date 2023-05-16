@@ -42,7 +42,7 @@ class GuessTheNumber(commands.Cog):
         await ctx.send(f"1 ile 1000 arasında bir sayı seçtim!")
 
         def check(m):
-            return m.author == ctx.author and m.channel == ctx.channel
+            return  m.channel == ctx.channel
 
         started = True
         while started:
