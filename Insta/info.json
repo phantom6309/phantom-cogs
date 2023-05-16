@@ -12,7 +12,7 @@
 
     "tags" : [""],
 
-    "requirements" : ["instaloader", "twdown"],
+    "requirements" : ["instaloader"],
 
     "end_user_data_statement": " "
 
