@@ -56,7 +56,7 @@ class GuessTheNumber(commands.Cog):
                     winem = discord.Embed()
                     winem.set_author(
                         name=f"{guess.author.display_name} has won the gtn event",
-                        icon_url=guess.author.avatar_url,
+                        icon_url=guess.author.avatar.url,
                     )
                     winem.color = await ctx.embed_colour()
                     winem.add_field(name="Number guessed", value=f"> {guess.content}")
