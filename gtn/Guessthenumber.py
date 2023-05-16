@@ -33,7 +33,7 @@ class GuessTheNumber(commands.Cog):
     @commands.command()
     @commands.guild_only()
     @commands.max_concurrency(1, commands.BucketType.channel)
-    async def gtn(self, ctx, miktar):
+    async def gtn(self, ctx, miktar:str):
         """
         sayı tahmin oyununu başlatın.
         """
