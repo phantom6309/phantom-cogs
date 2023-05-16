@@ -65,9 +65,9 @@ class GuessTheNumber(commands.Cog):
                     await guess.reply(embed=winem, content=ctx.author.mention)
                     started = False
                 elif guessed_number < number:
-                    await guess.add_reaction("🔽")  # Down arrow
+                    await guess.add_reaction("🔼")  # Down arrow
                 elif guessed_number > number:
-                    await guess.add_reaction("🔼")  # Up arrow
+                    await guess.add_reaction("🔽")  # Up arrow
 
             if guess.content.lower() == "cancel" and guess.author.id == ctx.author.id:
                 await ctx.send(f"{user.mention} has cancelled the gtn event.")
