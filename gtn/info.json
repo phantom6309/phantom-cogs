@@ -1,0 +1,20 @@
+{
+    "name": "sayıtahmin",
+    "short": "sayı tahmin oyunu",
+    "description": "discord sayı tahmin oyunu",
+    "end_user_data_statement": "jhfkjaehf",
+    "install_msg": "teşekkürler",
+    "author": [
+        "phantom"
+    ],
+    "required_cogs": {},
+    "requirements": [],
+    "tags": [
+        "eğlence",
+        "oyun"
+    ],
+    "min_bot_version": "3.3.10",
+    "hidden": false,
+    "disabled": false,
+    "type": "COG"
+}
