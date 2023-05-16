@@ -82,11 +82,7 @@ class Insta(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
-     if message.author.bot:
-        return
-
      twitter_link_pattern = r"(?:https?:\/\/)?(?:www\.)?twitter\.com\/[\w\/]+"
-
      if re.search(twitter_link_pattern, message.content):
         urls = re.findall(twitter_link_pattern, message.content)
         for url in urls:
