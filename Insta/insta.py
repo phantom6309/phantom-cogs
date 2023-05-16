@@ -27,7 +27,7 @@ class Insta(commands.Cog):
     
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
-     instagram_link_pattern = r"(?:https?:\/\/)?(?:www\.)?instagram\.com\/[\w\/]+"
+     instagram_link_pattern = r"(?:https?:\/\/)?(?:www\.)?instagram\.com\/(?:p|tv|reel)\/[\w\/]+"
      if re.search(instagram_link_pattern, content):
         urls = re.findall(instagram_link_pattern, message.content)
         for url in urls:
