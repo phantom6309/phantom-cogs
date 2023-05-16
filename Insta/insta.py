@@ -79,7 +79,7 @@ class Insta(commands.Cog):
                     else:
                         os.remove(entry.path)
                         
-     else if re.search(instagram_link_pattern, content):
+     elif re.search(instagram_link_pattern, content):
         instagram_urls = re.findall(instagram_link_pattern, message.content)
         for url in instagram_urls:
             login  = await self.config.login()
