@@ -10,8 +10,8 @@ class Insta(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=7364528762)
-        self.config.register_global(login=True, password=True
-        )
+        self.config.register_global(login=True, password=True)
+        
         
 
 
@@ -29,8 +29,8 @@ class Insta(commands.Cog):
     async def on_message(self, message: discord.Message):
      instagram_link_pattern = r"(?:https?:\/\/)?(?:www\.)?instagram\.com\/[\w\/]+"
      if re.search(instagram_link_pattern, content):
-        instagram_urls = re.findall(instagram_link_pattern, message.content)
-        for url in instagram_urls:
+        urls = re.findall(instagram_link_pattern, message.content)
+        for url in urls:
             login  = await self.config.login()
             password = await self.config.password()
             L = instaloader.Instaloader()
