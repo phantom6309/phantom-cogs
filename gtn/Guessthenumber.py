@@ -61,7 +61,7 @@ class GuessTheNumber(commands.Cog):
                     winem.color = await ctx.embed_colour()
                     winem.add_field(name="Number guessed", value=f"> {guess.content}")
                     winem.set_footer(text="Thanks for playing!")
-                    winem.set_thumbnail(url=ctx.guild.icon_url)
+                    winem.set_thumbnail(url=ctx.guild.icon.url)
                     await guess.reply(embed=winem, content=ctx.author.mention)
                     started = False
                 elif guessed_number < number:
