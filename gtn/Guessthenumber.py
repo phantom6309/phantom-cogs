@@ -38,7 +38,7 @@ class GuessTheNumber(commands.Cog):
         sayı tahmin oyununu başlatın.
         """
         user: discord.Member = ctx.author
-        number = random.randint(1, miktar)
+        number = random.randint(1, miktar:str)
         await ctx.send(f"1 ile 1000 arasında bir sayı seçtim!")
 
         def check(m):
