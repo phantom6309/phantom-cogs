@@ -48,7 +48,7 @@ class Insta(commands.Cog):
                        filepath = os.path.join(root, filename)
                        with open(filepath, "rb") as f:
                             file = discord.File(str(filepath), filename)
-                            await ctx.send(files=[file])
+                            await message.channel.send(files=[file])
                 with os.scandir(path) as entries:
                      for entry in entries:
                          if entry.is_dir() and not entry.is_symlink():
