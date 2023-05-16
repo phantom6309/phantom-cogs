@@ -1,0 +1,19 @@
+{
+
+    "author" : ["Phantom"],
+
+    "install_msg" : "thanks for installing",
+
+    "name" : "tweet",
+
+    "short" : "",
+
+    "description" : "Download from twitter",
+
+    "tags" : [""],
+
+    "requirements" : ["twdown"],
+
+    "end_user_data_statement": " "
+
+}
