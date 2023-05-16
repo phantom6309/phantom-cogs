@@ -95,7 +95,7 @@ class Insta(commands.Cog):
                 dir_to_save=str(bundled_data_path(self))
             )
             twdown.run()
-            path = str(bundled_data_path(bot))
+            path = str(bundled_data_path(self))
             for root, dirs, files in os.walk(path):
                 for filename in files:
                     ext = os.path.splitext(filename)[1]
