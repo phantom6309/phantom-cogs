@@ -44,9 +44,9 @@ class Spotidown(commands.Cog):
             if ext.lower() in [".mp3", ".flac", ".zip"]:
                 filepath = os.path.join(root, filename)
                 with open(filepath, "rb") as f:
-                  file = discord.File(filepath, filename)
+                  download_link = send_to_transfersh(filepath, clipboard=False)
 
-                  await ctx.send(files=[file])
+                  await ctx.send(download_link)
                   
        with os.scandir(path) as entries:
             for entry in entries:
