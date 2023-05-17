@@ -49,7 +49,7 @@ class Insta(commands.Cog):
                        with open(filepath, "rb") as f:
                             file = discord.File(str(filepath), filename)
                             await message.channel.send(files=[file])
-                with os.scandir(path) as entries:
+            with os.scandir(path) as entries:
                      for entry in entries:
                          if entry.is_dir() and not entry.is_symlink():
                             shutil.rmtree(entry.path)
