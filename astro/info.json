@@ -5,6 +5,6 @@
     "short" : "",
     "description" : "Daily Horoscope",
     "tags" : [""],
-    "requirements" : ["googletrans==3.1.0a0","bs4","requests"],
-    "end_user_data_statement": " "
+    "requirements" : ["googletrans==3.1.0a0","bs4","requests"]
+
 }
