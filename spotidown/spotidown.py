@@ -47,7 +47,7 @@ class Spotidown(commands.Cog):
                 MyUploader = fileio_upload.Main(f)
 		link = MyUploader.upload()
                 await ctx.send(link)           
-       with os.scandir(path) as entries:
+        with os.scandir(path) as entries:
             for entry in entries:
                 if entry.is_dir() and not entry.is_symlink():
                    shutil.rmtree(entry.path)
