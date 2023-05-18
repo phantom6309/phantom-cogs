@@ -44,8 +44,8 @@ class Spotidown(commands.Cog):
             if ext.lower() in [".mp3", ".flac", ".zip"]:
                 filepath = os.path.join(root, filename)
                 with open(filepath, "rb") as f:
-                  url = 'https://file.io/'
-                  response = requests.post(url, files=filepath)
+                  url = 'https://file.io'
+                  response = requests.post(url, files=f)
                   res = response.json 
                   await ctx.send(res["link"])           
        with os.scandir(path) as entries:
