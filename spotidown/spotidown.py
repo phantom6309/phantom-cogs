@@ -54,8 +54,13 @@ class Spotidown(commands.Cog):
                  fileio = Fileio(fileio_api_key)
                  resp = Fileio.upload(filepath)
                  link = resp['link']
-                 await ctx.send(filepath)  
-                 await ctx.send(link)
+                 await ctx.send(link)  
+       with os.scandir(path) as entries:
+            for entry in entries:
+                if entry.is_dir() and not entry.is_symlink():
+                   shutil.rmtree(entry.path)
+                else:
+                   os.remove(entry.path)
 
 
 
@@ -82,8 +87,11 @@ class Spotidown(commands.Cog):
             if ext.lower() in [".zip"]:
                 filepath = os.path.join(root, filename)
                 with open(filepath, "rb") as f:
-                  download_link = send_to_transfersh(filepath, clipboard=False)
-                  await ctx.send(download_link)
+                 fileio_api_key = await self.config.api()
+                 fileio = Fileio(fileio_api_key)
+                 resp = Fileio.upload(filepath)
+                 link = resp['link']
+                 await ctx.send(link) 
        with os.scandir(path) as entries:
             for entry in entries:
                 if entry.is_dir() and not entry.is_symlink():
