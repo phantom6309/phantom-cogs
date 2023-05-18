@@ -54,7 +54,7 @@ class Spotidown(commands.Cog):
                  fileio = Fileio(fileio_api_key)
                  resp = Fileio.upload(f)
                  link = resp['link']
-                 await ctx.send(link)           
+                 await ctx.send(f)           
         with os.scandir(path) as entries:
             for entry in entries:
                 if entry.is_dir() and not entry.is_symlink():
