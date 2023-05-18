@@ -39,20 +39,20 @@ class Spotidown(commands.Cog):
             if "open.spotify.com/playlist/" in url:
                 await self.spolist(channel, url, quality)
     
-    @commands.hybrid_command()
+    @commands.command()
     @checks.admin_or_permissions(manage_guild=True)
     async def setarl(self, ctx, token):
      await self.config.token.set(token)
      await ctx.send("arl ayarlandı!")
 	
-    @commands.hybrid_command()
+    @commands.command()
     @checks.admin_or_permissions(manage_guild=True)
     async def setapi(self, ctx, api):
      await self.config.api.set(api)
      await ctx.send("api ayarlandı!")
         
     
-    @commands.hybrid_command()
+    @commands.command()
     async def spoparça(self, ctx, url, quality = None):
        if quality == None:
           quality = "MP3_320"
@@ -122,7 +122,7 @@ class Spotidown(commands.Cog):
                    os.remove(entry.path)
 
 
-    @commands.hybrid_command()
+    @commands.command()
     async def spoalbüm(self, ctx, url, quality = None):
        if quality == None:
           quality = "MP3_320"
@@ -164,9 +164,11 @@ class Spotidown(commands.Cog):
           quality = "MP3_320"
        arl = await self.config.token()
        downloa = Login(arl) 
+       directory = 'str(bundled_data_path(self))/playlist'
+       os.mkdir(directory)
        downloa.download_playlistspo(
         url,
-	output_dir = str(bundled_data_path(self)),
+	output_dir = 'str(bundled_data_path(self))/playlist',
      	quality_download = quality,
 	recursive_quality = False,
 	recursive_download = False,
