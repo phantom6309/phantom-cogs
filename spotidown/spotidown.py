@@ -164,11 +164,11 @@ class Spotidown(commands.Cog):
           quality = "MP3_320"
        arl = await self.config.token()
        downloa = Login(arl) 
-       directory = 'str(bundled_data_path(self))/playlist'
+       directory = str(bundled_data_path(self))/"playlist"
        os.mkdir(directory)
        downloa.download_playlistspo(
         url,
-	output_dir = 'str(bundled_data_path(self))/playlist',
+	output_dir = str(bundled_data_path(self))/"playlist",
      	quality_download = quality,
 	recursive_quality = False,
 	recursive_download = False,
