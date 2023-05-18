@@ -4,13 +4,13 @@ import os, shutil
 from redbot.core import checks,commands,Config 
 from redbot.core.data_manager import bundled_data_path
 from deezfacu import Login
-import fileio_upload
+from fileio_wrapper import Fileio
 
 class Spotidown(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=7364528762)
-        self.config.register_global(token=True
+        self.config.register_global(token=True,api=True
         )
         
         
@@ -20,6 +20,12 @@ class Spotidown(commands.Cog):
     async def setarl(self, ctx, token):
      await self.config.token.set(token)
      await ctx.send("arl ayarlandı!")
+	
+    @commands.hybrid_command()
+    @checks.admin_or_permissions(manage_guild=True)
+    async def setapi(self, ctx, token):
+     await self.config.api.set(api)
+     await ctx.send("api ayarlandı!")
         
     
     @commands.hybrid_command()
@@ -44,8 +50,10 @@ class Spotidown(commands.Cog):
             if ext.lower() in [".mp3", ".flac", ".zip"]:
                 filepath = os.path.join(root, filename)
                 with open(filepath, "rb") as f:
-                 MyUploader = fileio_upload.Main(f)
-                 link = MyUploader.upload()
+                 fileio_api_key = await self.config.api()
+                 fileio = Fileio(fileio_api_key)
+                 resp = fileio.upload(filepath)
+                 link = resp['link']
                  await ctx.send(link)           
         with os.scandir(path) as entries:
             for entry in entries:
