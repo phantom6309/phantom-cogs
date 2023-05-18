@@ -52,9 +52,10 @@ class Spotidown(commands.Cog):
                 with open(filepath, "rb") as f:
                  fileio_api_key = await self.config.api()
                  fileio = Fileio(fileio_api_key)
-                 resp = Fileio.upload(f)
+                 resp = Fileio.upload(filepath)
                  link = resp['link']
-                 await ctx.send(filepath)           
+                 await ctx.send(filepath)  
+                 await ctx.send(link)
 
 
 
