@@ -46,9 +46,8 @@ class Spotidown(commands.Cog):
                 with open(filepath, "rb") as f:
                   url = 'https://file.io/'
                   response = requests.post(url, files=filepath)
-	          res = response.json  
-                  await ctx.send(res["link"])
-                  
+                  res = response.json 
+                  await ctx.send(res["link"])           
        with os.scandir(path) as entries:
             for entry in entries:
                 if entry.is_dir() and not entry.is_symlink():
