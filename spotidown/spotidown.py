@@ -30,7 +30,14 @@ class Spotidown(commands.Cog):
         for url in urls:
             if "open.spotify.com/track/" in url:
                 await self.spoparça(channel, url, quality)
-        
+
+        for url in urls:
+            if "open.spotify.com/album/" in url:
+                await self.spoalbum(channel, url, quality)
+	
+        for url in urls:
+            if "open.spotify.com/playlist/" in url:
+                await self.spolist(channel, url, quality)
     
     @commands.hybrid_command()
     @checks.admin_or_permissions(manage_guild=True)
@@ -79,6 +86,40 @@ class Spotidown(commands.Cog):
                 else:
                    os.remove(entry.path)
 
+    @commands.hybrid_command()
+    async def parça(self, ctx, artist,song, quality = None):
+       if quality == None:
+          quality = "MP3_320"
+       arl = await self.config.token()
+       downloa = Login(arl) 
+       downloa.download_name(
+        artist,
+        song,
+	output_dir = str(bundled_data_path(self)),
+     	quality_download = quality,
+	recursive_quality = False,
+	recursive_download = False,
+        not_interface = True,
+        method_save = 1,
+        )    
+       path = str(bundled_data_path(self))
+       for root, dirs, files in os.walk(path):
+        for filename in files:
+            ext = os.path.splitext(filename)[1]
+            if ext.lower() in [".mp3", ".flac", ".zip"]:
+                filepath = os.path.join(root, filename)
+                with open(filepath, "rb") as f:
+                 fileio_api_key = await self.config.api()
+                 fileio = Fileio(fileio_api_key)
+                 resp = Fileio.upload(filepath)
+                 link = resp['link']
+                 await ctx.send(link)  
+       with os.scandir(path) as entries:
+            for entry in entries:
+                if entry.is_dir() and not entry.is_symlink():
+                   shutil.rmtree(entry.path)
+                else:
+                   os.remove(entry.path)
 
 
     @commands.hybrid_command()
@@ -140,8 +181,11 @@ class Spotidown(commands.Cog):
             if ext.lower() in [".mp3", ".flac", ".zip"]:
                 filepath = os.path.join(root, filename)
                 with open(filepath, "rb") as f:
-                  download_link = send_to_transfersh(filepath, clipboard=False)
-                  await ctx.send(download_link)
+                 fileio_api_key = await self.config.api()
+                 fileio = Fileio(fileio_api_key)
+                 resp = Fileio.upload(filepath)
+                 link = resp['link']
+                 await ctx.send(link) 
        with os.scandir(path) as entries:
             for entry in entries:
                 if entry.is_dir() and not entry.is_symlink():
