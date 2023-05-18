@@ -10,7 +10,7 @@ class Spotidown(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=7364528762)
-        self.config.register_global(token=True,api=True
+        self.config.register_global(token=True, api=True
         )
         
         
@@ -23,7 +23,7 @@ class Spotidown(commands.Cog):
 	
     @commands.hybrid_command()
     @checks.admin_or_permissions(manage_guild=True)
-    async def setapi(self, ctx, token):
+    async def setapi(self, ctx, api):
      await self.config.api.set(api)
      await ctx.send("api ayarlandı!")
         
