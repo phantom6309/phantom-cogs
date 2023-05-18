@@ -45,7 +45,7 @@ class Spotidown(commands.Cog):
                 filepath = os.path.join(root, filename)
                 with open(filepath, "rb") as f:
                   url = 'https://file.io/'
-		  response = requests.post(url, files=filepath)
+                  response = requests.post(url, files=filepath)
 	          res = response.json  
                   await ctx.send(res["link"])
                   
