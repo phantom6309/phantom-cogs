@@ -164,7 +164,7 @@ class Spotidown(commands.Cog):
           quality = "MP3_320"
        arl = await self.config.token()
        downloa = Login(arl) 
-       directory =bundled_data_path(self))/"playlist"
+       directory =bundled_data_path(self)/"playlist"
        if not os.path.exists(directory):
         os.mkdirs(directory)
        downloa.download_playlistspo(
