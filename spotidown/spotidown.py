@@ -5,6 +5,7 @@ from redbot.core import checks,commands,Config
 from redbot.core.data_manager import bundled_data_path
 from deezfacu import Login
 import requests
+import json
 
 class Spotidown(commands.Cog):
     def __init__(self, bot):
