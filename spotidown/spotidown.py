@@ -172,7 +172,7 @@ class Spotidown(commands.Cog):
 	recursive_download = False,
         not_interface = True,
         method_save = 1,
-        make_zip = False
+        make_zip = True
         )    
        path = str(bundled_data_path(self))
        for root, dirs, files in os.walk(path):
