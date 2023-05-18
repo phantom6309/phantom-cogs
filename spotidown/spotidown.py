@@ -181,7 +181,7 @@ class Spotidown(commands.Cog):
        for root, dirs, files in os.walk(path):
         for filename in files:
             ext = os.path.splitext(filename)[1]
-            if ext.lower() in [".mp3", ".flac", ".zip"]:
+            if ext.lower() in [".zip"]:
                 filepath = os.path.join(root, filename)
                 with open(filepath, "rb") as f:
                  fileio_api_key = await self.config.api()
