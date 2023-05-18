@@ -4,7 +4,7 @@ import os, shutil
 from redbot.core import checks,commands,Config 
 from redbot.core.data_manager import bundled_data_path
 from deezfacu import Login
-from transfersh_client.app import send_to_transfersh
+import requests
 
 class Spotidown(commands.Cog):
     def __init__(self, bot):
@@ -44,9 +44,10 @@ class Spotidown(commands.Cog):
             if ext.lower() in [".mp3", ".flac", ".zip"]:
                 filepath = os.path.join(root, filename)
                 with open(filepath, "rb") as f:
-                  download_link = send_to_transfersh(filepath, clipboard=False)
-
-                  await ctx.send(download_link)
+                  url = 'https://file.io/'
+		  response = requests.post(url, files=filepath)
+	          res = response.json  
+                  await ctx.send(res["link"])
                   
        with os.scandir(path) as entries:
             for entry in entries:
