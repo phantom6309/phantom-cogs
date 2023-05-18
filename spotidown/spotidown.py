@@ -159,7 +159,7 @@ class Spotidown(commands.Cog):
 
 
     @commands.command()
-    async def spoliste(self, ctx, url, quality = None):
+    async def spolist(self, ctx, url, quality = None):
        if quality == None:
           quality = "MP3_320"
        arl = await self.config.token()
