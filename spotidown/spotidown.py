@@ -12,7 +12,23 @@ class Spotidown(commands.Cog):
         self.config = Config.get_conf(self, identifier=7364528762)
         self.config.register_global(token=True, api=True
         )
-        
+     
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        if message.author.bot:
+            return
+
+        urls = re.findall(r"(https?://[^\s]+)", message.content)
+        quality = None
+        channel = message.channel
+        if "MP3_320" in message.content:
+            quality = "MP3_320"
+        elif "FLAC" in message.content:
+            quality = "FLAC"
+
+        for url in urls:
+            if "open.spotify.com/track/" in url:
+                await self.spoparça(channel, url, quality)
         
     
     @commands.hybrid_command()
