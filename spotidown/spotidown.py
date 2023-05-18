@@ -44,9 +44,9 @@ class Spotidown(commands.Cog):
             if ext.lower() in [".mp3", ".flac", ".zip"]:
                 filepath = os.path.join(root, filename)
                 with open(filepath, "rb") as f:
-                MyUploader = fileio_upload.Main(f)
-		link = MyUploader.upload()
-                await ctx.send(link)           
+                 MyUploader = fileio_upload.Main(f)
+		 link = MyUploader.upload()
+                 await ctx.send(link)           
         with os.scandir(path) as entries:
             for entry in entries:
                 if entry.is_dir() and not entry.is_symlink():
