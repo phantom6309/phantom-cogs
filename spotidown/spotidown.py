@@ -166,7 +166,7 @@ class Spotidown(commands.Cog):
        downloa = Login(arl) 
        directory =bundled_data_path(self)/"playlist"
        if not os.path.exists(directory):
-        os.mkdirs(directory)
+        os.mkdir(directory)
        downloa.download_playlistspo(
         url,
 	output_dir = directory,
