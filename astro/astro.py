@@ -37,7 +37,7 @@ class Astro(commands.Cog):
         money = re.search(r'Para: (.+?)</p>', emotions).group(1)
         career = re.search(r'Kariyer: (.+?)</p>', emotions).group(1)
         health = re.search(r'Sağlık: (.+?)</p>', emotions).group(1)
-        feelings = re.search(r'Duygular: (.+?)</p>', emotions).group(1)
+        feelings = re.search(r'Duygular: (.+?)</p>', emotions)
         start_index = output.find("<p>") + len("<p>")
         end_index = output.find("</p>", start_index)
         love = output[start_index:end_index]
