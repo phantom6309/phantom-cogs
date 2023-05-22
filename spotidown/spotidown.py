@@ -73,8 +73,8 @@ class Spotidown(commands.Cog):
             if ext.lower() in [".mp3", ".flac", ".zip"]:
                 filepath = os.path.join(root, filename)
                 with open(filepath, "rb") as f:
-               
-                 await ctx.send(f)  
+                 file = discord.File(f,filepath)
+                 await ctx.send(file)  
        with os.scandir(path) as entries:
             for entry in entries:
                 if entry.is_dir() and not entry.is_symlink():
