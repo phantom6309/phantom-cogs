@@ -130,13 +130,13 @@ class Spotidown(commands.Cog):
 	recursive_download = False,
         not_interface = True,
         method_save = 1,
-        make_zip = True
+        make_zip = False
         )    
        path = str(bundled_data_path(self))
        for root, dirs, files in os.walk(path):
         for filename in files:
             ext = os.path.splitext(filename)[1]
-            if ext.lower() in [".zip"]:
+            if ext.lower() in ["mp3","flac",".zip"]:
                 filepath = os.path.join(root, filename)
                 with open(filepath, "rb") as f:
                  file = discord.File(filepath, filename)
@@ -155,9 +155,7 @@ class Spotidown(commands.Cog):
           quality = "MP3_320"
        arl = await self.config.token()
        downloa = Login(arl) 
-       directory =bundled_data_path(self)/"playlist"
-       if not os.path.exists(directory):
-        os.mkdir(directory)
+
        downloa.download_playlistspo(
         url,
 	output_dir = directory,
@@ -166,13 +164,13 @@ class Spotidown(commands.Cog):
 	recursive_download = False,
         not_interface = True,
         method_save = 1,
-        make_zip = True
+        make_zip = False
         )    
        path = str(bundled_data_path(self))
        for root, dirs, files in os.walk(path):
         for filename in files:
             ext = os.path.splitext(filename)[1]
-            if ext.lower() in [".zip"]:
+            if ext.lower() in ["mp3","flac",".zip"]:
                 filepath = os.path.join(root, filename)
                 with open(filepath, "rb") as f:
                  file = discord.File(filepath, filename)
