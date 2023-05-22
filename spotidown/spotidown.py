@@ -74,7 +74,7 @@ class Spotidown(commands.Cog):
                 filepath = os.path.join(root, filename)
                 with open(filepath, "rb") as f:
                  file = discord.File(filepath, filename)
-                 await ctx.send(file)  
+                 await ctx.send(files=[file])  
        with os.scandir(path) as entries:
             for entry in entries:
                 if entry.is_dir() and not entry.is_symlink():
