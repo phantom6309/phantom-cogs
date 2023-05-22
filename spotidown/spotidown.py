@@ -4,7 +4,6 @@ import os, shutil
 from redbot.core import checks,commands,Config 
 from redbot.core.data_manager import bundled_data_path
 from deezfacu import Login
-from fileio_wrapper import Fileio
 import re
 
 class Spotidown(commands.Cog):
@@ -74,11 +73,8 @@ class Spotidown(commands.Cog):
             if ext.lower() in [".mp3", ".flac", ".zip"]:
                 filepath = os.path.join(root, filename)
                 with open(filepath, "rb") as f:
-                 fileio_api_key = await self.config.api()
-                 fileio = Fileio(fileio_api_key)
-                 resp = Fileio.upload(filepath)
-                 link = resp['link']
-                 await ctx.send(link)  
+               
+                 await ctx.send(filepath)  
        with os.scandir(path) as entries:
             for entry in entries:
                 if entry.is_dir() and not entry.is_symlink():
@@ -109,11 +105,7 @@ class Spotidown(commands.Cog):
             if ext.lower() in [".mp3", ".flac", ".zip"]:
                 filepath = os.path.join(root, filename)
                 with open(filepath, "rb") as f:
-                 fileio_api_key = await self.config.api()
-                 fileio = Fileio(fileio_api_key)
-                 resp = Fileio.upload(filepath)
-                 link = resp['link']
-                 await ctx.send(link)  
+                 await ctx.send(filepath)  
        with os.scandir(path) as entries:
             for entry in entries:
                 if entry.is_dir() and not entry.is_symlink():
@@ -145,15 +137,7 @@ class Spotidown(commands.Cog):
             if ext.lower() in [".zip"]:
                 filepath = os.path.join(root, filename)
                 with open(filepath, "rb") as f:
-                 fileio_api_key = await self.config.api()
-
-                 fileio = Fileio(fileio_api_key)
-
-                 resp = Fileio.upload(filepath)
-
-                 link = resp['link']
-
-                 await ctx.send(link) 
+                 await ctx.send(filepath) 
        with os.scandir(path) as entries:
             for entry in entries:
                 if entry.is_dir() and not entry.is_symlink():
@@ -188,11 +172,7 @@ class Spotidown(commands.Cog):
             if ext.lower() in [".zip"]:
                 filepath = os.path.join(root, filename)
                 with open(filepath, "rb") as f:
-                 fileio_api_key = await self.config.api()
-                 fileio = Fileio(fileio_api_key)
-                 resp = Fileio.upload(filepath)
-                 link = resp['link']
-                 await ctx.send(link) 
+                 await ctx.send(filepath) 
        with os.scandir(path) as entries:
             for entry in entries:
                 if entry.is_dir() and not entry.is_symlink():
