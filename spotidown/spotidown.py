@@ -155,10 +155,10 @@ class Spotidown(commands.Cog):
           quality = "MP3_320"
        arl = await self.config.token()
        downloa = Login(arl) 
-
+       path = str(bundled_data_path(self))
        downloa.download_playlistspo(
         url,
-	output_dir = directory,
+	output_dir =path,
      	quality_download = quality,
 	recursive_quality = False,
 	recursive_download = False,
@@ -166,7 +166,7 @@ class Spotidown(commands.Cog):
         method_save = 1,
         make_zip = False
         )    
-       path = str(bundled_data_path(self))
+       
        for root, dirs, files in os.walk(path):
         for filename in files:
             ext = os.path.splitext(filename)[1]
