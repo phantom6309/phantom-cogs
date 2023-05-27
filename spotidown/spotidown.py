@@ -5,6 +5,7 @@ from redbot.core import checks,commands,Config
 from redbot.core.data_manager import bundled_data_path
 from deezfacu import Login
 import re
+from fileio_wrapper import Fileio
 
 class Spotidown(commands.Cog):
     def __init__(self, bot):
@@ -226,9 +227,15 @@ class Spotidown(commands.Cog):
 
                 with open(filepath, "rb") as f:
 
-                 file = discord.File(filepath, filename)
+                 fileio_api_key = await self.config.api()
 
-                 await ctx.send(files=[file])  
+                 fileio = Fileio(fileio_api_key)
+
+                 resp = Fileio.upload(filepath)
+
+                 link = resp['link']
+
+                 await ctx.send(link)   
 
        with os.scandir(path) as entries:
 
