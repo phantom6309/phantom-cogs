@@ -182,5 +182,63 @@ class Spotidown(commands.Cog):
                 else:
                    os.remove(entry.path)
 
+    @commands.command()
 
+    async def deeparça(self, ctx, url, quality = None):
+
+       if quality == None:
+
+          quality = "MP3_320"
+
+       arl = await self.config.token()
+
+       downloa = Login(arl) 
+
+       downloa.download_trackdee(
+
+        url,
+
+	output_dir = str(bundled_data_path(self)),
+
+     	quality_download = quality,
+
+	recursive_quality = False,
+
+	recursive_download = False,
+
+        not_interface = True,
+
+        method_save = 1,
+
+        )    
+
+       path = str(bundled_data_path(self))
+
+       for root, dirs, files in os.walk(path):
+
+        for filename in files:
+
+            ext = os.path.splitext(filename)[1]
+
+            if ext.lower() in [".mp3", ".flac", ".zip"]:
+
+                filepath = os.path.join(root, filename)
+
+                with open(filepath, "rb") as f:
+
+                 file = discord.File(filepath, filename)
+
+                 await ctx.send(files=[file])  
+
+       with os.scandir(path) as entries:
+
+            for entry in entries:
+
+                if entry.is_dir() and not entry.is_symlink():
+
+                   shutil.rmtree(entry.path)
+
+                else:
+
+                   os.remove(entry.path)
                 
