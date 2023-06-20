@@ -34,10 +34,6 @@ class Spotidown(commands.Cog):
         for url in urls:
             if "open.spotify.com/album/" in url:
                 await self.spoalbum(channel, url, quality)
-	
-        for url in urls:
-            if "open.spotify.com/playlist/" in url:
-                await self.spolist(channel, url, quality)
     
     @commands.command()
     @checks.admin_or_permissions(manage_guild=True)
