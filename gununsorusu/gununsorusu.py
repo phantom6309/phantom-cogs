@@ -27,7 +27,7 @@ class Gununsorusu(commands.Cog):
         await ctx.message.delete()
     
     @commands.command()
-        @checks.admin_or_permissions(manage_guild=True)
+    @checks.admin_or_permissions()
     async def gününsorusu(self, ctx):
         """Günün sorusunu isteyin"""
         guild_id = ctx.guild.id
@@ -52,7 +52,7 @@ class Gununsorusu(commands.Cog):
             await ctx.send(f'Havuzdaki bütün sorular:\n{item_list}')
 
     @commands.command()
-        @checks.admin_or_permissions(manage_guild=True)
+    @checks.admin_or_permissions()
     async def çıkart(self, ctx, *, item):
          """Listeden soru çıkartın"""
          guild_id = ctx.guild.id
@@ -67,7 +67,7 @@ class Gununsorusu(commands.Cog):
          
     
     @commands.command()
-        @checks.admin_or_permissions(manage_guild=True)
+    @checks.admin_or_permissions(manage_guild=True)
     async def temizle(self, ctx):
         """Tüm listeyi temizleyin"""
         self.items.clear()
