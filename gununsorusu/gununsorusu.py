@@ -27,6 +27,7 @@ class Gununsorusu(commands.Cog):
         await ctx.message.delete()
     
     @commands.command()
+        @checks.admin_or_permissions(manage_guild=True)
     async def gününsorusu(self, ctx):
         """Günün sorusunu isteyin"""
         guild_id = ctx.guild.id
