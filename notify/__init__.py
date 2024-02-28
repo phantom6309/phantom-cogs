@@ -1,7 +1,7 @@
-from .insta import Insta
+from .notify import Notify
 
 async def setup(bot):
 
-    cog = Insta(bot)
+    cog = Notify(bot)
 
     await bot.add_cog(cog)
