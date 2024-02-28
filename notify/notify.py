@@ -1,5 +1,6 @@
 import discord
 from redbot.core import commands, Config
+from urllib.parse import quote_plus
 
 class Notify(commands.Cog):
     def __init__(self, bot):
@@ -23,8 +24,10 @@ class Notify(commands.Cog):
                 user = await self.bot.fetch_user(payload.user_id)
                 # Get the emoji used in the reaction
                 emoji = payload.emoji
-                # Send a notification including the emoji information
-                await message.author.send(f"{user.name} reacted to your message with the emoji {emoji}: {message.content}")
+                # Get the message link
+                message_link = f"https://discord.com/channels/{payload.guild_id}/{payload.channel_id}/{payload.message_id}"
+                # Send a notification including the emoji information and message link
+                await message.author.send(f"{user.name} reacted to your message with the emoji {emoji}: {message.content}\n[Jump to Message]({message_link})")
 
     @commands.command()
     async def notify(self, ctx):
