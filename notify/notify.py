@@ -27,7 +27,7 @@ class Notify(commands.Cog):
                 # Get the message link
                 message_link = f"https://discord.com/channels/{payload.guild_id}/{payload.channel_id}/{payload.message_id}"
                 # Send a notification including the emoji information and message link
-                await message.author.send(f"{user.name} reacted to your message with the emoji {emoji}: {message.content}\n[Jump to Message]({message_link})")
+                await message.author.send(f"{user.name} kullanıcısı mesajına tepki ekledi {emoji}: {message.content}\n[Mesaja git]({message_link})")
 
     @commands.command()
     async def notify(self, ctx):
@@ -35,8 +35,8 @@ class Notify(commands.Cog):
         user_id = str(ctx.author.id)
         if user_id in notify_users:
             await self.config.clear_raw(user_id)
-            await ctx.send("You will no longer receive reaction notifications.")
+            await ctx.send("Artık mesaj bildirimi alamayacaksınız.")
         else:
             await self.config.set_raw(user_id, value={})
-            await ctx.send("You will now receive reaction notifications.")
+            await ctx.send("Şimdi mesaj bildirimi alacaksınız.")
 
