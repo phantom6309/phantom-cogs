@@ -12,6 +12,11 @@ class Corba(commands.Cog):
 
     @commands.command()
     async def corba(self, ctx):
+        # Eğer oyun zaten başlamışsa, mesaj gönder ve çık
+        if ctx.author.id in self.active_games:
+            await ctx.send("Zaten bir oyun başlatılmış durumda.")
+            return
+
         # Word listesini dosyadan yükle
         with open(self.wordlist_file, 'r') as f:
             words = f.readlines()
@@ -40,15 +45,20 @@ class Corba(commands.Cog):
                     break  # Oyunu bitir
                 else:
                     await ctx.send("Yanlış! Bir dahaki sefere daha iyi şanslar.")
+
+            # Oyunu başlatan kişiyi kaydet
+            self.active_games[ctx.author.id] = True
         except asyncio.TimeoutError:
             await ctx.send("Süre doldu! Zamanında cevap vermediniz.")
 
     @commands.command()
     async def puanlar(self, ctx):
-        if ctx.author.id in self.points:
-            await ctx.send(f"{ctx.author.name} {self.points[ctx.author.id]} puanına sahip.")
-        else:
-            await ctx.send(f"{ctx.author.name} 0 puana sahip.")
+        response = "Puanlar:\n"
+        for user_id, points in self.points.items():
+            user = self.bot.get_user(user_id)
+            if user:
+                response += f"{user.name}: {points} puan\n"
+        await ctx.send(response)
 
     @commands.command()
     async def puan_sifirla(self, ctx):
