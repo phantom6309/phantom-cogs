@@ -11,7 +11,7 @@ class Corba(commands.Cog):
         self.points = {}
 
     @commands.command()
-    async def karma(self, ctx):
+    async def corba(self, ctx):
         # Word listesini dosyadan yükle
         with open(self.wordlist_file, 'r') as f:
             words = f.readlines()
@@ -25,12 +25,18 @@ class Corba(commands.Cog):
             return msg.author == ctx.author and msg.channel == ctx.channel
 
         try:
+            start_time = asyncio.get_event_loop().time()
             while True:
                 # Kullanıcının cevabını bekleyin
                 msg = await self.bot.wait_for('message', check=check, timeout=20.0)
+                end_time = asyncio.get_event_loop().time()
+                elapsed_time = int(end_time - start_time)
                 if msg.content.lower() == word.lower():
-                    await ctx.send(f"Doğru! Kelime: `{word}`.")
-                    self.points[ctx.author.id] = self.points.get(ctx.author.id, 0) + 1
+                    points_earned = 20 - elapsed_time
+                    if points_earned < 1:
+                        points_earned = 1
+                    await ctx.send(f"Doğru! Kelime: `{word}`. {points_earned} puan kazandınız.")
+                    self.points[ctx.author.id] = self.points.get(ctx.author.id, 0) + points_earned
                     break  # Oyunu bitir
                 else:
                     await ctx.send("Yanlış! Bir dahaki sefere daha iyi şanslar.")
@@ -44,4 +50,13 @@ class Corba(commands.Cog):
         else:
             await ctx.send(f"{ctx.author.name} 0 puana sahip.")
 
+    @commands.command()
+    async def puan_sifirla(self, ctx):
+        if ctx.author.id in self.points:
+            self.points[ctx.author.id] = 0
+            await ctx.send(f"{ctx.author.name} puanları sıfırlandı.")
+        else:
+            await ctx.send(f"{ctx.author.name} zaten 0 puana sahip.")
 
+def setup(bot):
+    bot.add_cog(Corba(bot))
