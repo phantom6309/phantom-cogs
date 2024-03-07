@@ -1,0 +1,5 @@
+araba
+kamyon
+elma
+kitap
+kalem
