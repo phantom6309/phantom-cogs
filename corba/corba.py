@@ -2,11 +2,12 @@ import discord
 from redbot.core import commands
 import random
 import asyncio
+from redbot.core.data_manager import bundled_data_path
 
 class Corba(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.wordlist_file = 'data.txt'
+        self.wordlist_file = str(bundled_data_path(self)/data.txt)
         self.points = {}
 
     @commands.command()
