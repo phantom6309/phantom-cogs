@@ -3,7 +3,7 @@ from discord.ext import commands
 import random
 import asyncio
 
-class Çorba(commands.Cog):
+class Corba(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.wordlist_file = 'data.txt'
