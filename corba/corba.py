@@ -8,15 +8,11 @@ class Corba(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.wordlist_file = str(bundled_data_path(self) / 'data.txt')
-        self.points = {}
+        self.active_games = {}  # Oyunu başlatan kişiyi takip etmek için bir sözlük
+        self.points = {}  # Oyuncuların puanlarını saklamak için bir sözlük
 
     @commands.command()
     async def corba(self, ctx):
-        # Eğer oyun zaten başlamışsa, mesaj gönder ve çık
-        if ctx.author.id in self.active_games:
-            await ctx.send("Zaten bir oyun başlatılmış durumda.")
-            return
-
         # Word listesini dosyadan yükle
         with open(self.wordlist_file, 'r') as f:
             words = f.readlines()
@@ -27,7 +23,7 @@ class Corba(commands.Cog):
         await ctx.send(f"Bu kelimeyi çözün: `{scrambled_word}`")
 
         def check(msg):
-            return msg.author == ctx.author and msg.channel == ctx.channel
+            return msg.channel == ctx.channel
 
         try:
             start_time = asyncio.get_event_loop().time()
@@ -41,7 +37,7 @@ class Corba(commands.Cog):
                     if points_earned < 1:
                         points_earned = 1
                     await ctx.send(f"Doğru! Kelime: `{word}`. {points_earned} puan kazandınız.")
-                    self.points[ctx.author.id] = self.points.get(ctx.author.id, 0) + points_earned
+                    self.points[msg.author.id] = self.points.get(msg.author.id, 0) + points_earned
                     break  # Oyunu bitir
                 else:
                     await ctx.send("Yanlış! Bir dahaki sefere daha iyi şanslar.")
@@ -53,12 +49,15 @@ class Corba(commands.Cog):
 
     @commands.command()
     async def puanlar(self, ctx):
-        response = "Puanlar:\n"
-        for user_id, points in self.points.items():
-            user = self.bot.get_user(user_id)
-            if user:
-                response += f"{user.name}: {points} puan\n"
-        await ctx.send(response)
+        if self.points:
+            message = "Puanlar:\n"
+            for user_id, points in self.points.items():
+                user = ctx.guild.get_member(user_id)
+                if user:
+                    message += f"{user.name}: {points} puan\n"
+            await ctx.send(message)
+        else:
+            await ctx.send("Henüz kimse puan almamış.")
 
     @commands.command()
     async def puan_sifirla(self, ctx):
