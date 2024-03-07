@@ -7,11 +7,11 @@ from redbot.core.data_manager import bundled_data_path
 class Corba(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.wordlist_file = str(bundled_data_path(self)/data.txt)
+        self.wordlist_file = str(bundled_data_path(self)/'data.txt')
         self.points = {}
 
     @commands.command()
-    async def unscramble(self, ctx):
+    async def corba(self, ctx):
         # Load word list from file
         with open(self.wordlist_file, 'r') as f:
             words = f.readlines()
