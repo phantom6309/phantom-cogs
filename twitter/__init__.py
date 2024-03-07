@@ -1,7 +1,7 @@
-from .twitter import Twitter
+from .çorba import Çorba
 
 async def setup(bot):
 
-    cog = Twitter(bot)
+    cog = Çorba(bot)
 
     await bot.add_cog(cog)
