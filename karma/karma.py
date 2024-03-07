@@ -62,7 +62,7 @@ class Karma(commands.Cog):
     @commands.command()
     async def puan_sifirla(self, ctx):
         if ctx.author.id in self.points:
-            self.points[] = 0
+            self.points = 0
             await ctx.send(f"{ctx.author.name} puanları sıfırlandı.")
         else:
             await ctx.send(f"{ctx.author.name} zaten 0 puana sahip.")
