@@ -1,7 +1,7 @@
-from .corba import Corba
+from .karma import Karma
 
 async def setup(bot):
 
-    cog = Corba(bot)
+    cog = Karma(bot)
 
     await bot.add_cog(cog)
