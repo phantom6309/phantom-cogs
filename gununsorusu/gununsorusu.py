@@ -27,7 +27,7 @@ class Gununsorusu(commands.Cog):
         await ctx.message.delete()
     
     @commands.command()
-    @checks.admin_or_permissions()
+    @checks.admin_or_permissions(manage_guild=True)
     async def gününsorusu(self, ctx):
         """Günün sorusunu isteyin"""
         guild_id = ctx.guild.id
@@ -41,6 +41,7 @@ class Gununsorusu(commands.Cog):
             await self.config.guild(ctx.guild).items.set(items)
     
     @commands.command()
+    @checks.admin_or_permissions(manage_guild=True)
     async def sorulistesi(self, ctx):
         """Soru havuzunu görüntüleyin"""
         guild_id = ctx.guild.id
@@ -52,7 +53,7 @@ class Gununsorusu(commands.Cog):
             await ctx.send(f'Havuzdaki bütün sorular:\n{item_list}')
 
     @commands.command()
-    @checks.admin_or_permissions()
+    @checks.admin_or_permissions(manage_guild=True)
     async def çıkart(self, ctx, *, item):
          """Listeden soru çıkartın"""
          guild_id = ctx.guild.id
@@ -73,13 +74,13 @@ class Gununsorusu(commands.Cog):
         self.items.clear()
         with open(self.filename, 'w') as f:
             json.dump(self.items, f)
-        await ctx.send('soru havuzu temizlendi!')
+        await ctx.send('soru Havuzu temizlendi!')
   
     
     @commands.command()
     async def temizle(self, ctx):
      """Tüm listeyi temizleyin"""
      await self.config.guild(ctx.guild).items.set([])
-     await ctx.send('soru havuzu temizlendi!')
+     await ctx.send('Soru havuzu temizlendi!')
      
 
