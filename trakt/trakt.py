@@ -51,13 +51,13 @@ class Trakt(commands.Cog):
             return None
 
     def extract_title(self, activity_item):
-    if 'movie' in activity_item:
+     if 'movie' in activity_item:
         return activity_item['movie']['title'], 'movie'
-    elif 'episode' in activity_item and 'show' in activity_item:
+     elif 'episode' in activity_item and 'show' in activity_item:
         return f"{activity_item['show']['title']} - {activity_item['episode']['title']}", 'series'
-    elif 'show' in activity_item:
+     elif 'show' in activity_item:
         return activity_item['show']['title'], 'series'
-    return 'Unknown Title', 'movie'
+     return 'Unknown Title', 'movie'
     
     @trakt.command()
     async def setup(self, ctx):
