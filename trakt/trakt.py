@@ -58,7 +58,11 @@ class Trakt(commands.Cog):
      elif 'show' in activity_item:
         return activity_item['show']['title'], 'series'
      return 'Unknown Title', 'movie'
-    
+        
+    @commands.group(name='trakt', invoke_without_command=True)
+    async def trakt(self, ctx):
+        await ctx.send("Available commands: `user`, `setup`, `run`, `setupchannel`, `setomdbkey`")
+        
     @trakt.command()
     async def setup(self, ctx):
         await ctx.author.send("Please provide your Trakt Client ID:")
