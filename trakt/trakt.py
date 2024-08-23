@@ -50,19 +50,15 @@ class Trakt(commands.Cog):
             print(f"Failed to fetch Trakt activity: {e}")
             return None
 
-    def extract_title(self, activity_item: dict) -> str:
-        if 'movie' in activity_item:
-            return activity_item['movie']['title']
-        elif 'episode' in activity_item and 'show' in activity_item:
-            return f"{activity_item['show']['title']} - {activity_item['episode']['title']}"
-        elif 'show' in activity_item:
-            return activity_item['show']['title']
-        return 'Unknown Title'
-
-    @commands.group(name='trakt', invoke_without_command=True)
-    async def trakt(self, ctx):
-        await ctx.send("Available commands: `user`, `setup`, `run`, `setupchannel`, `setomdbkey`")
-
+    def extract_title(self, activity_item):
+    if 'movie' in activity_item:
+        return activity_item['movie']['title'], 'movie'
+    elif 'episode' in activity_item and 'show' in activity_item:
+        return f"{activity_item['show']['title']} - {activity_item['episode']['title']}", 'series'
+    elif 'show' in activity_item:
+        return activity_item['show']['title'], 'series'
+    return 'Unknown Title', 'movie'
+    
     @trakt.command()
     async def setup(self, ctx):
         await ctx.author.send("Please provide your Trakt Client ID:")
@@ -205,31 +201,32 @@ class Trakt(commands.Cog):
         await ctx.send(f"Channel ID has been set to {channel.mention}. This is where updates will be sent.")
 
     @tasks.loop(minutes=1)
-    async def check_for_updates(self):
-     if not self.data['trakt_credentials'].get('access_token') or not self.data['tracked_users']:
-         return
+async def check_for_updates(self):
+    if not self.data['trakt_credentials'].get('access_token') or not self.data['tracked_users']:
+        return
 
-     channel_id = self.data.get('channel_id')
-     if channel_id is None:
+    channel_id = self.data.get('channel_id')
+    if channel_id is None:
         return
     
-     channel = self.bot.get_channel(int(channel_id))
-     if channel is None:
+    channel = self.bot.get_channel(int(channel_id))
+    if channel is None:
         print("Invalid channel ID. Please check your DISCORD_CHANNEL_ID.")
         return
 
-     for username in self.data['tracked_users']:
+    for username in self.data['tracked_users']:
         activity = await self.get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
         if activity:
             latest_activity = activity[0]
-            title = self.extract_title(latest_activity)
+            title, content_type = self.extract_title(latest_activity)
             last_watched = self.data['last_activity'].get(username)
             if last_watched != title:
                 self.data['last_activity'][username] = title
                 self.save_data()
                 
-                embed = await self.create_embed_with_omdb_info(title)
+                embed = await self.create_embed_with_omdb_info(title, content_type)
                 embed.set_footer(text=f'Watched by {username}')
                 embed.set_author(name=username, icon_url=self.bot.user.display_avatar.url)  # Use bot's avatar for the author field
                 
                 await channel.send(embed=embed)
+                
