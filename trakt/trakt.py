@@ -158,7 +158,7 @@ class Trakt(commands.Cog):
                 self.save_data()
                 embed = await self.create_embed_with_omdb_info(title, username)
                 await channel.send(embed=embed)
-         else:
+        else:
             await ctx.send(f'{username} için son etkinlik bulunamadı.')
 
     
