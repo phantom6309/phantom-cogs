@@ -54,8 +54,16 @@ class Trakt(commands.Cog):
 
     async def get_imdb_info(self, imdb_id):
         try:
-            movie = self.ia.get_movie(imdb_id)
-            return movie
+            imdb_id = imdb_id.lstrip('tt')
+            movie = self.ia.get_imdb_movie(imdb_id)
+            poster_url = movie.get('cover url', 'https://via.placeholder.com/150?text=No+Image')
+            rating = movie.get('rating', 'N/A')
+            plot = movie.get('plot', ['No plot available'])[0]
+            return {
+                'poster_url': poster_url,
+                'rating': rating,
+                'plot': plot
+            }
         except Exception as e:
             print(f"Error retrieving IMDb info: {e}")
             return None
@@ -165,13 +173,15 @@ class Trakt(commands.Cog):
                     embed = discord.Embed(title=title, description=f"{username} watched {title}", color=discord.Color.blue())
                     
                     if imdb_info:
-                        embed.set_thumbnail(url=f"https://www.imdb.com/title/{imdb_id}/mediaindex")
-                        embed.add_field(name="IMDB ID", value=f"[{imdb_id}](https://www.imdb.com/title/{imdb_id}/)")
+                        embed.set_thumbnail(url=imdb_info['poster_url'])
+                        embed.add_field(name="Rating", value=imdb_info['rating'])
+                        embed.add_field(name="Plot", value=imdb_info['plot'])
+                        embed.add_field(name="IMDB ID", value=f"[{imdb_id}](https://www.imdb.com/title/tt{imdb_id}/)")
+                    else:
+                        embed.set_thumbnail(url="https://via.placeholder.com/150?text=No+Image")  # Placeholder image if IMDb info is not found
 
                     await channel.send(embed=embed)
-            else:
-                await ctx.send(f'No recent activity found for {username}.')
-
+                    
     @trakt.command()
     async def setupchannel(self, ctx, *, channel: discord.TextChannel):
         self.data['channel_id'] = str(channel.id)
@@ -211,8 +221,14 @@ class Trakt(commands.Cog):
                     embed = discord.Embed(title=title, description=f"{username} watched {title}", color=discord.Color.blue())
                     
                     if imdb_info:
-                        embed.set_thumbnail(url=f"https://www.imdb.com/title/{imdb_id}/mediaindex")
-                        embed.add_field(name="IMDB ID", value=f"[{imdb_id}](https://www.imdb.com/title/{imdb_id}/)")
+                        embed.set_thumbnail(url=imdb_info['poster_url'])
+                        embed.add_field(name="Rating", value=imdb_info['rating'])
+                        embed.add_field(name="Plot", value=imdb_info['plot'])
+                        embed.add_field(name="IMDB ID", value=f"[{imdb_id}](https://www.imdb.com/title/tt{imdb_id}/)")
+                    else:
+                        embed.set_thumbnail(url="https://via.placeholder.com/150?text=No+Image")  # Placeholder image if IMDb info is not found
 
                     await channel.send(embed=embed)
-            
+            else:
+                await channel.send(f'No recent activity found for {username}.')
+                        
