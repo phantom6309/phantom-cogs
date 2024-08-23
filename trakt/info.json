@@ -12,7 +12,7 @@
 
     "tags" : [""],
 
-    "requirements" : ["requests"],
+    "requirements" : ["IMDbPY"],
 
     "end_user_data_statement": " "
 
