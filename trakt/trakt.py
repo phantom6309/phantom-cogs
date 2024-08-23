@@ -169,33 +169,34 @@ class Trakt(commands.Cog):
                 await channel.send(embed=embed)
                 
 
-    async def create_embed_with_omdb_info(self, title: str) -> discord.Embed:
-        """Fetch additional info from OMDb and create an embed."""
-        api_key = self.data.get('omdb_api_key')
-        if not api_key:
-            return discord.Embed(title=title, description="OMDb API key not set.")
+    async def create_embed_with_omdb_info(self, title, content_type='movie') -> discord.Embed:
+     """Fetch additional info from OMDb and create an embed for movies or TV shows."""
+     api_key = self.data.get('omdb_api_key')
+     if not api_key:
+        return discord.Embed(title=title, description="OMDb API key not set.")
 
-        url = f"http://www.omdbapi.com/?t={title}&apikey={api_key}"
-        try:
-            async with aiohttp.ClientSession() as session:
-                async with session.get(url) as response:
-                    if response.status == 200:
-                        movie_data = await response.json()
-                        embed = discord.Embed(
-                            title=movie_data.get('Title', title),
-                            description=movie_data.get('Plot', 'No description available.'),
-                            color=discord.Color.blue()
-                        )
-                        embed.set_thumbnail(url=movie_data.get('Poster'))
-                        embed.add_field(name="Rating", value=movie_data.get('imdbRating', 'N/A'), inline=True)
-                        embed.add_field(name="Duration", value=movie_data.get('Runtime', 'N/A'), inline=True)
-                        embed.add_field(name="Genre", value=movie_data.get('Genre', 'N/A'), inline=False)
-                        return embed
-                    else:
-                        return discord.Embed(title=title, description="Could not fetch additional info from OMDb.")
-        except aiohttp.ClientError as e:
-            print(f"Failed to fetch OMDb data: {e}")
-            return discord.Embed(title=title, description="Could not fetch additional info from OMDb.")
+     url = f"http://www.omdbapi.com/?t={title}&apikey={api_key}&type={content_type}"
+     try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as response:
+                if response.status == 200:
+                    item_data = await response.json()
+                    embed = discord.Embed(
+                        title=item_data.get('Title', title),
+                        description=item_data.get('Plot', 'No description available.'),
+                        color=discord.Color.blue()
+                    )
+                    embed.set_thumbnail(url=item_data.get('Poster'))
+                    embed.add_field(name="Rating", value=item_data.get('imdbRating', 'N/A'), inline=True)
+                    embed.add_field(name="Duration", value=item_data.get('Runtime', 'N/A'), inline=True)
+                    embed.add_field(name="Genre", value=item_data.get('Genre', 'N/A'), inline=False)
+                    return embed
+                else:
+                    return discord.Embed(title=title, description="Could not fetch additional info from OMDb.")
+     except aiohttp.ClientError as e:
+        print(f"Failed to fetch OMDb data: {e}")
+        return discord.Embed(title=title, description="Could not fetch additional info from OMDb.")
+
 
     @trakt.command()
     async def setupchannel(self, ctx, *, channel: discord.TextChannel):
