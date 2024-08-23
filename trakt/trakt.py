@@ -1,7 +1,6 @@
-import requests
+import aiohttp
 import discord
 import json
-import asyncio
 from redbot.core import commands
 from discord.ext import tasks
 
@@ -12,25 +11,21 @@ class Trakt(commands.Cog):
         self.data = self.load_data()
         self.check_for_updates.start()
 
-    # Load data from file
     def load_data(self):
         try:
             with open(self.data_file, 'r') as f:
                 data = json.load(f)
         except FileNotFoundError:
             data = {'trakt_credentials': {}, 'tracked_users': {}, 'last_activity': {}, 'channel_id': None}
-        # Ensure last_activity key is present
         if 'last_activity' not in data:
             data['last_activity'] = {}
         return data
 
-    # Save data to file
     def save_data(self):
         with open(self.data_file, 'w') as f:
             json.dump(self.data, f, indent=4)
 
-    # Function to get user activity from Trakt
-    def get_trakt_user_activity(self, username, access_token):
+    async def get_trakt_user_activity(self, username, access_token):
         url = f'https://api.trakt.tv/users/{username}/history'
         headers = {
             'Content-Type': 'application/json',
@@ -38,10 +33,13 @@ class Trakt(commands.Cog):
             'trakt-api-version': '2',
             'trakt-api-key': self.data['trakt_credentials'].get('client_id')
         }
-        response = requests.get(url, headers=headers)
-        return response.json()
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, headers=headers) as response:
+                if response.status == 200:
+                    return await response.json()
+                else:
+                    return None
 
-    # Function to extract title from activity item
     def extract_title(self, activity_item):
         if 'movie' in activity_item:
             return activity_item['movie']['title']
@@ -57,26 +55,22 @@ class Trakt(commands.Cog):
 
     @trakt.command()
     async def user(self, ctx, username: str):
-        # Convert tracked_users list to a dictionary if necessary
         if isinstance(self.data['tracked_users'], list):
             self.data['tracked_users'] = {user: {} for user in self.data['tracked_users']}
         
         if username in self.data['tracked_users']:
-            # Remove the user
             del self.data['tracked_users'][username]
             if username in self.data['last_activity']:
                 del self.data['last_activity'][username]
             self.save_data()
             await ctx.send(f"User {username} has been removed from the tracking list.")
         else:
-            # Add the user
             self.data['tracked_users'][username] = {}
             self.save_data()
             await ctx.send(f"User {username} has been added to the tracking list.")
 
     @trakt.command()
     async def setup(self, ctx):
-        # Ask user for client ID and secret in DM
         await ctx.author.send("Please provide your Trakt Client ID:")
         def check(m):
             return m.author == ctx.author and isinstance(m.channel, discord.DMChannel)
@@ -96,7 +90,6 @@ class Trakt(commands.Cog):
             msg = await self.bot.wait_for('message', timeout=300.0, check=check)
             authorization_code = msg.content.strip()
 
-            # Exchange the authorization code for an access token
             token_data = {
                 'code': authorization_code,
                 'client_id': client_id,
@@ -104,19 +97,20 @@ class Trakt(commands.Cog):
                 'redirect_uri': redirect_uri,
                 'grant_type': 'authorization_code'
             }
-            response = requests.post('https://api.trakt.tv/oauth/token', data=token_data)
-            
-            if response.status_code == 200:
-                access_token = response.json().get('access_token')
-                self.data['trakt_credentials'] = {
-                    'client_id': client_id,
-                    'client_secret': client_secret,
-                    'access_token': access_token
-                }
-                self.save_data()
-                await ctx.author.send("Trakt credentials and access token have been set up successfully.")
-            else:
-                await ctx.author.send(f"Failed to get access token: {response.json()}")
+            async with aiohttp.ClientSession() as session:
+                async with session.post('https://api.trakt.tv/oauth/token', data=token_data) as response:
+                    if response.status == 200:
+                        token_response = await response.json()
+                        access_token = token_response.get('access_token')
+                        self.data['trakt_credentials'] = {
+                            'client_id': client_id,
+                            'client_secret': client_secret,
+                            'access_token': access_token
+                        }
+                        self.save_data()
+                        await ctx.author.send("Trakt credentials and access token have been set up successfully.")
+                    else:
+                        await ctx.author.send(f"Failed to get access token: {await response.text()}")
         
         except asyncio.TimeoutError:
             await ctx.author.send("You took too long to respond. Please try the setup command again.")
@@ -142,7 +136,7 @@ class Trakt(commands.Cog):
             return
 
         for username in self.data['tracked_users']:
-            activity = self.get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
+            activity = await self.get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
             if activity:
                 latest_activity = activity[0]
                 title = self.extract_title(latest_activity)
@@ -156,11 +150,10 @@ class Trakt(commands.Cog):
                 await ctx.send(f'No recent activity found for {username}.')
 
     @trakt.command()
-    async def setupchannel(self, ctx, channel_id: int):
-        # Set the channel ID
-        self.data['channel_id'] = str(channel_id)
+    async def setupchannel(self, ctx, *, channel: discord.TextChannel):
+        self.data['channel_id'] = str(channel.id)
         self.save_data()
-        await ctx.send(f"Channel ID has been set to {channel_id}. This is where updates will be sent.")
+        await ctx.send(f"Channel ID has been set to {channel.mention}. This is where updates will be sent.")
 
     @tasks.loop(minutes=30)
     async def check_for_updates(self):
@@ -177,7 +170,7 @@ class Trakt(commands.Cog):
             return
 
         for username in self.data['tracked_users']:
-            activity = self.get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
+            activity = await self.get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
             if activity:
                 latest_activity = activity[0]
                 title = self.extract_title(latest_activity)
@@ -187,6 +180,4 @@ class Trakt(commands.Cog):
                     self.save_data()
                     message = f'{username} watched {title}'
                     await channel.send(message)
-
-
-      
+        
