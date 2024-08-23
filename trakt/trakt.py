@@ -203,7 +203,7 @@ class Trakt(commands.Cog):
         self.save_data()
         await ctx.send(f"Channel ID has been set to {channel.mention}. This is where updates will be sent.")
 
-    @tasks.loop(minutes=30)
+    @tasks.loop(minutes=1)
     async def check_for_updates(self):
      if not self.data['trakt_credentials'].get('access_token') or not self.data['tracked_users']:
          return
