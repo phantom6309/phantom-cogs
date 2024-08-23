@@ -2,7 +2,7 @@ import requests
 import discord
 import json
 import asyncio
-from redbot.core import commands, tasks
+from redbot.core import commands
 
 class Trakt(commands.Cog):
     def __init__(self, bot):
