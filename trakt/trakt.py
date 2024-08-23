@@ -203,30 +203,32 @@ class Trakt(commands.Cog):
         self.save_data()
         await ctx.send(f"Channel ID has been set to {channel.mention}. This is where updates will be sent.")
 
-    @tasks.loop(minutes=1)
+    @tasks.loop(minutes=30)
     async def check_for_updates(self):
-        if not self.data['trakt_credentials'].get('access_token') or not self.data['tracked_users']:
-            return
+     if not self.data['trakt_credentials'].get('access_token') or not self.data['tracked_users']:
+         return
 
-        channel_id = self.data.get('channel_id')
-        if channel_id is None:
-            return
-        
-        channel = self.bot.get_channel(int(channel_id))
-        if channel is None:
-            print("Invalid channel ID. Please check your DISCORD_CHANNEL_ID.")
-            return
+     channel_id = self.data.get('channel_id')
+     if channel_id is None:
+        return
+    
+     channel = self.bot.get_channel(int(channel_id))
+     if channel is None:
+        print("Invalid channel ID. Please check your DISCORD_CHANNEL_ID.")
+        return
 
-        for username in self.data['tracked_users']:
-            activity = await self.get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
-            if activity:
-                latest_activity = activity[0]
-                title = self.extract_title(latest_activity)
-                last_watched = self.data['last_activity'].get(username)
-                if last_watched != title:
-                    self.data['last_activity'][username] = title
-                    self.save_data()
-                    embed = discord.Embed(title=f"{username} watched {title}")
-                    embed.set_footer(text=f'Watched by {username}')  # Footer with username
-                    await channel.send(embed=embed)
-            
+     for username in self.data['tracked_users']:
+        activity = await self.get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
+        if activity:
+            latest_activity = activity[0]
+            title = self.extract_title(latest_activity)
+            last_watched = self.data['last_activity'].get(username)
+            if last_watched != title:
+                self.data['last_activity'][username] = title
+                self.save_data()
+                
+                embed = await self.create_embed_with_omdb_info(title)
+                embed.set_footer(text=f'Watched by {username}')
+                embed.set_author(name=username, icon_url=self.bot.user.display_avatar.url)  # Use bot's avatar for the author field
+                
+                await channel.send(embed=embed)
