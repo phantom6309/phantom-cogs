@@ -54,7 +54,7 @@ class Trakt(commands.Cog):
 
     async def get_imdb_info(self, imdb_id):
         try:
-            movie = self.ia.get_imdbID(imdb_id)
+            movie = self.ia.get_movie(imdb_id)
             return movie
         except Exception as e:
             print(f"Error retrieving IMDb info: {e}")
@@ -157,10 +157,9 @@ class Trakt(commands.Cog):
                     self.save_data()
 
                     # Fetch IMDb info
+                    imdb_info = None
                     if imdb_id:
                         imdb_info = await self.get_imdb_info(imdb_id)
-                    else:
-                        imdb_info = None
 
                     # Create embed message
                     embed = discord.Embed(title=title, description=f"{username} watched {title}", color=discord.Color.blue())
@@ -204,13 +203,16 @@ class Trakt(commands.Cog):
                     self.save_data()
 
                     # Fetch IMDb info
+                    imdb_info = None
                     if imdb_id:
                         imdb_info = await self.get_imdb_info(imdb_id)
-                    else:
-                        imdb_info = None
 
                     # Create embed message
                     embed = discord.Embed(title=title, description=f"{username} watched {title}", color=discord.Color.blue())
                     
-                    if imdb_info
-        
+                    if imdb_info:
+                        embed.set_thumbnail(url=f"https://www.imdb.com/title/{imdb_id}/mediaindex")
+                        embed.add_field(name="IMDB ID", value=f"[{imdb_id}](https://www.imdb.com/title/{imdb_id}/)")
+
+                    await channel.send(embed=embed)
+            
