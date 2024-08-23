@@ -3,7 +3,6 @@ import discord
 import json
 from redbot.core import commands
 from discord.ext import tasks
-from googletrans import Translator
 
 class Trakt(commands.Cog):
     def __init__(self, bot):
@@ -24,8 +23,8 @@ class Trakt(commands.Cog):
 
     def save_data(self):
         with open(self.data_file, 'w') as f:
-            json.dump(self.data, f, indent=4) 
-            
+            json.dump(self.data, f, indent=4)
+
     async def get_trakt_user_activity(self, username, access_token):
         url = f'https://api.trakt.tv/users/{username}/history'
         headers = {
@@ -129,71 +128,63 @@ class Trakt(commands.Cog):
 
     @trakt.command()
     async def run(self, ctx):
-     if not self.data['trakt_credentials'].get('access_token'):
-        await ctx.send("Trakt erişim anahtarı bulunamadı. Lütfen önce `?trakt setup` komutunu kullanarak ayarlayın.")
-        return
-    
-     if not self.data['tracked_users']:
-        await ctx.send("İzlenecek kullanıcı yok. Lütfen önce `?trakt user <username>` komutunu kullanarak kullanıcı ekleyin.")
-        return
+        if not self.data['trakt_credentials'].get('access_token'):
+            await ctx.send("No Trakt access token found. Please set up the credentials first using `?trakt setup`.")
+            return
+        
+        if not self.data['tracked_users']:
+            await ctx.send("No users to track. Please add users first using `?trakt user <username>`.")
+            return
 
-     channel_id = self.data.get('channel_id')
-     if channel_id is None:
-        await ctx.send("Herhangi bir kanal ayarlanmadı. Lütfen `?trakt setupchannel <channel_id>` komutunu kullanarak kanalı ayarlayın.")
-        return
-    
-     channel = self.bot.get_channel(int(channel_id))
-     if channel is None:
-        await ctx.send("Geçersiz kanal ID'si. Lütfen `?trakt setupchannel <channel_id>` komutunu kullanarak kanalı tekrar ayarlayın.")
-        return
+        channel_id = self.data.get('channel_id')
+        if channel_id is None:
+            await ctx.send("No channel has been set up. Please set the channel using `?trakt setupchannel <channel_id>`.")
+            return
+        
+        channel = self.bot.get_channel(int(channel_id))
+        if channel is None:
+            await ctx.send("Invalid channel ID. Please set the channel again using `?trakt setupchannel <channel_id>`.")
+            return
 
-     for username in self.data['tracked_users']:
-        activity = await self.get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
-        if activity:
-            latest_activity = activity[0]
-            title = self.extract_title(latest_activity)
-            last_watched = self.data['last_activity'].get(username)
-            if last_watched != title:
-                self.data['last_activity'][username] = title
-                self.save_data()
-                embed = await self.create_embed_with_omdb_info(title, username)
-                await channel.send(embed=embed)
-        else:
-            await ctx.send(f'{username} için son etkinlik bulunamadı.')
-
-    
-
-    async def create_embed_with_omdb_info(self, title, username):
-     api_key = self.data.get('omdb_api_key')
-     if not api_key:
-        return discord.Embed(title=title, description="OMDb API anahtarı ayarlanmadı.")
-
-     url = f"http://www.omdbapi.com/?t={title}&apikey={api_key}"
-     async with aiohttp.ClientSession() as session:
-        async with session.get(url) as response:
-            if response.status == 200:
-                movie_data = await response.json()
-                
-                # Initialize the translator
-                translator = Translator()
-
-                # Translate fields to Turkish
-                description = translator.translate(movie_data.get('Plot', 'Açıklama bulunamadı.'), dest='tr').text
-                genre = translator.translate(movie_data.get('Genre', 'Tür bulunamadı.'), dest='tr').text
-
-                embed = discord.Embed(
-                    title=f"{movie_data.get('Title', title)} - {username} izledi",
-                    description=description,
-                    color=discord.Color.blue()
-                )
-                embed.set_thumbnail(url=movie_data.get('Poster'))
-                embed.add_field(name="Puan", value=movie_data.get('imdbRating', 'N/A'), inline=True)
-                embed.add_field(name="Süre", value=movie_data.get('Runtime', 'N/A'), inline=True)
-                embed.add_field(name="Tür", value=genre, inline=False)
-                return embed
+        for username in self.data['tracked_users']:
+            activity = await self.get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
+            if activity:
+                latest_activity = activity[0]
+                title = self.extract_title(latest_activity)
+                last_watched = self.data['last_activity'].get(username)
+                if last_watched != title:
+                    self.data['last_activity'][username] = title
+                    self.save_data()
+                    message = f'{username} watched {title}'
+                    embed = await self.create_embed_with_omdb_info(title)
+                    await channel.send(embed=embed)
             else:
-                return discord.Embed(title=title, description="OMDb'den ek bilgi alınamadı.")
-                
+                await ctx.send(f'No recent activity found for {username}.')
+
+    async def create_embed_with_omdb_info(self, title):
+        """Fetch additional info from OMDb and create an embed."""
+        api_key = self.data.get('omdb_api_key')
+        if not api_key:
+            return discord.Embed(title=title, description="OMDb API key not set.")
+
+        url = f"http://www.omdbapi.com/?t={title}&apikey={api_key}"
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as response:
+                if response.status == 200:
+                    movie_data = await response.json()
+                    embed = discord.Embed(
+                        title=movie_data.get('Title', title),
+                        description=movie_data.get('Plot', 'No description available.'),
+                        color=discord.Color.blue()
+                    )
+                    embed.set_thumbnail(url=movie_data.get('Poster'))
+                    embed.add_field(name="Rating", value=movie_data.get('imdbRating', 'N/A'), inline=True)
+                    embed.add_field(name="Duration", value=movie_data.get('Runtime', 'N/A'), inline=True)
+                    embed.add_field(name="Genre", value=movie_data.get('Genre', 'N/A'), inline=False)
+                    return embed
+                else:
+                    return discord.Embed(title=title, description="Could not fetch additional info from OMDb.")
+
     @trakt.command()
     async def setupchannel(self, ctx, *, channel: discord.TextChannel):
         self.data['channel_id'] = str(channel.id)
