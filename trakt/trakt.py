@@ -24,9 +24,9 @@ class Trakt(commands.Cog):
 
     def save_data(self):
         with open(self.data_file, 'w') as f:
-            json.dump(self.data, f, indent=4)
-
-    async def get_trakt_user_activity(self, username, access_token):
+            json.dump(self.data, f, indent=4) 
+            
+        async def get_trakt_user_activity(self, username, access_token):
         url = f'https://api.trakt.tv/users/{username}/history'
         headers = {
             'Content-Type': 'application/json',
@@ -129,49 +129,47 @@ class Trakt(commands.Cog):
 
     @trakt.command()
     async def run(self, ctx):
-        if not self.data['trakt_credentials'].get('access_token'):
-            await ctx.send("No Trakt access token found. Please set up the credentials first using `?trakt setup`.")
-            return
-        
-        if not self.data['tracked_users']:
-            await ctx.send("No users to track. Please add users first using `?trakt user <username>`.")
-            return
+     if not self.data['trakt_credentials'].get('access_token'):
+        await ctx.send("Trakt erişim anahtarı bulunamadı. Lütfen önce `?trakt setup` komutunu kullanarak ayarlayın.")
+        return
+    
+     if not self.data['tracked_users']:
+        await ctx.send("İzlenecek kullanıcı yok. Lütfen önce `?trakt user <username>` komutunu kullanarak kullanıcı ekleyin.")
+        return
 
-        channel_id = self.data.get('channel_id')
-        if channel_id is None:
-            await ctx.send("No channel has been set up. Please set the channel using `?trakt setupchannel <channel_id>`.")
-            return
-        
-        channel = self.bot.get_channel(int(channel_id))
-        if channel is None:
-            await ctx.send("Invalid channel ID. Please set the channel again using `?trakt setupchannel <channel_id>`.")
-            return
+     channel_id = self.data.get('channel_id')
+     if channel_id is None:
+        await ctx.send("Herhangi bir kanal ayarlanmadı. Lütfen `?trakt setupchannel <channel_id>` komutunu kullanarak kanalı ayarlayın.")
+        return
+    
+     channel = self.bot.get_channel(int(channel_id))
+     if channel is None:
+        await ctx.send("Geçersiz kanal ID'si. Lütfen `?trakt setupchannel <channel_id>` komutunu kullanarak kanalı tekrar ayarlayın.")
+        return
 
-        for username in self.data['tracked_users']:
-            activity = await self.get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
-            if activity:
-                latest_activity = activity[0]
-                title = self.extract_title(latest_activity)
-                last_watched = self.data['last_activity'].get(username)
-                if last_watched != title:
-                    self.data['last_activity'][username] = title
-                    self.save_data()
-                    message = f'{username} watched {title}'
-                    embed = await self.create_embed_with_omdb_info(title)
-                    await channel.send(embed=embed)
-            else:
-                await ctx.send(f'No recent activity found for {username}.')
+     for username in self.data['tracked_users']:
+        activity = await self.get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
+        if activity:
+            latest_activity = activity[0]
+            title = self.extract_title(latest_activity)
+            last_watched = self.data['last_activity'].get(username)
+            if last_watched != title:
+                self.data['last_activity'][username] = title
+                self.save_data()
+                embed = await self.create_embed_with_omdb_info(title, username)
+                await channel.send(embed=embed)
+         else:
+            await ctx.send(f'{username} için son etkinlik bulunamadı.')
 
     
 
     async def create_embed_with_omdb_info(self, title, username):
-    """Fetch additional info from OMDb, translate to Turkish, and create an embed."""
-    api_key = self.data.get('omdb_api_key')
-    if not api_key:
+     api_key = self.data.get('omdb_api_key')
+     if not api_key:
         return discord.Embed(title=title, description="OMDb API anahtarı ayarlanmadı.")
 
-    url = f"http://www.omdbapi.com/?t={title}&apikey={api_key}"
-    async with aiohttp.ClientSession() as session:
+     url = f"http://www.omdbapi.com/?t={title}&apikey={api_key}"
+     async with aiohttp.ClientSession() as session:
         async with session.get(url) as response:
             if response.status == 200:
                 movie_data = await response.json()
