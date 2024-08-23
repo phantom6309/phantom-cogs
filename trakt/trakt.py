@@ -127,39 +127,37 @@ class Trakt(commands.Cog):
             await ctx.send(f"User {username} has been added to the tracking list.")
 
     @trakt.command()
-    async def run(self, ctx):
-        if not self.data['trakt_credentials'].get('access_token'):
-            await ctx.send("No Trakt access token found. Please set up the credentials first using `?trakt setup`.")
-            return
-        
-        if not self.data['tracked_users']:
-            await ctx.send("No users to track. Please add users first using `?trakt user <username>`.")
-            return
+async def run(self, ctx):
+    if not self.data['trakt_credentials'].get('access_token'):
+        await ctx.send("No Trakt access token found. Please set up the credentials first using `?trakt setup`.")
+        return
 
-        channel_id = self.data.get('channel_id')
-        if channel_id is None:
-            await ctx.send("No channel has been set up. Please set the channel using `?trakt setupchannel <channel_id>`.")
-            return
-        
-        channel = self.bot.get_channel(int(channel_id))
-        if channel is None:
-            await ctx.send("Invalid channel ID. Please set the channel again using `?trakt setupchannel <channel_id>`.")
-            return
+    if not self.data['tracked_users']:
+        await ctx.send("No users to track. Please add users first using `?trakt user <username>`.")
+        return
 
-        for username in self.data['tracked_users']:
-            activity = await self.get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
-            if activity:
-                latest_activity = activity[0]
-                title = self.extract_title(latest_activity)
-                last_watched = self.data['last_activity'].get(username)
-                if last_watched != title:
-                    self.data['last_activity'][username] = title
-                    self.save_data()
-                    message = f'{username} watched {title}'
-                    embed = await self.create_embed_with_omdb_info(title)
-                    await channel.send(embed=embed)
-            else:
-                await ctx.send(f'No recent activity found for {username}.')
+    channel_id = self.data.get('channel_id')
+    if channel_id is None:
+        await ctx.send("No channel has been set up. Please set the channel using `?trakt setupchannel <channel_id>`.")
+        return
+
+    channel = self.bot.get_channel(int(channel_id))
+    if channel is None:
+        await ctx.send("Invalid channel ID. Please set the channel again using `?trakt setupchannel <channel_id>`.")
+        return
+
+    for username in self.data['tracked_users']:
+        activity = await self.get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
+        if activity:
+            latest_activity = activity[0]
+            title = self.extract_title(latest_activity)
+            last_watched = self.data['last_activity'].get(username)
+            if last_watched != title:
+                self.data['last_activity'][username] = title
+                self.save_data()
+                embed = await self.create_embed_with_omdb_info(title)
+                embed.set_footer(text=f'Watched by {username}')
+                await channel.send(embed=embed)
 
     async def create_embed_with_omdb_info(self, title):
         """Fetch additional info from OMDb and create an embed."""
