@@ -16,7 +16,13 @@ class Trakt(commands.Cog):
             with open(self.data_file, 'r') as f:
                 data = json.load(f)
         except FileNotFoundError:
-            data = {'trakt_credentials': {}, 'tracked_users': {}, 'last_activity': {}, 'channel_id': None, 'omdb_api_key': None}
+            data = {
+                'trakt_credentials': {},
+                'tracked_users': {},  # Store user IDs
+                'last_activity': {},
+                'channel_id': None,
+                'omdb_api_key': None
+            }
         if 'last_activity' not in data:
             data['last_activity'] = {}
         return data
@@ -25,7 +31,7 @@ class Trakt(commands.Cog):
         with open(self.data_file, 'w') as f:
             json.dump(self.data, f, indent=4)
 
-    async def get_trakt_user_activity(self, username, access_token):
+    async def get_trakt_user_activity(self, username: str, access_token: str):
         url = f'https://api.trakt.tv/users/{username}/history'
         headers = {
             'Content-Type': 'application/json',
@@ -33,14 +39,18 @@ class Trakt(commands.Cog):
             'trakt-api-version': '2',
             'trakt-api-key': self.data['trakt_credentials'].get('client_id')
         }
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url, headers=headers) as response:
-                if response.status == 200:
-                    return await response.json()
-                else:
-                    return None
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url, headers=headers) as response:
+                    if response.status == 200:
+                        return await response.json()
+                    else:
+                        return None
+        except aiohttp.ClientError as e:
+            print(f"Failed to fetch Trakt activity: {e}")
+            return None
 
-    def extract_title(self, activity_item):
+    def extract_title(self, activity_item: dict) -> str:
         if 'movie' in activity_item:
             return activity_item['movie']['title']
         elif 'episode' in activity_item and 'show' in activity_item:
@@ -102,8 +112,8 @@ class Trakt(commands.Cog):
         
         except asyncio.TimeoutError:
             await ctx.author.send("You took too long to respond. Please try the setup command again.")
-    
-    @trakt.command()
+
+                @trakt.command()
     async def setomdbkey(self, ctx, api_key: str):
         """Command to set or update the OMDb API key."""
         self.data['omdb_api_key'] = api_key
@@ -112,9 +122,7 @@ class Trakt(commands.Cog):
 
     @trakt.command()
     async def user(self, ctx, username: str):
-        if isinstance(self.data['tracked_users'], list):
-            self.data['tracked_users'] = {user: {} for user in self.data['tracked_users']}
-        
+        user_id = ctx.author.id
         if username in self.data['tracked_users']:
             del self.data['tracked_users'][username]
             if username in self.data['last_activity']:
@@ -122,66 +130,71 @@ class Trakt(commands.Cog):
             self.save_data()
             await ctx.send(f"User {username} has been removed from the tracking list.")
         else:
-            self.data['tracked_users'][username] = {}
+            self.data['tracked_users'][username] = {'user_id': user_id}
             self.save_data()
             await ctx.send(f"User {username} has been added to the tracking list.")
 
     @trakt.command()
     async def run(self, ctx):
-     if not self.data['trakt_credentials'].get('access_token'):
-        await ctx.send("No Trakt access token found. Please set up the credentials first using `?trakt setup`.")
-        return
+        if not self.data['trakt_credentials'].get('access_token'):
+            await ctx.send("No Trakt access token found. Please set up the credentials first using `?trakt setup`.")
+            return
 
-     if not self.data['tracked_users']:
-        await ctx.send("No users to track. Please add users first using `?trakt user <username>`.")
-        return
+        if not self.data['tracked_users']:
+            await ctx.send("No users to track. Please add users first using `?trakt user <username>`.")
+            return
 
-     channel_id = self.data.get('channel_id')
-     if channel_id is None:
-        await ctx.send("No channel has been set up. Please set the channel using `?trakt setupchannel <channel_id>`.")
-        return
+        channel_id = self.data.get('channel_id')
+        if channel_id is None:
+            await ctx.send("No channel has been set up. Please set the channel using `?trakt setupchannel <channel_id>`.")
+            return
 
-     channel = self.bot.get_channel(int(channel_id))
-     if channel is None:
-        await ctx.send("Invalid channel ID. Please set the channel again using `?trakt setupchannel <channel_id>`.")
-        return
+        channel = self.bot.get_channel(int(channel_id))
+        if channel is None:
+            await ctx.send("Invalid channel ID. Please set the channel again using `?trakt setupchannel <channel_id>`.")
+            return
 
-     for username in self.data['tracked_users']:
-        activity = await self.get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
-        if activity:
-            latest_activity = activity[0]
-            title = self.extract_title(latest_activity)
-            last_watched = self.data['last_activity'].get(username)
-            if last_watched != title:
-                self.data['last_activity'][username] = title
-                self.save_data()
-                embed = await self.create_embed_with_omdb_info(title)
-                embed.set_footer(text=f'Watched by {username}')
-                await channel.send(embed=embed)
+        for username in self.data['tracked_users']:
+            activity = await self.get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
+            if activity:
+                latest_activity = activity[0]
+                title = self.extract_title(latest_activity)
+                last_watched = self.data['last_activity'].get(username)
+                if last_watched != title:
+                    self.data['last_activity'][username] = title
+                    self.save_data()
+                    embed = await self.create_embed_with_omdb_info(title)
+                    embed.set_footer(text=f'Watched by {username}')
+                    embed.set_author(name=username, icon_url=ctx.author.avatar_url)  # Add username as large header
+                    await channel.send(embed=embed)
 
-    async def create_embed_with_omdb_info(self, title):
+    async def create_embed_with_omdb_info(self, title: str) -> discord.Embed:
         """Fetch additional info from OMDb and create an embed."""
         api_key = self.data.get('omdb_api_key')
         if not api_key:
             return discord.Embed(title=title, description="OMDb API key not set.")
 
         url = f"http://www.omdbapi.com/?t={title}&apikey={api_key}"
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as response:
-                if response.status == 200:
-                    movie_data = await response.json()
-                    embed = discord.Embed(
-                        title=movie_data.get('Title', title),
-                        description=movie_data.get('Plot', 'No description available.'),
-                        color=discord.Color.blue()
-                    )
-                    embed.set_thumbnail(url=movie_data.get('Poster'))
-                    embed.add_field(name="Rating", value=movie_data.get('imdbRating', 'N/A'), inline=True)
-                    embed.add_field(name="Duration", value=movie_data.get('Runtime', 'N/A'), inline=True)
-                    embed.add_field(name="Genre", value=movie_data.get('Genre', 'N/A'), inline=False)
-                    return embed
-                else:
-                    return discord.Embed(title=title, description="Could not fetch additional info from OMDb.")
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url) as response:
+                    if response.status == 200:
+                        movie_data = await response.json()
+                        embed = discord.Embed(
+                            title=movie_data.get('Title', title),
+                            description=movie_data.get('Plot', 'No description available.'),
+                            color=discord.Color.blue()
+                        )
+                        embed.set_thumbnail(url=movie_data.get('Poster'))
+                        embed.add_field(name="Rating", value=movie_data.get('imdbRating', 'N/A'), inline=True)
+                        embed.add_field(name="Duration", value=movie_data.get('Runtime', 'N/A'), inline=True)
+                        embed.add_field(name="Genre", value=movie_data.get('Genre', 'N/A'), inline=False)
+                        return embed
+                    else:
+                        return discord.Embed(title=title, description="Could not fetch additional info from OMDb.")
+        except aiohttp.ClientError as e:
+            print(f"Failed to fetch OMDb data: {e}")
+            return discord.Embed(title=title, description="Could not fetch additional info from OMDb.")
 
     @trakt.command()
     async def setupchannel(self, ctx, *, channel: discord.TextChannel):
@@ -199,7 +212,7 @@ class Trakt(commands.Cog):
             return
         
         channel = self.bot.get_channel(int(channel_id))
-        if channel is none:
+        if channel is None:
             print("Invalid channel ID. Please check your DISCORD_CHANNEL_ID.")
             return
 
@@ -212,7 +225,7 @@ class Trakt(commands.Cog):
                 if last_watched != title:
                     self.data['last_activity'][username] = title
                     self.save_data()
-                    message = f'{username} watched {title}'
-                    embed = await self.create_embed_with_omdb_info(title)
+                    embed = discord.Embed(title=f"{username} watched {title}")
+                    embed.set_footer(text=f'Watched by {username}')  # Footer with username
                     await channel.send(embed=embed)
-                    
+            
