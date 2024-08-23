@@ -16,7 +16,7 @@ class Trakt(commands.Cog):
             with open(self.data_file, 'r') as f:
                 data = json.load(f)
         except FileNotFoundError:
-            data = {'trakt_credentials': {}, 'tracked_users': {}, 'last_activity': {}, 'channel_id': None}
+            data = {'trakt_credentials': {}, 'tracked_users': {}, 'last_activity': {}, 'channel_id': None, 'omdb_api_key': None}
         if 'last_activity' not in data:
             data['last_activity'] = {}
         return data
@@ -51,23 +51,7 @@ class Trakt(commands.Cog):
 
     @commands.group(name='trakt', invoke_without_command=True)
     async def trakt(self, ctx):
-        await ctx.send("Available commands: `user`, `setup`, `run`, `setupchannel`")
-
-    @trakt.command()
-    async def user(self, ctx, username: str):
-        if isinstance(self.data['tracked_users'], list):
-            self.data['tracked_users'] = {user: {} for user in self.data['tracked_users']}
-        
-        if username in self.data['tracked_users']:
-            del self.data['tracked_users'][username]
-            if username in self.data['last_activity']:
-                del self.data['last_activity'][username]
-            self.save_data()
-            await ctx.send(f"User {username} has been removed from the tracking list.")
-        else:
-            self.data['tracked_users'][username] = {}
-            self.save_data()
-            await ctx.send(f"User {username} has been added to the tracking list.")
+        await ctx.send("Available commands: `user`, `setup`, `run`, `setupchannel`, `setomdbkey`")
 
     @trakt.command()
     async def setup(self, ctx):
@@ -76,13 +60,16 @@ class Trakt(commands.Cog):
             return m.author == ctx.author and isinstance(m.channel, discord.DMChannel)
         
         try:
+            # Get Trakt Client ID
             msg = await self.bot.wait_for('message', timeout=60.0, check=check)
             client_id = msg.content.strip()
             
+            # Get Trakt Client Secret
             await ctx.author.send("Please provide your Trakt Client Secret:")
             msg = await self.bot.wait_for('message', timeout=60.0, check=check)
             client_secret = msg.content.strip()
             
+            # OAuth setup for Trakt
             redirect_uri = 'urn:ietf:wg:oauth:2.0:oob'
             oauth_url = f'https://trakt.tv/oauth/authorize?response_type=code&client_id={client_id}&redirect_uri={redirect_uri}'
             await ctx.author.send(f"Please authorize the application by visiting this URL: {oauth_url}\nAfter authorization, please send me the authorization code.")
@@ -102,18 +89,41 @@ class Trakt(commands.Cog):
                     if response.status == 200:
                         token_response = await response.json()
                         access_token = token_response.get('access_token')
+                        # Save Trakt credentials
                         self.data['trakt_credentials'] = {
                             'client_id': client_id,
                             'client_secret': client_secret,
                             'access_token': access_token
                         }
                         self.save_data()
-                        await ctx.author.send("Trakt credentials and access token have been set up successfully.")
+                        await ctx.author.send("Trakt credentials have been set up successfully.")
                     else:
                         await ctx.author.send(f"Failed to get access token: {await response.text()}")
         
         except asyncio.TimeoutError:
             await ctx.author.send("You took too long to respond. Please try the setup command again.")
+            @trakt.command()
+    async def setomdbkey(self, ctx, api_key: str):
+        """Command to set or update the OMDb API key."""
+        self.data['omdb_api_key'] = api_key
+        self.save_data()
+        await ctx.send("OMDb API key has been updated.")
+
+    @trakt.command()
+    async def user(self, ctx, username: str):
+        if isinstance(self.data['tracked_users'], list):
+            self.data['tracked_users'] = {user: {} for user in self.data['tracked_users']}
+        
+        if username in self.data['tracked_users']:
+            del self.data['tracked_users'][username]
+            if username in self.data['last_activity']:
+                del self.data['last_activity'][username]
+            self.save_data()
+            await ctx.send(f"User {username} has been removed from the tracking list.")
+        else:
+            self.data['tracked_users'][username] = {}
+            self.save_data()
+            await ctx.send(f"User {username} has been added to the tracking list.")
 
     @trakt.command()
     async def run(self, ctx):
@@ -145,9 +155,34 @@ class Trakt(commands.Cog):
                     self.data['last_activity'][username] = title
                     self.save_data()
                     message = f'{username} watched {title}'
-                    await ctx.send(message)
+                    embed = await self.create_embed_with_omdb_info(title)
+                    await channel.send(embed=embed)
             else:
                 await ctx.send(f'No recent activity found for {username}.')
+
+    async def create_embed_with_omdb_info(self, title):
+        """Fetch additional info from OMDb and create an embed."""
+        api_key = self.data.get('omdb_api_key')
+        if not api_key:
+            return discord.Embed(title=title, description="OMDb API key not set.")
+
+        url = f"http://www.omdbapi.com/?t={title}&apikey={api_key}"
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as response:
+                if response.status == 200:
+                    movie_data = await response.json()
+                    embed = discord.Embed(
+                        title=movie_data.get('Title', title),
+                        description=movie_data.get('Plot', 'No description available.'),
+                        color=discord.Color.blue()
+                    )
+                    embed.set_thumbnail(url=movie_data.get('Poster'))
+                    embed.add_field(name="Rating", value=movie_data.get('imdbRating', 'N/A'), inline=True)
+                    embed.add_field(name="Duration", value=movie_data.get('Runtime', 'N/A'), inline=True)
+                    embed.add_field(name="Genre", value=movie_data.get('Genre', 'N/A'), inline=False)
+                    return embed
+                else:
+                    return discord.Embed(title=title, description="Could not fetch additional info from OMDb.")
 
     @trakt.command()
     async def setupchannel(self, ctx, *, channel: discord.TextChannel):
@@ -165,7 +200,7 @@ class Trakt(commands.Cog):
             return
         
         channel = self.bot.get_channel(int(channel_id))
-        if channel is None:
+        if channel is none:
             print("Invalid channel ID. Please check your DISCORD_CHANNEL_ID.")
             return
 
@@ -179,5 +214,6 @@ class Trakt(commands.Cog):
                     self.data['last_activity'][username] = title
                     self.save_data()
                     message = f'{username} watched {title}'
-                    await channel.send(message)
-        
+                    embed = await self.create_embed_with_omdb_info(title)
+                    await channel.send(embed=embed)
+                    
