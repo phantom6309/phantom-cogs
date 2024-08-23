@@ -3,6 +3,7 @@ import discord
 import json
 from redbot.core import commands
 from discord.ext import tasks
+from googletrans import Translator
 
 class Trakt(commands.Cog):
     def __init__(self, bot):
@@ -161,30 +162,40 @@ class Trakt(commands.Cog):
             else:
                 await ctx.send(f'No recent activity found for {username}.')
 
-    async def create_embed_with_omdb_info(self, title):
-        """Fetch additional info from OMDb and create an embed."""
-        api_key = self.data.get('omdb_api_key')
-        if not api_key:
-            return discord.Embed(title=title, description="OMDb API key not set.")
+    
 
-        url = f"http://www.omdbapi.com/?t={title}&apikey={api_key}"
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as response:
-                if response.status == 200:
-                    movie_data = await response.json()
-                    embed = discord.Embed(
-                        title=movie_data.get('Title', title),
-                        description=movie_data.get('Plot', 'No description available.'),
-                        color=discord.Color.blue()
-                    )
-                    embed.set_thumbnail(url=movie_data.get('Poster'))
-                    embed.add_field(name="Rating", value=movie_data.get('imdbRating', 'N/A'), inline=True)
-                    embed.add_field(name="Duration", value=movie_data.get('Runtime', 'N/A'), inline=True)
-                    embed.add_field(name="Genre", value=movie_data.get('Genre', 'N/A'), inline=False)
-                    return embed
-                else:
-                    return discord.Embed(title=title, description="Could not fetch additional info from OMDb.")
+    async def create_embed_with_omdb_info(self, title, username):
+    """Fetch additional info from OMDb, translate to Turkish, and create an embed."""
+    api_key = self.data.get('omdb_api_key')
+    if not api_key:
+        return discord.Embed(title=title, description="OMDb API anahtarı ayarlanmadı.")
 
+    url = f"http://www.omdbapi.com/?t={title}&apikey={api_key}"
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            if response.status == 200:
+                movie_data = await response.json()
+                
+                # Initialize the translator
+                translator = Translator()
+
+                # Translate fields to Turkish
+                description = translator.translate(movie_data.get('Plot', 'Açıklama bulunamadı.'), dest='tr').text
+                genre = translator.translate(movie_data.get('Genre', 'Tür bulunamadı.'), dest='tr').text
+
+                embed = discord.Embed(
+                    title=f"{movie_data.get('Title', title)} - {username} izledi",
+                    description=description,
+                    color=discord.Color.blue()
+                )
+                embed.set_thumbnail(url=movie_data.get('Poster'))
+                embed.add_field(name="Puan", value=movie_data.get('imdbRating', 'N/A'), inline=True)
+                embed.add_field(name="Süre", value=movie_data.get('Runtime', 'N/A'), inline=True)
+                embed.add_field(name="Tür", value=genre, inline=False)
+                return embed
+            else:
+                return discord.Embed(title=title, description="OMDb'den ek bilgi alınamadı.")
+                
     @trakt.command()
     async def setupchannel(self, ctx, *, channel: discord.TextChannel):
         self.data['channel_id'] = str(channel.id)
