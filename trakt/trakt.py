@@ -113,7 +113,7 @@ class Trakt(commands.Cog):
         except asyncio.TimeoutError:
             await ctx.author.send("You took too long to respond. Please try the setup command again.")
 
-                @trakt.command()
+    @trakt.command()
     async def setomdbkey(self, ctx, api_key: str):
         """Command to set or update the OMDb API key."""
         self.data['omdb_api_key'] = api_key
