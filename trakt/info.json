@@ -12,7 +12,7 @@
 
     "tags" : [""],
 
-    "requirements" : ["IMDbPY"],
+    "requirements" : ["IMDbPY,googletrans==4.0.0-rc1"],
 
     "end_user_data_statement": " "
 
