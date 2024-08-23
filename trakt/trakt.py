@@ -1,8 +1,10 @@
 import aiohttp
 import discord
 import json
+import asyncio
 from redbot.core import commands
 from discord.ext import tasks
+from imdb import IMDb
 
 class Trakt(commands.Cog):
     def __init__(self, bot):
@@ -10,6 +12,7 @@ class Trakt(commands.Cog):
         self.data_file = 'data.json'
         self.data = self.load_data()
         self.check_for_updates.start()
+        self.ia = IMDb()  # Initialize IMDbPY instance
 
     def load_data(self):
         try:
@@ -42,12 +45,20 @@ class Trakt(commands.Cog):
 
     def extract_title(self, activity_item):
         if 'movie' in activity_item:
-            return activity_item['movie']['title']
+            return activity_item['movie']['title'], activity_item['movie']['ids']['imdb']
         elif 'episode' in activity_item and 'show' in activity_item:
-            return f"{activity_item['show']['title']} - {activity_item['episode']['title']}"
+            return f"{activity_item['show']['title']} - {activity_item['episode']['title']}", None
         elif 'show' in activity_item:
-            return activity_item['show']['title']
-        return 'Unknown Title'
+            return activity_item['show']['title'], None
+        return 'Unknown Title', None
+
+    async def get_imdb_info(self, imdb_id):
+        try:
+            movie = self.ia.get_imdbID(imdb_id)
+            return movie
+        except Exception as e:
+            print(f"Error retrieving IMDb info: {e}")
+            return None
 
     @commands.group(name='trakt', invoke_without_command=True)
     async def trakt(self, ctx):
@@ -139,13 +150,26 @@ class Trakt(commands.Cog):
             activity = await self.get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
             if activity:
                 latest_activity = activity[0]
-                title = self.extract_title(latest_activity)
+                title, imdb_id = self.extract_title(latest_activity)
                 last_watched = self.data['last_activity'].get(username)
                 if last_watched != title:
                     self.data['last_activity'][username] = title
                     self.save_data()
-                    message = f'{username} watched {title}'
-                    await ctx.send(message)
+
+                    # Fetch IMDb info
+                    if imdb_id:
+                        imdb_info = await self.get_imdb_info(imdb_id)
+                    else:
+                        imdb_info = None
+
+                    # Create embed message
+                    embed = discord.Embed(title=title, description=f"{username} watched {title}", color=discord.Color.blue())
+                    
+                    if imdb_info:
+                        embed.set_thumbnail(url=f"https://www.imdb.com/title/{imdb_id}/mediaindex")
+                        embed.add_field(name="IMDB ID", value=f"[{imdb_id}](https://www.imdb.com/title/{imdb_id}/)")
+
+                    await channel.send(embed=embed)
             else:
                 await ctx.send(f'No recent activity found for {username}.')
 
@@ -173,11 +197,20 @@ class Trakt(commands.Cog):
             activity = await self.get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
             if activity:
                 latest_activity = activity[0]
-                title = self.extract_title(latest_activity)
+                title, imdb_id = self.extract_title(latest_activity)
                 last_watched = self.data['last_activity'].get(username)
                 if last_watched != title:
                     self.data['last_activity'][username] = title
                     self.save_data()
-                    message = f'{username} watched {title}'
-                    await channel.send(message)
+
+                    # Fetch IMDb info
+                    if imdb_id:
+                        imdb_info = await self.get_imdb_info(imdb_id)
+                    else:
+                        imdb_info = None
+
+                    # Create embed message
+                    embed = discord.Embed(title=title, description=f"{username} watched {title}", color=discord.Color.blue())
+                    
+                    if imdb_info
         
