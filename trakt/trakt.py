@@ -26,7 +26,7 @@ class Trakt(commands.Cog):
         with open(self.data_file, 'w') as f:
             json.dump(self.data, f, indent=4) 
             
-        async def get_trakt_user_activity(self, username, access_token):
+    async def get_trakt_user_activity(self, username, access_token):
         url = f'https://api.trakt.tv/users/{username}/history'
         headers = {
             'Content-Type': 'application/json',
