@@ -1,15 +1,64 @@
+import aiohttp
 import discord
+import json
+import asyncio
 from redbot.core import commands
 from discord.ext import tasks
-from .utils.trakt_utils import get_trakt_user_activity, extract_title_and_imdb_id, get_imdb_info
-from .utils.data_manager import load_data, save_data
+from imdb import IMDb
 
 class Trakt(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.data_file = 'data.json'
-        self.data = load_data(self.data_file)
+        self.data = self.load_data()
         self.check_for_updates.start()
+        self.ia = IMDb()  # Initialize IMDbPY instance
+
+    def load_data(self):
+        try:
+            with open(self.data_file, 'r') as f:
+                data = json.load(f)
+        except FileNotFoundError:
+            data = {'trakt_credentials': {}, 'tracked_users': {}, 'last_activity': {}, 'channel_id': None}
+        if 'last_activity' not in data:
+            data['last_activity'] = {}
+        return data
+
+    def save_data(self):
+        with open(self.data_file, 'w') as f:
+            json.dump(self.data, f, indent=4)
+
+    async def get_trakt_user_activity(self, username, access_token):
+        url = f'https://api.trakt.tv/users/{username}/history'
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {access_token}',
+            'trakt-api-version': '2',
+            'trakt-api-key': self.data['trakt_credentials'].get('client_id')
+        }
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, headers=headers) as response:
+                if response.status == 200:
+                    return await response.json()
+                else:
+                    return None
+
+    def extract_title(self, activity_item):
+        if 'movie' in activity_item:
+            return activity_item['movie']['title'], activity_item['movie']['ids']['imdb']
+        elif 'episode' in activity_item and 'show' in activity_item:
+            return f"{activity_item['show']['title']} - {activity_item['episode']['title']}", None
+        elif 'show' in activity_item:
+            return activity_item['show']['title'], None
+        return 'Unknown Title', None
+
+    async def get_imdb_info(self, imdb_id):
+        try:
+            movie = self.ia.get_movie(imdb_id)
+            return movie
+        except Exception as e:
+            print(f"Error retrieving IMDb info: {e}")
+            return None
 
     @commands.group(name='trakt', invoke_without_command=True)
     async def trakt(self, ctx):
@@ -24,11 +73,11 @@ class Trakt(commands.Cog):
             del self.data['tracked_users'][username]
             if username in self.data['last_activity']:
                 del self.data['last_activity'][username]
-            save_data(self.data_file, self.data)
+            self.save_data()
             await ctx.send(f"User {username} has been removed from the tracking list.")
         else:
             self.data['tracked_users'][username] = {}
-            save_data(self.data_file, self.data)
+            self.save_data()
             await ctx.send(f"User {username} has been added to the tracking list.")
 
     @trakt.command()
@@ -69,7 +118,7 @@ class Trakt(commands.Cog):
                             'client_secret': client_secret,
                             'access_token': access_token
                         }
-                        save_data(self.data_file, self.data)
+                        self.save_data()
                         await ctx.author.send("Trakt credentials and access token have been set up successfully.")
                     else:
                         await ctx.author.send(f"Failed to get access token: {await response.text()}")
@@ -98,29 +147,25 @@ class Trakt(commands.Cog):
             return
 
         for username in self.data['tracked_users']:
-            activity = await get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
+            activity = await self.get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
             if activity:
                 latest_activity = activity[0]
-                title, imdb_id = extract_title_and_imdb_id(latest_activity)
+                title, imdb_id = self.extract_title(latest_activity)
                 last_watched = self.data['last_activity'].get(username)
                 if last_watched != title:
                     self.data['last_activity'][username] = title
-                    save_data(self.data_file, self.data)
+                    self.save_data()
 
                     # Fetch IMDb info
                     imdb_info = None
                     if imdb_id:
-                        imdb_info = await get_imdb_info(imdb_id)
+                        imdb_info = await self.get_imdb_info(imdb_id)
 
                     # Create embed message
                     embed = discord.Embed(title=title, description=f"{username} watched {title}", color=discord.Color.blue())
                     
                     if imdb_info:
-                        embed.set_thumbnail(url=imdb_info['poster'])
-                        embed.add_field(name="Plot", value=imdb_info['plot'], inline=False)
-                        embed.add_field(name="Year", value=imdb_info['year'], inline=True)
-                        embed.add_field(name="Genres", value=imdb_info['genres'], inline=True)
-                        embed.add_field(name="Rating", value=imdb_info['rating'], inline=True)
+                        embed.set_thumbnail(url=f"https://www.imdb.com/title/{imdb_id}/mediaindex")
                         embed.add_field(name="IMDB ID", value=f"[{imdb_id}](https://www.imdb.com/title/{imdb_id}/)")
 
                     await channel.send(embed=embed)
@@ -130,7 +175,7 @@ class Trakt(commands.Cog):
     @trakt.command()
     async def setupchannel(self, ctx, *, channel: discord.TextChannel):
         self.data['channel_id'] = str(channel.id)
-        save_data(self.data_file, self.data)
+        self.save_data()
         await ctx.send(f"Channel ID has been set to {channel.mention}. This is where updates will be sent.")
 
     @tasks.loop(minutes=30)
@@ -148,29 +193,25 @@ class Trakt(commands.Cog):
             return
 
         for username in self.data['tracked_users']:
-            activity = await get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
+            activity = await self.get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
             if activity:
                 latest_activity = activity[0]
-                title, imdb_id = extract_title_and_imdb_id(latest_activity)
+                title, imdb_id = self.extract_title(latest_activity)
                 last_watched = self.data['last_activity'].get(username)
                 if last_watched != title:
                     self.data['last_activity'][username] = title
-                    save_data(self.data_file, self.data)
+                    self.save_data()
 
                     # Fetch IMDb info
                     imdb_info = None
                     if imdb_id:
-                        imdb_info = await get_imdb_info(imdb_id)
+                        imdb_info = await self.get_imdb_info(imdb_id)
 
                     # Create embed message
                     embed = discord.Embed(title=title, description=f"{username} watched {title}", color=discord.Color.blue())
                     
                     if imdb_info:
-                        embed.set_thumbnail(url=imdb_info['poster'])
-                        embed.add_field(name="Plot", value=imdb_info['plot'], inline=False)
-                        embed.add_field(name="Year", value=imdb_info['year'], inline=True)
-                        embed.add_field(name="Genres", value=imdb_info['genres'], inline=True)
-                        embed.add_field(name="Rating", value=imdb_info['rating'], inline=True)
+                        embed.set_thumbnail(url=f"https://www.imdb.com/title/{imdb_id}/mediaindex")
                         embed.add_field(name="IMDB ID", value=f"[{imdb_id}](https://www.imdb.com/title/{imdb_id}/)")
 
                     await channel.send(embed=embed)
