@@ -201,20 +201,20 @@ class Trakt(commands.Cog):
         await ctx.send(f"Channel ID has been set to {channel.mention}. This is where updates will be sent.")
 
     @tasks.loop(minutes=1)
-async def check_for_updates(self):
-    if not self.data['trakt_credentials'].get('access_token') or not self.data['tracked_users']:
+    async def check_for_updates(self):
+     if not self.data['trakt_credentials'].get('access_token') or not self.data['tracked_users']:
         return
 
-    channel_id = self.data.get('channel_id')
-    if channel_id is None:
+     channel_id = self.data.get('channel_id')
+     if channel_id is None:
         return
     
-    channel = self.bot.get_channel(int(channel_id))
-    if channel is None:
+     channel = self.bot.get_channel(int(channel_id))
+     if channel is None:
         print("Invalid channel ID. Please check your DISCORD_CHANNEL_ID.")
         return
 
-    for username in self.data['tracked_users']:
+     for username in self.data['tracked_users']:
         activity = await self.get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
         if activity:
             latest_activity = activity[0]
