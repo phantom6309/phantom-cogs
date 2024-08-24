@@ -177,10 +177,6 @@ class Trakt(commands.Cog):
                         )
                         embed.set_image(url=f"https://image.tmdb.org/t/p/w500{item.get('poster_path')}")
                         embed.add_field(name="Rating", value=item.get('vote_average', 'N/A'), inline=True)
-                        if content_type == 'show':
-                            embed.add_field(name="Seasons", value=item.get('number_of_seasons', 'N/A'), inline=True)
-                            embed.add_field(name="Episodes", value=item.get('number_of_episodes', 'N/A'), inline=True)
-                        return embed
                     else:
                         return discord.Embed(title=title, description="No results found on TMDb.", color=discord.Color.red())
                 else:
