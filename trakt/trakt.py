@@ -140,77 +140,78 @@ class Trakt(commands.Cog):
         self.save_data()
         await ctx.send(f"{channel.name} channel set for tracking.")
 
-    async def create_embed_with_tmdb_info(self, title, content_type, episode_info=None):
-        api_key = self.data.get('tmdb_api_key')
-        if not api_key:
-            return discord.Embed(title=title, description="TMDb API key not set.", color=discord.Color.red())
+async def create_embed_with_tmdb_info(self, title, content_type, episode_info=None):
+    api_key = self.data.get('tmdb_api_key')
+    if not api_key:
+        return discord.Embed(title=title, description="TMDb API key not set.", color=discord.Color.red())
 
-        if content_type == 'movie':
-            url = f"https://api.themoviedb.org/3/search/movie?query={title}&api_key={api_key}&language=tr-TR"
-        else:  # content_type == 'show'
-            url = f"https://api.themoviedb.org/3/search/tv?query={title}&api_key={api_key}&language=tr-TR"
+    if content_type == 'movie':
+        url = f"https://api.themoviedb.org/3/search/movie?query={title}&api_key={api_key}&language=tr-TR"
+    else:  # content_type == 'show'
+        url = f"https://api.themoviedb.org/3/search/tv?query={title}&api_key={api_key}&language=tr-TR"
 
-        try:
-            async with aiohttp.ClientSession() as session:
-                async with session.get(url) as response:
-                    if response.status == 200:
-                        data = await response.json()
-                        if data['results']:
-                            item = data['results'][0]
-                            embed_title = item.get('title' if content_type == 'movie' else 'name', title)
-                            description = item.get('overview', 'No description available.')
-                            if content_type == 'show' and episode_info:
-                                season, episode_number = episode_info
-                                description = f"{description}\n\nSeason {season} Episode {episode_number}"
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    if data['results']:
+                        item = data['results'][0]
+                        embed_title = item.get('title' if content_type == 'movie' else 'name', title)
+                        description = item.get('overview', 'No description available.')
+                        if content_type == 'show' and episode_info:
+                            season, episode_number = episode_info
+                            description = f"{description}\n\nSeason {season} Episode {episode_number}"
 
-                            embed = discord.Embed(
-                                title=embed_title,
-                                description=description,
-                                color=discord.Color.blue()
-                            )
-                            embed.set_thumbnail(url=f"https://image.tmdb.org/t/p/w500{item.get('poster_path')}")
-                            embed.add_field(name="Rating", value=item.get('vote_average', 'N/A'), inline=True)
-                            if content_type == 'show':
-                                embed.add_field(name="Seasons", value=item.get('number_of_seasons', 'N/A'), inline=True)
-                                embed.add_field(name="Episodes", value=item.get('number_of_episodes', 'N/A'), inline=True)
-                            return embed
-                        else:
-                            return discord.Embed(title=title, description="No results found on TMDb.", color=discord.Color.red())
+                        embed = discord.Embed(
+                            title=f"{embed_title} - {title}",
+                            description=description,
+                            color=discord.Color.blue()
+                        )
+                        embed.set_image(url=f"https://image.tmdb.org/t/p/w500{item.get('poster_path')}")
+                        embed.add_field(name="Rating", value=item.get('vote_average', 'N/A'), inline=True)
+                        if content_type == 'show':
+                            embed.add_field(name="Seasons", value=item.get('number_of_seasons', 'N/A'), inline=True)
+                            embed.add_field(name="Episodes", value=item.get('number_of_episodes', 'N/A'), inline=True)
+                        return embed
                     else:
-                        print(f"Failed to fetch TMDb data. Status code: {response.status}")
-                        return discord.Embed(title=title, description="Failed to fetch TMDb data.", color=discord.Color.red())
-        except Exception as e:
-            print(f"Error fetching TMDb data: {e}")
-            return discord.Embed(title=title, description="Error fetching TMDb data.", color=discord.Color.red())
+                        return discord.Embed(title=title, description="No results found on TMDb.", color=discord.Color.red())
+                else:
+                    logger.error(f"Failed to fetch TMDb data. Status code: {response.status}")
+                    return discord.Embed(title=title, description="Failed to fetch TMDb data.", color=discord.Color.red())
+    except Exception as e:
+        logger.error(f"Error fetching TMDb data: {e}")
+        return discord.Embed(title=title, description="Error fetching TMDb data.", color=discord.Color.red())
 
     @tasks.loop(minutes=15)
     async def check_for_updates(self):
-        await self.bot.wait_until_ready()
-        if not self.data['trakt_credentials'].get('access_token'):
-            return
-        if not self.data['tracked_users']:
-            return
-        if not self.data.get('channel_id'):
-            return
+     await self.bot.wait_until_ready()
+     if not self.data['trakt_credentials'].get('access_token'):
+        return
+     if not self.data['tracked_users']:
+        return
+     if not self.data.get('channel_id'):
+        return
 
-        channel = self.bot.get_channel(int(self.data['channel_id']))
-        if not channel:
-            print("Channel not found.")
-            return
+     channel = self.bot.get_channel(int(self.data['channel_id']))
+     if not channel:
+        logger.error("Channel not found.")
+        return
 
-        for username in self.data['tracked_users']:
-            activity = await self.get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
-            if activity:
-                latest_activity = activity[0]
-                title, content_type, episode_info = self.extract_title(latest_activity)
-                last_watched = self.data['last_activity'].get(username)
-                if last_watched != title:
-                    self.data['last_activity'][username] = title
-                    self.save_data()
-                    embed = await self.create_embed_with_tmdb_info(title, content_type, episode_info)
-                    if content_type == 'show' and episode_info:
-                        embed.set_author(name=f"{username} watched", icon_url=None)
-                        embed.set_footer(text=f"Season {episode_info[0]} Episode {episode_info[1]}", icon_url=None)
-                    else:
-                        embed.set_author(name=f"{username} watched", icon_url=None)
-                    await channel.send(embed=embed)
+     for username in self.data['tracked_users']:
+        activity = await self.get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
+        if activity:
+            latest_activity = activity[0]
+            title, content_type, episode_info = self.extract_title(latest_activity)
+            last_watched = self.data['last_activity'].get(username)
+            if last_watched != title:
+                self.data['last_activity'][username] = title
+                self.save_data()
+                embed = await self.create_embed_with_tmdb_info(title, content_type, episode_info)
+                if content_type == 'show' and episode_info:
+                    embed.set_author(name=f"{username} watched", icon_url=None)
+                    embed.set_footer(text=f"Season {episode_info[0]} Episode {episode_info[1]}", icon_url=None)
+                else:
+                    embed.set_author(name=f"{username} watched", icon_url=None)
+                await channel.send(embed=embed)
+
