@@ -183,8 +183,8 @@ async def create_embed_with_tmdb_info(self, title, content_type, episode_info=No
         logger.error(f"Error fetching TMDb data: {e}")
         return discord.Embed(title=title, description="Error fetching TMDb data.", color=discord.Color.red())
 
-    @tasks.loop(minutes=15)
-    async def check_for_updates(self):
+@tasks.loop(minutes=15)
+async def check_for_updates(self):
      await self.bot.wait_until_ready()
      if not self.data['trakt_credentials'].get('access_token'):
         return
