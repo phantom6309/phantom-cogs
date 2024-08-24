@@ -100,7 +100,7 @@ class Trakt(commands.Cog):
 
         except asyncio.TimeoutError:
             await ctx.author.send("Yanıt vermeniz çok uzun sürdü. Lütfen setup komutunu tekrar deneyin.")
-                @trakt.command()
+    @trakt.command()
     async def setupchannel(self, ctx, *, channel: discord.TextChannel):
         self.data['channel_id'] = channel.id
         self.save_data()
