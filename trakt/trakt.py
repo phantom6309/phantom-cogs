@@ -136,37 +136,38 @@ class Trakt(commands.Cog):
 
     @trakt.command()
     async def run(self, ctx):
-        if not self.data['trakt_credentials'].get('access_token'):
-            await ctx.send("Trakt erişim belirteci bulunamadı. Öncelikle `?trakt setup` komutunu kullanarak kimlik bilgilerini ayarlayın.")
-            return
+     if not self.data['trakt_credentials'].get('access_token'):
+        await ctx.send("Trakt erişim belirteci bulunamadı. Öncelikle `?trakt setup` komutunu kullanarak kimlik bilgilerini ayarlayın.")
+        return
 
-        if not self.data['tracked_users']:
-            await ctx.send("Takip edilecek kullanıcı bulunmuyor. Öncelikle `?trakt user <kullanıcı_adı>` komutunu kullanarak kullanıcı ekleyin.")
-            return
+     if not self.data['tracked_users']:
+        await ctx.send("Takip edilecek kullanıcı bulunmuyor. Öncelikle `?trakt user <kullanıcı_adı>` komutunu kullanarak kullanıcı ekleyin.")
+        return
 
-        channel_id = self.data.get('channel_id')
-        if channel_id is None:
-            await ctx.send("Bir kanal ayarlanmamış. Kanalı ayarlamak için `?trakt setupchannel <kanal_id>` komutunu kullanın.")
-            return
+     channel_id = self.data.get('channel_id')
+     if channel_id is None:
+        await ctx.send("Bir kanal ayarlanmamış. Kanalı ayarlamak için `?trakt setupchannel <kanal_id>` komutunu kullanın.")
+        return
 
-        channel = self.bot.get_channel(int(channel_id))
-        if channel is None:
-            await ctx.send("Geçersiz kanal ID'si. Kanalı tekrar ayarlamak için `?trakt setupchannel <kanal_id>` komutunu kullanın.")
-            return
+     channel = self.bot.get_channel(int(channel_id))
+     if channel is None:
+        await ctx.send("Geçersiz kanal ID'si. Kanalı tekrar ayarlamak için `?trakt setupchannel <kanal_id>` komutunu kullanın.")
+        return
 
-        for username in self.data['tracked_users']:
-            activity = await self.get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
-            if activity:
-                latest_activity = activity[0]
-                title, content_type = self.extract_title(latest_activity)
-                last_watched = self.data['last_activity'].get(username)
-                if last_watched != title:
-                    self.data['last_activity'][username] = title
-                    self.save_data()
-                    embed = await self.create_embed_with_tmdb_info(title, content_type)
-                    embed.set_author(name=username, icon_url=None)
-                    embed.set_footer(text=f"{username}", icon_url=None)
-                    await channel.send(embed=embed)
+     for username in self.data['tracked_users']:
+        activity = await self.get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
+        if activity:
+            latest_activity = activity[0]
+            title, content_type, show_title = self.extract_title(latest_activity)
+            last_watched = self.data['last_activity'].get(username)
+            if last_watched != title:
+                self.data['last_activity'][username] = title
+                self.save_data()
+                embed = await self.create_embed_with_tmdb_info(title, content_type, show_title)
+                embed.set_author(name=username, icon_url=None)
+                embed.set_footer(text=f"{username}", icon_url=None)
+                await channel.send(embed=embed)
+                
     async def create_embed_with_tmdb_info(self, title, content_type, show_title=None):
      api_key = self.data.get('tmdb_api_key')
      if not api_key:
