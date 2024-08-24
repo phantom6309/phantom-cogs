@@ -175,11 +175,11 @@ class Trakt(commands.Cog):
      if not api_key:
         return discord.Embed(title=title, description="TMDb API anahtarı ayarlanmamış.", color=discord.Color.red())
 
-      if content_type == 'movie':
+     if content_type == 'movie':
         url = f"https://api.themoviedb.org/3/search/movie?query={title}&api_key={api_key}&language=tr-TR"
-      elif content_type == 'show':
+     elif content_type == 'show':
         url = f"https://api.themoviedb.org/3/search/tv?query={title}&api_key={api_key}&language=tr-TR"
-      elif content_type == 'episode' and show_title:
+     elif content_type == 'episode' and show_title:
         show_url = f"https://api.themoviedb.org/3/search/tv?query={show_title}&api_key={api_key}&language=tr-TR"
         async with aiohttp.ClientSession() as session:
             async with session.get(show_url) as response:
