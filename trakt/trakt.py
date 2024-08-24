@@ -135,43 +135,6 @@ class Trakt(commands.Cog):
             await ctx.send(f"User {username} added to the tracking list.")
 
     @trakt.command()
-    async def run(self, ctx):
-        if not self.data['trakt_credentials'].get('access_token'):
-            await ctx.send("Trakt access token not found. Set up credentials with `?trakt setup`.")
-            return
-
-        if not self.data['tracked_users']:
-            await ctx.send("No users to track. Add users with `?trakt user <username>`.")
-            return
-
-        channel_id = self.data.get('channel_id')
-        if channel_id is None:
-            await ctx.send("No channel set. Set the channel with `?trakt setupchannel <channel_id>`.")
-            return
-
-        channel = self.bot.get_channel(int(channel_id))
-        if channel is None:
-            await ctx.send("Invalid channel ID. Set the channel again with `?trakt setupchannel <channel_id>`.")
-            return
-
-        for username in self.data['tracked_users']:
-            activity = await self.get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
-            if activity:
-                latest_activity = activity[0]
-                title, content_type, episode_info = self.extract_title(latest_activity)
-                last_watched = self.data['last_activity'].get(username)
-                if last_watched != title:
-                    self.data['last_activity'][username] = title
-                    self.save_data()
-                    embed = await self.create_embed_with_tmdb_info(title, content_type, episode_info)
-                    if content_type == 'show' and episode_info:
-                        embed.set_author(name=f"{username} watched", icon_url=None)
-                        embed.set_footer(text=f"Season {episode_info[0]} Episode {episode_info[1]}", icon_url=None)
-                    else:
-                        embed.set_author(name=f"{username} watched", icon_url=None)
-                    await channel.send(embed=embed)
-
-    @trakt.command()
     async def setupchannel(self, ctx, *, channel: discord.TextChannel):
         self.data['channel_id'] = channel.id
         self.save_data()
