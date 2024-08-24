@@ -159,7 +159,7 @@ class Trakt(commands.Cog):
                         item = data['results'][0]
                         
                         if content_type == 'movie':
-                            embed_title = f"{username} watched {item.get('title', title)}"
+                            embed_title = f"{username} {item.get('title', title)} izledi."
                         else:
                             show_name = item.get('name', title)
                             if episode_info:
