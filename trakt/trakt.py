@@ -170,7 +170,7 @@ class Trakt(commands.Cog):
                 embed.set_footer(text=f"{username}", icon_url=None)
                 await channel.send(embed=embed)
                 
-   async def create_embed_with_tmdb_info(self, title, content_type, show_title=None, season_number=None, episode_number=None):
+    async def create_embed_with_tmdb_info(self, title, content_type, show_title=None, season_number=None, episode_number=None):
     api_key = self.data.get('tmdb_api_key')
     if not api_key:
         return discord.Embed(title=title, description="TMDb API anahtarı ayarlanmamış.", color=discord.Color.red())
