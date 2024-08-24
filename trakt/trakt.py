@@ -164,9 +164,9 @@ class Trakt(commands.Cog):
                             show_name = item.get('name', title)
                             if episode_info:
                                 season, episode_number = episode_info
-                                embed_title = f"{username} watched {show_name} S{season}E{episode_number}"
+                                embed_title = f"{username}  {show_name} S{season}E{episode_number} izledi."
                             else:
-                                embed_title = f"{username} watched {show_name}"
+                                embed_title = f"{username}  {show_name} izledi."
 
                         description = item.get('overview', 'No description available.')
 
