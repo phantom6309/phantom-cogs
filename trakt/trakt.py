@@ -207,8 +207,8 @@ class Trakt(commands.Cog):
                                 return discord.Embed(title=title, description="Episod bilgisi alınamadı.", color=discord.Color.red())
                     else:
                      return discord.Embed(title=title, description="Şov bilgisi alınamadı.", color=discord.Color.red())
-                else:
-                    return discord.Embed(title=title, description="Bilgi bulunamadı.", color=discord.Color.orange())
+                  else:
+                  return discord.Embed(title=title, description="Bilgi bulunamadı.", color=discord.Color.orange())
         
 
 
