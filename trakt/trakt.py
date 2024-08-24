@@ -171,15 +171,15 @@ class Trakt(commands.Cog):
                 await channel.send(embed=embed)
                 
     async def create_embed_with_tmdb_info(self, title, content_type, show_title=None, season_number=None, episode_number=None):
-    api_key = self.data.get('tmdb_api_key')
-    if not api_key:
+     api_key = self.data.get('tmdb_api_key')
+     if not api_key:
         return discord.Embed(title=title, description="TMDb API anahtarı ayarlanmamış.", color=discord.Color.red())
 
-     if content_type == 'movie':
+      if content_type == 'movie':
         url = f"https://api.themoviedb.org/3/search/movie?query={title}&api_key={api_key}&language=tr-TR"
-     elif content_type == 'show':
+      elif content_type == 'show':
         url = f"https://api.themoviedb.org/3/search/tv?query={title}&api_key={api_key}&language=tr-TR"
-     elif content_type == 'episode' and show_title:
+      elif content_type == 'episode' and show_title:
         show_url = f"https://api.themoviedb.org/3/search/tv?query={show_title}&api_key={api_key}&language=tr-TR"
         async with aiohttp.ClientSession() as session:
             async with session.get(show_url) as response:
@@ -205,10 +205,10 @@ class Trakt(commands.Cog):
                                 return embed
                             else:
                                 return discord.Embed(title=title, description="Episod bilgisi alınamadı.", color=discord.Color.red())
-                else:
+                    else:
                     return discord.Embed(title=title, description="Şov bilgisi alınamadı.", color=discord.Color.red())
-     else:
-        return discord.Embed(title=title, description="Bilgi bulunamadı.", color=discord.Color.orange())
+                  else:
+                  return discord.Embed(title=title, description="Bilgi bulunamadı.", color=discord.Color.orange())
         
 
 
