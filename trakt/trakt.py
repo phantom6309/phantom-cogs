@@ -140,17 +140,17 @@ class Trakt(commands.Cog):
         self.save_data()
         await ctx.send(f"{channel.name} channel set for tracking.")
 
-async def create_embed_with_tmdb_info(self, title, content_type, episode_info=None):
-    api_key = self.data.get('tmdb_api_key')
-    if not api_key:
+    async def create_embed_with_tmdb_info(self, title, content_type, episode_info=None):
+     api_key = self.data.get('tmdb_api_key')
+     if not api_key:
         return discord.Embed(title=title, description="TMDb API key not set.", color=discord.Color.red())
 
-    if content_type == 'movie':
+     if content_type == 'movie':
         url = f"https://api.themoviedb.org/3/search/movie?query={title}&api_key={api_key}&language=tr-TR"
-    else:  # content_type == 'show'
+     else:  # content_type == 'show'
         url = f"https://api.themoviedb.org/3/search/tv?query={title}&api_key={api_key}&language=tr-TR"
 
-    try:
+     try:
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as response:
                 if response.status == 200:
@@ -179,26 +179,26 @@ async def create_embed_with_tmdb_info(self, title, content_type, episode_info=No
                 else:
                     logger.error(f"Failed to fetch TMDb data. Status code: {response.status}")
                     return discord.Embed(title=title, description="Failed to fetch TMDb data.", color=discord.Color.red())
-    except Exception as e:
+     except Exception as e:
         logger.error(f"Error fetching TMDb data: {e}")
         return discord.Embed(title=title, description="Error fetching TMDb data.", color=discord.Color.red())
 
-@tasks.loop(minutes=15)
-async def check_for_updates(self):
-     await self.bot.wait_until_ready()
-     if not self.data['trakt_credentials'].get('access_token'):
+     @tasks.loop(minutes=15)
+     async def check_for_updates(self):
+      await self.bot.wait_until_ready()
+      if not self.data['trakt_credentials'].get('access_token'):
         return
-     if not self.data['tracked_users']:
+      if not self.data['tracked_users']:
         return
-     if not self.data.get('channel_id'):
+      if not self.data.get('channel_id'):
         return
 
-     channel = self.bot.get_channel(int(self.data['channel_id']))
-     if not channel:
+      channel = self.bot.get_channel(int(self.data['channel_id']))
+      if not channel:
         logger.error("Channel not found.")
         return
 
-     for username in self.data['tracked_users']:
+      for username in self.data['tracked_users']:
         activity = await self.get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
         if activity:
             latest_activity = activity[0]
