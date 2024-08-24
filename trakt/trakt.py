@@ -140,7 +140,7 @@ class Trakt(commands.Cog):
         self.save_data()
         await ctx.send(f"{channel.name} channel set for tracking.")
 
-    async def create_embed_with_tmdb_info(self, title, content_type, episode_info=None):
+    async def create_embed_with_tmdb_info(self, username, title, content_type, episode_info=None):
      api_key = self.data.get('tmdb_api_key')
      if not api_key:
         return discord.Embed(title=title, description="TMDb API key not set.", color=discord.Color.red())
@@ -157,14 +157,21 @@ class Trakt(commands.Cog):
                     data = await response.json()
                     if data['results']:
                         item = data['results'][0]
-                        embed_title = item.get('title' if content_type == 'movie' else 'name', title)
+                        
+                        if content_type == 'movie':
+                            embed_title = f"{username} watched {item.get('title', title)}"
+                        else:
+                            show_name = item.get('name', title)
+                            if episode_info:
+                                season, episode_number = episode_info
+                                embed_title = f"{username} watched {show_name} S{season}E{episode_number}"
+                            else:
+                                embed_title = f"{username} watched {show_name}"
+
                         description = item.get('overview', 'No description available.')
-                        if content_type == 'show' and episode_info:
-                            season, episode_number = episode_info
-                            description = f"{description}\n\nSeason {season} Episode {episode_number}"
 
                         embed = discord.Embed(
-                            title=f"{embed_title} - {title}",
+                            title=embed_title,
                             description=description,
                             color=discord.Color.blue()
                         )
@@ -179,7 +186,7 @@ class Trakt(commands.Cog):
                 else:
                     logger.error(f"Failed to fetch TMDb data. Status code: {response.status}")
                     return discord.Embed(title=title, description="Failed to fetch TMDb data.", color=discord.Color.red())
-     except Exception as e:
+    except Exception as e:
         logger.error(f"Error fetching TMDb data: {e}")
         return discord.Embed(title=title, description="Error fetching TMDb data.", color=discord.Color.red())
 
@@ -207,6 +214,6 @@ class Trakt(commands.Cog):
             if last_watched != title:
                 self.data['last_activity'][username] = title
                 self.save_data()
-                embed = await self.create_embed_with_tmdb_info(title, content_type, episode_info)
+                embed = await self.create_embed_with_tmdb_info(username, title, content_type, episode_info)
                 await channel.send(embed=embed)
-
+                
