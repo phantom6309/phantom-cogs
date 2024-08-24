@@ -16,7 +16,13 @@ class Trakt(commands.Cog):
             with open(self.data_file, 'r') as f:
                 data = json.load(f)
         except FileNotFoundError:
-            data = {'trakt_credentials': {}, 'tracked_users': {}, 'last_activity': {}, 'channel_id': None, 'tmdb_api_key': None}
+            data = {
+                'trakt_credentials': {},
+                'tracked_users': {},
+                'last_activity': {},
+                'channel_id': None,
+                'tmdb_api_key': None
+            }
         if 'last_activity' not in data:
             data['last_activity'] = {}
         return data
@@ -44,7 +50,7 @@ class Trakt(commands.Cog):
         if 'movie' in activity_item:
             return activity_item['movie']['title'], 'movie'
         elif 'show' in activity_item:
-            return activity_item['show']['title'], 'tv'
+            return activity_item['show']['title'], 'show'
         return 'Bilinmeyen Başlık', 'unknown'
 
     @commands.group(name='trakt', invoke_without_command=True)
@@ -53,25 +59,25 @@ class Trakt(commands.Cog):
 
     @trakt.command()
     async def setup(self, ctx):
-        await ctx.author.send("Lütfen Trakt Client ID'nizi sağlayın:")
+        await ctx.author.send("Trakt Client ID'nizi girin:")
         def check(m):
             return m.author == ctx.author and isinstance(m.channel, discord.DMChannel)
-
+        
         try:
-            # Trakt Client ID'yi alın
+            # Trakt Client ID'yi al
             msg = await self.bot.wait_for('message', timeout=60.0, check=check)
             client_id = msg.content.strip()
-
-            # Trakt Client Secret'ı alın
-            await ctx.author.send("Lütfen Trakt Client Secret'ınızı sağlayın:")
+            
+            # Trakt Client Secret'ı al
+            await ctx.author.send("Trakt Client Secret'ınızı girin:")
             msg = await self.bot.wait_for('message', timeout=60.0, check=check)
             client_secret = msg.content.strip()
-
-            # Trakt OAuth kurulumu
+            
+            # Trakt için OAuth ayarı
             redirect_uri = 'urn:ietf:wg:oauth:2.0:oob'
             oauth_url = f'https://trakt.tv/oauth/authorize?response_type=code&client_id={client_id}&redirect_uri={redirect_uri}'
-            await ctx.author.send(f"Lütfen bu URL'yi ziyaret ederek uygulamayı yetkilendirin: {oauth_url}\nYetkilendirmeden sonra yetkilendirme kodunu bana gönderin.")
-
+            await ctx.author.send(f"Uygulamayı yetkilendirmek için bu URL'yi ziyaret edin: {oauth_url}\nYetkilendirme sonrası, lütfen bana yetkilendirme kodunu gönderin.")
+            
             msg = await self.bot.wait_for('message', timeout=300.0, check=check)
             authorization_code = msg.content.strip()
 
@@ -96,10 +102,99 @@ class Trakt(commands.Cog):
                         self.save_data()
                         await ctx.author.send("Trakt kimlik bilgileri başarıyla ayarlandı.")
                     else:
-                        await ctx.author.send(f"Erişim tokenı alınamadı: {await response.text()}")
-
+                        await ctx.author.send(f"Erişim belirteci alınamadı: {await response.text()}")
+        
         except asyncio.TimeoutError:
-            await ctx.author.send("Yanıt vermeniz çok uzun sürdü. Lütfen setup komutunu tekrar deneyin.")
+            await ctx.author.send("Yanıt vermek çok uzun sürdü. Lütfen setup komutunu tekrar deneyin.")
+    
+    @trakt.command()
+    async def settmdbkey(self, ctx, api_key: str):
+        """TMDb API anahtarını ayarlama veya güncelleme komutu."""
+        self.data['tmdb_api_key'] = api_key
+        self.save_data()
+        await ctx.send("TMDb API anahtarı güncellendi.")
+
+    @trakt.command()
+    async def user(self, ctx, username: str):
+        if isinstance(self.data['tracked_users'], list):
+            self.data['tracked_users'] = {user: {} for user in self.data['tracked_users']}
+        
+        if username in self.data['tracked_users']:
+            del self.data['tracked_users'][username]
+            if username in self.data['last_activity']:
+                del self.data['last_activity'][username]
+            self.save_data()
+            await ctx.send(f"Kullanıcı {username} takip listesinden kaldırıldı.")
+        else:
+            self.data['tracked_users'][username] = {}
+            self.save_data()
+            await ctx.send(f"Kullanıcı {username} takip listesine eklendi.")
+
+    @trakt.command()
+    async def run(self, ctx):
+        if not self.data['trakt_credentials'].get('access_token'):
+            await ctx.send("Trakt erişim belirteci bulunamadı. Öncelikle `?trakt setup` komutunu kullanarak kimlik bilgilerini ayarlayın.")
+            return
+
+        if not self.data['tracked_users']:
+            await ctx.send("Takip edilecek kullanıcı bulunmuyor. Öncelikle `?trakt user <kullanıcı_adı>` komutunu kullanarak kullanıcı ekleyin.")
+            return
+
+        channel_id = self.data.get('channel_id')
+        if channel_id is None:
+            await ctx.send("Bir kanal ayarlanmamış. Kanalı ayarlamak için `?trakt setupchannel <kanal_id>` komutunu kullanın.")
+            return
+
+        channel = self.bot.get_channel(int(channel_id))
+        if channel is None:
+            await ctx.send("Geçersiz kanal ID'si. Kanalı tekrar ayarlamak için `?trakt setupchannel <kanal_id>` komutunu kullanın.")
+            return
+
+        for username in self.data['tracked_users']:
+            activity = await self.get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
+            if activity:
+                latest_activity = activity[0]
+                title, content_type = self.extract_title(latest_activity)
+                last_watched = self.data['last_activity'].get(username)
+                if last_watched != title:
+                    self.data['last_activity'][username] = title
+                    self.save_data()
+                    embed = await self.create_embed_with_tmdb_info(title, content_type)
+                    embed.set_author(name=username, icon_url=None)
+                    embed.set_footer(text=f"{username}", icon_url=None)
+                    await channel.send(embed=embed)
+
+    async def create_embed_with_tmdb_info(self, title, content_type):
+        api_key = self.data.get('tmdb_api_key')
+        if not api_key:
+            return discord.Embed(title=title, description="TMDb API anahtarı ayarlanmamış.", color=discord.Color.red())
+
+        if content_type == 'movie':
+            url = f"https://api.themoviedb.org/3/search/movie?query={title}&api_key={api_key}&language=tr-TR"
+        else:
+            url = f"https://api.themoviedb.org/3/search/tv?query={title}&api_key={api_key}&language=tr-TR"
+
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    if data['results']:
+                        item = data['results'][0]
+                        embed = discord.Embed(
+                            title=item.get('title' if content_type == 'movie' else 'name', title),
+                            description=item.get('overview', 'Açıklama bulunamadı.'),
+                            color=discord.Color.blue()
+                        )
+                        embed.set_thumbnail(url=f"https://image.tmdb.org/t/p/w500{item.get('poster_path')}")
+                        embed.add_field(name="Puan", value=item.get('vote_average', 'N/A'), inline=True)
+                        embed.add_field(name="Çıkış Tarihi", value=item.get('release_date' if content_type == 'movie' else 'first_air_date', 'N/A'), inline=True)
+                        embed.add_field(name="Tür", value=', '.join([genre['name'] for genre in item.get('genres', [])]), inline=False)
+                        return embed
+                    else:
+                        return discord.Embed(title=title, description="Bilgi bulunamadı.", color=discord.Color.orange())
+                else:
+                    return discord.Embed(title=title, description="TMDb'den bilgi alınamadı.", color=discord.Color.red())
+
     @trakt.command()
     async def setupchannel(self, ctx, *, channel: discord.TextChannel):
         self.data['channel_id'] = channel.id
