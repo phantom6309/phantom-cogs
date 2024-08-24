@@ -47,12 +47,16 @@ class Trakt(commands.Cog):
                     return None
 
     def extract_title(self, activity_item):
-        if 'movie' in activity_item:
-            return activity_item['movie']['title'], 'movie'
-        elif 'show' in activity_item:
-            return activity_item['show']['title'], 'show'
-        return 'Bilinmeyen Başlık', 'unknown'
-
+     if 'movie' in activity_item:
+        return activity_item['movie']['title'], 'movie', None
+     elif 'episode' in activity_item and 'show' in activity_item:
+        show_title = activity_item['show']['title']
+        episode_title = activity_item['episode']['title']
+        return f"{show_title} - {episode_title}", 'episode', show_title
+     elif 'show' in activity_item:
+        return activity_item['show']['title'], 'show', None
+     return 'Bilinmeyen Başlık', 'unknown', None
+ 
     @commands.group(name='trakt', invoke_without_command=True)
     async def trakt(self, ctx):
         await ctx.send("Mevcut komutlar: `user`, `setup`, `run`, `setupchannel`, `settmdbkey`")
@@ -163,37 +167,44 @@ class Trakt(commands.Cog):
                     embed.set_author(name=username, icon_url=None)
                     embed.set_footer(text=f"{username}", icon_url=None)
                     await channel.send(embed=embed)
+    async def create_embed_with_tmdb_info(self, title, content_type, show_title=None):
+     api_key = self.data.get('tmdb_api_key')
+     if not api_key:
+         return discord.Embed(title=title, description="TMDb API anahtarı ayarlanmamış.", color=discord.Color.red())
 
-    async def create_embed_with_tmdb_info(self, title, content_type):
-        api_key = self.data.get('tmdb_api_key')
-        if not api_key:
-            return discord.Embed(title=title, description="TMDb API anahtarı ayarlanmamış.", color=discord.Color.red())
+     if content_type == 'movie':
+        url = f"https://api.themoviedb.org/3/search/movie?query={title}&api_key={api_key}&language=tr-TR"
+     elif content_type == 'show':
+        url = f"https://api.themoviedb.org/3/search/tv?query={title}&api_key={api_key}&language=tr-TR"
+     elif content_type == 'episode' and show_title:
+        url = f"https://api.themoviedb.org/3/search/tv?query={show_title}&api_key={api_key}&language=tr-TR"
+     else:
+        return discord.Embed(title=title, description="Bilgi bulunamadı.", color=discord.Color.orange())
 
-        if content_type == 'movie':
-            url = f"https://api.themoviedb.org/3/search/movie?query={title}&api_key={api_key}&language=tr-TR"
-        else:
-            url = f"https://api.themoviedb.org/3/search/tv?query={title}&api_key={api_key}&language=tr-TR"
-
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as response:
-                if response.status == 200:
-                    data = await response.json()
-                    if data['results']:
-                        item = data['results'][0]
-                        embed = discord.Embed(
-                            title=item.get('title' if content_type == 'movie' else 'name', title),
-                            description=item.get('overview', 'Açıklama bulunamadı.'),
-                            color=discord.Color.blue()
-                        )
-                        embed.set_thumbnail(url=f"https://image.tmdb.org/t/p/w500{item.get('poster_path')}")
-                        embed.add_field(name="Puan", value=item.get('vote_average', 'N/A'), inline=True)
-                        embed.add_field(name="Çıkış Tarihi", value=item.get('release_date' if content_type == 'movie' else 'first_air_date', 'N/A'), inline=True)
-                        embed.add_field(name="Tür", value=', '.join([genre['name'] for genre in item.get('genres', [])]), inline=False)
-                        return embed
-                    else:
-                        return discord.Embed(title=title, description="Bilgi bulunamadı.", color=discord.Color.orange())
+     async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            if response.status == 200:
+                data = await response.json()
+                if data['results']:
+                    item = data['results'][0]
+                    embed = discord.Embed(
+                        title=item.get('title' if content_type in ['movie', 'episode'] else 'name', title),
+                        description=item.get('overview', 'Açıklama bulunamadı.'),
+                        color=discord.Color.blue()
+                    )
+                    embed.set_thumbnail(url=f"https://image.tmdb.org/t/p/w500{item.get('poster_path')}")
+                    embed.add_field(name="Puan", value=item.get('vote_average', 'N/A'), inline=True)
+                    embed.add_field(name="Çıkış Tarihi", value=item.get('release_date' if content_type == 'movie' else 'first_air_date', 'N/A'), inline=True)
+                    embed.add_field(name="Tür", value=', '.join([genre['name'] for genre in item.get('genres', [])]), inline=False)
+                    if content_type == 'episode':
+                        episode_info = f"Episod: {item.get('name', 'N/A')}"
+                        embed.add_field(name="Episod Bilgisi", value=episode_info, inline=False)
+                    return embed
                 else:
-                    return discord.Embed(title=title, description="TMDb'den bilgi alınamadı.", color=discord.Color.red())
+                    return discord.Embed(title=title, description="Bilgi bulunamadı.", color=discord.Color.orange())
+            else:
+                return discord.Embed(title=title, description="TMDb'den bilgi alınamadı.", color=discord.Color.red())
+
 
     @trakt.command()
     async def setupchannel(self, ctx, *, channel: discord.TextChannel):
