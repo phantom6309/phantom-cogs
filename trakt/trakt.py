@@ -208,10 +208,5 @@ class Trakt(commands.Cog):
                 self.data['last_activity'][username] = title
                 self.save_data()
                 embed = await self.create_embed_with_tmdb_info(title, content_type, episode_info)
-                if content_type == 'show' and episode_info:
-                    embed.set_author(name=f"{username} watched", icon_url=None)
-                    embed.set_footer(text=f"Season {episode_info[0]} Episode {episode_info[1]}", icon_url=None)
-                else:
-                    embed.set_author(name=f"{username} watched", icon_url=None)
                 await channel.send(embed=embed)
 
