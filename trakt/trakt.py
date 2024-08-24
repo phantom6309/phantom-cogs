@@ -1,6 +1,7 @@
 import aiohttp
 import discord
 import json
+import asyncio
 from redbot.core import commands
 from discord.ext import tasks
 
@@ -48,10 +49,14 @@ class Trakt(commands.Cog):
 
     def extract_title(self, activity_item):
         if 'movie' in activity_item:
-            return activity_item['movie']['title'], 'movie'
+            return activity_item['movie']['title'], 'movie', None
         elif 'show' in activity_item:
-            return activity_item['show']['title'], 'show'
-        return 'Bilinmeyen Başlık', 'unknown'
+            show_title = activity_item['show']['title']
+            episode = activity_item.get('episode', {})
+            season = episode.get('season', 'N/A')
+            episode_number = episode.get('number', 'N/A')
+            return show_title, 'show', (season, episode_number)
+        return 'Bilinmeyen Başlık', 'unknown', None
 
     @commands.group(name='trakt', invoke_without_command=True)
     async def trakt(self, ctx):
@@ -154,24 +159,30 @@ class Trakt(commands.Cog):
             activity = await self.get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
             if activity:
                 latest_activity = activity[0]
-                title, content_type = self.extract_title(latest_activity)
+                title, content_type, episode_info = self.extract_title(latest_activity)
                 last_watched = self.data['last_activity'].get(username)
                 if last_watched != title:
                     self.data['last_activity'][username] = title
                     self.save_data()
-                    embed = await self.create_embed_with_tmdb_info(title, content_type)
-                    embed.set_author(name=username, icon_url=None)
+                    embed = await self.create_embed_with_tmdb_info(title, content_type, episode_info)
+                    embed.set_author(name=f"{username} izledi", icon_url=None)
                     embed.set_footer(text=f"{username}", icon_url=None)
                     await channel.send(embed=embed)
 
-    async def create_embed_with_tmdb_info(self, title, content_type):
+    @trakt.command()
+    async def setupchannel(self, ctx, *, channel: discord.TextChannel):
+        self.data['channel_id'] = channel.id
+        self.save_data()
+        await ctx.send(f"{channel.name} kanalı takip edilecek şekilde ayarlandı.")
+
+    async def create_embed_with_tmdb_info(self, title, content_type, episode_info=None):
         api_key = self.data.get('tmdb_api_key')
         if not api_key:
             return discord.Embed(title=title, description="TMDb API anahtarı ayarlanmamış.", color=discord.Color.red())
 
         if content_type == 'movie':
             url = f"https://api.themoviedb.org/3/search/movie?query={title}&api_key={api_key}&language=tr-TR"
-        else:
+        else:  # content_type == 'show'
             url = f"https://api.themoviedb.org/3/search/tv?query={title}&api_key={api_key}&language=tr-TR"
 
         async with aiohttp.ClientSession() as session:
@@ -180,26 +191,29 @@ class Trakt(commands.Cog):
                     data = await response.json()
                     if data['results']:
                         item = data['results'][0]
+                        embed_title = item.get('title' if content_type == 'movie' else 'name', title)
+                        description = item.get('overview', 'Açıklama bulunamadı.')
+                        if content_type == 'show' and episode_info:
+                            season, episode_number = episode_info
+                            description = f"{description}\n\nSezon {season} Bölüm {episode_number}"
+
                         embed = discord.Embed(
-                            title=item.get('title' if content_type == 'movie' else 'name', title),
-                            description=item.get('overview', 'Açıklama bulunamadı.'),
+                            title=embed_title,
+                            description=description,
                             color=discord.Color.blue()
                         )
                         embed.set_thumbnail(url=f"https://image.tmdb.org/t/p/w500{item.get('poster_path')}")
                         embed.add_field(name="Puan", value=item.get('vote_average', 'N/A'), inline=True)
-                        embed.add_field(name="Çıkış Tarihi", value=item.get('release_date' if content_type == 'movie' else 'first_air_date', 'N/A'), inline=True)
+                        if content_type == 'movie':
+                            embed.add_field(name="Çıkış Tarihi", value=item.get('release_date', 'N/A'), inline=True)
+                        else:  # TV Show
+                            embed.add_field(name="Çıkış Tarihi", value=item.get('first_air_date', 'N/A'), inline=True)
                         embed.add_field(name="Tür", value=', '.join([genre['name'] for genre in item.get('genres', [])]), inline=False)
                         return embed
                     else:
                         return discord.Embed(title=title, description="Bilgi bulunamadı.", color=discord.Color.orange())
                 else:
                     return discord.Embed(title=title, description="TMDb'den bilgi alınamadı.", color=discord.Color.red())
-
-    @trakt.command()
-    async def setupchannel(self, ctx, *, channel: discord.TextChannel):
-        self.data['channel_id'] = channel.id
-        self.save_data()
-        await ctx.send(f"{channel.name} kanalı takip edilecek şekilde ayarlandı.")
 
     @tasks.loop(minutes=5)
     async def check_for_updates(self):
@@ -221,17 +235,16 @@ class Trakt(commands.Cog):
             activity = await self.get_trakt_user_activity(username, self.data['trakt_credentials'].get('access_token'))
             if activity:
                 latest_activity = activity[0]
-                title, content_type = self.extract_title(latest_activity)
+                title, content_type, episode_info = self.extract_title(latest_activity)
                 last_watched = self.data['last_activity'].get(username)
                 if last_watched != title:
                     self.data['last_activity'][username] = title
                     self.save_data()
-                    embed = await self.create_embed_with_tmdb_info(title, content_type)
-                    embed.set_author(name=username, icon_url=None)
+                    embed = await self.create_embed_with_tmdb_info(title, content_type, episode_info)
+                    embed.set_author(name=f"{username} izledi", icon_url=None)
                     embed.set_footer(text=f"{username}", icon_url=None)
                     await channel.send(embed=embed)
 
     @check_for_updates.before_loop
     async def before_checking(self):
         await self.bot.wait_until_ready()
-        
