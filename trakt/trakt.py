@@ -102,7 +102,7 @@ class Trakt(commands.Cog):
 
         except asyncio.TimeoutError:
             await ctx.author.send("Yanıt vermeniz çok uzun sürdü. Lütfen setup komutunu tekrar deneyin.")
-                @trakt.command()
+    @trakt.command()
     async def settmdbkey(self, ctx, api_key: str):
         """TMDb API anahtarını ayarlamak veya güncellemek için komut."""
         self.data['tmdb_api_key'] = api_key
