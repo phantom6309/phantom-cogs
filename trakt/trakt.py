@@ -186,7 +186,7 @@ class Trakt(commands.Cog):
                 else:
                     logger.error(f"Failed to fetch TMDb data. Status code: {response.status}")
                     return discord.Embed(title=title, description="Failed to fetch TMDb data.", color=discord.Color.red())
-    except Exception as e:
+     except Exception as e:
         logger.error(f"Error fetching TMDb data: {e}")
         return discord.Embed(title=title, description="Error fetching TMDb data.", color=discord.Color.red())
 
