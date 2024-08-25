@@ -106,10 +106,8 @@ class Sinema(commands.Cog):
                         description=movie.get('summary', 'No summary available.'),
                         color=discord.Color.blue()
                     )
-                    embed.add_field(name="Director", value=movie.get('director', 'Unknown'))
-                    embed.add_field(name="Type", value=movie.get('type', 'Unknown'))
-                    embed.set_image(url=movie.get('image', ''))
-
+                    embed.add_field(name="Tür", value=movie.get('type', 'Unknown'))
+                    embed.add_field(name="Süre", value=movie.get('Süre', 'Unknown'))
                     await channel.send(embed=embed)
                     new_movies.append(movie_name)
 
