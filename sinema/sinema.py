@@ -1,5 +1,5 @@
 import discord
-from redbot import commands
+from redbot.core import commands
 from discord.ext import tasks
 import json
 import http.client
