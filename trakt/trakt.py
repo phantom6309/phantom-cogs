@@ -164,9 +164,9 @@ class Trakt(commands.Cog):
                             show_name = item.get('name', title)
                             if episode_info:
                                 season, episode_number = episode_info
-                                embed_title = f"{username} watched {show_name} S{season}E{episode_number}"
+                                embed_title = f"{username} {show_name} izledi "
                             else:
-                                embed_title = f"{username} watched {show_name}"
+                                embed_title = f"{username}  {show_name} izledi"
 
                         description = item.get('overview', 'No description available.')
 
@@ -178,8 +178,8 @@ class Trakt(commands.Cog):
                         embed.set_image(url=f"https://image.tmdb.org/t/p/w500{item.get('poster_path')}")
                         embed.add_field(name="Rating", value=item.get('vote_average', 'N/A'), inline=True)
                         if content_type == 'show':
-                            embed.add_field(name="Seasons", value=item.get('number_of_seasons', 'N/A'), inline=True)
-                            embed.add_field(name="Episodes", value=item.get('number_of_episodes', 'N/A'), inline=True)
+                            embed.add_field(name="Sezon", value={season}, inline=True)
+                            embed.add_field(name="Bölüm", value={episode_number}
                         return embed
                     else:
                         return discord.Embed(title=title, description="No results found on TMDb.", color=discord.Color.red())
