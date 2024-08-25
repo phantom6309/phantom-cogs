@@ -4,7 +4,7 @@ from redbot.core import commands, Config
 import http.client
 import json
 
-class MovieNotifier(commands.Cog):
+class Sinema(commands.Cog):
     """A cog that checks for upcoming movies and posts them to a Discord channel."""
 
     def __init__(self, bot):
