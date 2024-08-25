@@ -117,11 +117,11 @@ class Sinema(commands.Cog):
                 if movie_name and movie_name not in posted_movies:
                     embed = discord.Embed(
                         title=movie_name,
-                        description=movie.get('summary', 'No summary available.'),
                         color=discord.Color.blue()
                     )
                     embed.add_field(name="Tür", value=movie.get('type', 'Unknown'))
-                    embed.add_field(name="Süre", value=movie.get('Süre', 'Unknown'))
+                    embed.add_field(name="Süre", value=movie.get('duration', 'Unknown'))
+                    embed.add_field(name="Konu", value=movie.get('summary', 'Unknown'))
                     await channel.send(embed=embed)
                     new_movies.append(movie_name)
 
