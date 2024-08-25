@@ -2,25 +2,37 @@ import discord
 from discord.ext import tasks
 import json
 import http.client
-from redbot.core import Config, commands  # Import Config
+from redbot.core import commands
 
 class Sinema(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.config = Config.get_conf(self, identifier=1234567890, force_registration=True)
-        
-        # Default configuration settings
-        default_global = {
-            "api_key": None,
-            "channel_id": None,
-            "posted_movies": []
-        }
-        self.config.register_global(**default_global)
+        self.config_file = "config.json"
+        self.load_config()
 
         self.check_movies.start()
 
     def cog_unload(self):
         self.check_movies.cancel()
+
+    def load_config(self):
+        """Load configuration from the JSON file."""
+        try:
+            with open(self.config_file, "r") as file:
+                self.config = json.load(file)
+        except FileNotFoundError:
+            # Set default configuration if file is not found
+            self.config = {
+                "api_key": None,
+                "channel_id": None,
+                "posted_movies": []
+            }
+            self.save_config()
+
+    def save_config(self):
+        """Save configuration to the JSON file."""
+        with open(self.config_file, "w") as file:
+            json.dump(self.config, file, indent=4)
 
     @commands.group(name="sinema", invoke_without_command=True)
     async def sinema(self, ctx):
@@ -28,12 +40,14 @@ class Sinema(commands.Cog):
 
     @sinema.command(name="setapikey")
     async def set_api_key(self, ctx, api_key: str):
-        await self.config.api_key.set(api_key)
+        self.config["api_key"] = api_key
+        self.save_config()
         await ctx.send("API key has been set.")
 
     @sinema.command(name="setchannel")
     async def set_channel(self, ctx, channel: discord.TextChannel):
-        await self.config.channel_id.set(channel.id)
+        self.config["channel_id"] = channel.id
+        self.save_config()
         await ctx.send(f"Channel set to {channel.mention}")
 
     @sinema.command(name="checkmovies")
@@ -45,8 +59,8 @@ class Sinema(commands.Cog):
         await self.check_and_post_movies()
 
     async def check_and_post_movies(self, ctx=None):
-        api_key = await self.config.api_key()
-        channel_id = await self.config.channel_id()
+        api_key = self.config.get("api_key")
+        channel_id = self.config.get("channel_id")
 
         if not api_key:
             if ctx:
@@ -95,7 +109,7 @@ class Sinema(commands.Cog):
             return
 
         if movies_data.get("success"):
-            posted_movies = await self.config.posted_movies()
+            posted_movies = self.config.get("posted_movies", [])
             new_movies = []
 
             for movie in movies_data.get("result", []):
@@ -114,7 +128,8 @@ class Sinema(commands.Cog):
             # Update the list of posted movies
             if new_movies:
                 posted_movies.extend(new_movies)
-                await self.config.posted_movies.set(posted_movies)
+                self.config["posted_movies"] = posted_movies
+                self.save_config()
                 if ctx:
                     await ctx.send(f"Posted {len(new_movies)} new movie(s).")
             else:
@@ -130,4 +145,4 @@ class Sinema(commands.Cog):
 
 def setup(bot):
     bot.add_cog(Sinema(bot))
-    
+            
