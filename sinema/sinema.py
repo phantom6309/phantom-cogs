@@ -1,41 +1,32 @@
 import discord
-from discord.ext import tasks
-from redbot.core import commands, Config
-import http.client
+from discord.ext import commands, tasks
 import json
+import http.client
 
 class Sinema(commands.Cog):
-    """A cog that checks for upcoming movies and posts them to a Discord channel."""
-
     def __init__(self, bot):
         self.bot = bot
-        self.config = Config.get_conf(self, identifier=1234567890)
-        default_global = {
-            "api_key": None,
-            "posted_movies": [],
-            "channel_id": None
-        }
-        self.config.register_global(**default_global)
         self.check_movies.start()
 
     def cog_unload(self):
         self.check_movies.cancel()
 
-    @commands.command()
-    async def setapikey(self, ctx, api_key: str):
-        """Set the API key for the movie API."""
+    @commands.group(name="sinema", invoke_without_command=True)
+    async def sinema(self, ctx):
+        await ctx.send("Available subcommands: `setapikey`, `setchannel`, `checkmovies`")
+
+    @sinema.command(name="setapikey")
+    async def set_api_key(self, ctx, api_key: str):
         await self.config.api_key.set(api_key)
         await ctx.send("API key has been set.")
 
-    @commands.command()
-    async def setchannel(self, ctx, channel: discord.TextChannel):
-        """Set the channel where movie updates will be posted."""
+    @sinema.command(name="setchannel")
+    async def set_channel(self, ctx, channel: discord.TextChannel):
         await self.config.channel_id.set(channel.id)
-        await ctx.send(f"Channel has been set to {channel.mention}.")
+        await ctx.send(f"Channel set to {channel.mention}")
 
-    @commands.command()
+    @sinema.command(name="checkmovies")
     async def checkmovies(self, ctx):
-        """Manually check for upcoming movies."""
         await self.check_and_post_movies(ctx)
 
     @tasks.loop(hours=24)
@@ -69,24 +60,47 @@ class Sinema(commands.Cog):
         }
         conn.request("GET", "/watching/moviesComing", headers=headers)
         res = conn.getresponse()
+
+        # Debugging: Print response status and raw data
+        print(f"Response Status: {res.status}")
         data = res.read()
-        movies_data = json.loads(data.decode("utf-8"))
+        print(f"Raw Data: {data}")
+
+        if res.status != 200:
+            if ctx:
+                await ctx.send(f"API request failed with status code {res.status}.")
+            return
+
+        if not data:
+            if ctx:
+                await ctx.send("Received an empty response from the API.")
+            return
+
+        try:
+            movies_data = json.loads(data.decode("utf-8"))
+        except json.JSONDecodeError as e:
+            if ctx:
+                await ctx.send(f"Failed to decode the JSON response: {str(e)}")
+            return
 
         if movies_data.get("success"):
             posted_movies = await self.config.posted_movies()
             new_movies = []
 
-            for movie in movies_data["result"]:
-                if movie['name'] not in posted_movies:
+            for movie in movies_data.get("result", []):
+                movie_name = movie.get('name')
+                if movie_name and movie_name not in posted_movies:
                     embed = discord.Embed(
-                        title=movie['name'],
-                        description=movie['summary'],
+                        title=movie_name,
+                        description=movie.get('summary', 'No summary available.'),
                         color=discord.Color.blue()
                     )
-                    embed.add_field(name="Type", value=movie['type'])
-                    embed.set_image(url=movie['image'])
+                    embed.add_field(name="Director", value=movie.get('director', 'Unknown'))
+                    embed.add_field(name="Type", value=movie.get('type', 'Unknown'))
+                    embed.set_image(url=movie.get('image', ''))
+
                     await channel.send(embed=embed)
-                    new_movies.append(movie['name'])
+                    new_movies.append(movie_name)
 
             # Update the list of posted movies
             if new_movies:
@@ -105,6 +119,6 @@ class Sinema(commands.Cog):
     async def before_check_movies(self):
         await self.bot.wait_until_ready()
 
-async def setup(bot):
-    await bot.add_cog(MovieNotifier(bot))
-                  
+def setup(bot):
+    bot.add_cog(Sinema(bot))
+            
