@@ -1,0 +1,17 @@
+{
+
+    "author" : ["Phantom"],
+
+    "install_msg" : "thanks for installing",
+
+    "name" : "Trakt",
+
+    "short" : "",
+
+    "description" : "Trakt tracking",
+
+    "tags" : [""],
+
+    "end_user_data_statement": " "
+
+}
