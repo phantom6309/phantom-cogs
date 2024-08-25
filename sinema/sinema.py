@@ -1,12 +1,22 @@
 import discord
-from redbot.core import commands
 from discord.ext import tasks
 import json
 import http.client
+from redbot.core import Config, commands  # Import Config
 
 class Sinema(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.config = Config.get_conf(self, identifier=1234567890, force_registration=True)
+        
+        # Default configuration settings
+        default_global = {
+            "api_key": None,
+            "channel_id": None,
+            "posted_movies": []
+        }
+        self.config.register_global(**default_global)
+
         self.check_movies.start()
 
     def cog_unload(self):
@@ -120,4 +130,6 @@ class Sinema(commands.Cog):
     async def before_check_movies(self):
         await self.bot.wait_until_ready()
 
-            
+def setup(bot):
+    bot.add_cog(Sinema(bot))
+    
