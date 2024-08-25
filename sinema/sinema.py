@@ -83,7 +83,6 @@ class Sinema(commands.Cog):
                         description=movie['summary'],
                         color=discord.Color.blue()
                     )
-                    embed.add_field(name="Director", value=movie['director'])
                     embed.add_field(name="Type", value=movie['type'])
                     embed.set_image(url=movie['image'])
                     await channel.send(embed=embed)
