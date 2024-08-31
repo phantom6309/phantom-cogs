@@ -1,148 +1,108 @@
+import aiohttp
 import discord
+from datetime import datetime, timedelta
+from redbot.core import commands, Config
 from discord.ext import tasks
-import json
-import http.client
-from redbot.core import commands
-
 class Sinema(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.config_file = "config.json"
-        self.load_config()
-
-        self.check_movies.start()
+        self.config = Config.get_conf(self, identifier=965854345)
+        default_global = {
+            "api_key": None,
+            "posted_movies": []  # List to store already posted movies
+        }
+        self.config.register_global(**default_global)
+        self.daily_task.start()  # Start the daily task
 
     def cog_unload(self):
-        self.check_movies.cancel()
-
-    def load_config(self):
-        """Load configuration from the JSON file."""
-        try:
-            with open(self.config_file, "r") as file:
-                self.config = json.load(file)
-        except FileNotFoundError:
-            # Set default configuration if file is not found
-            self.config = {
-                "api_key": None,
-                "channel_id": None,
-                "posted_movies": []
-            }
-            self.save_config()
-
-    def save_config(self):
-        """Save configuration to the JSON file."""
-        with open(self.config_file, "w") as file:
-            json.dump(self.config, file, indent=4)
-
-    @commands.group(name="sinema", invoke_without_command=True)
-    async def sinema(self, ctx):
-        await ctx.send("Available subcommands: `setapikey`, `setchannel`, `checkmovies`")
-
-    @sinema.command(name="setapikey")
-    async def set_api_key(self, ctx, api_key: str):
-        self.config["api_key"] = api_key
-        self.save_config()
-        await ctx.send("API key has been set.")
-
-    @sinema.command(name="setchannel")
-    async def set_channel(self, ctx, channel: discord.TextChannel):
-        self.config["channel_id"] = channel.id
-        self.save_config()
-        await ctx.send(f"Channel set to {channel.mention}")
-
-    @sinema.command(name="checkmovies")
-    async def checkmovies(self, ctx):
-        await self.check_and_post_movies(ctx)
+        self.daily_task.cancel()  # Cancel the task when the cog is unloaded
 
     @tasks.loop(hours=24)
-    async def check_movies(self):
-        await self.check_and_post_movies()
+    async def daily_task(self):
+        """Task to run daily and post new movies."""
+        await self.post_new_movies()
 
-    async def check_and_post_movies(self, ctx=None):
-        api_key = self.config.get("api_key")
-        channel_id = self.config.get("channel_id")
-
-        if not api_key:
-            if ctx:
-                await ctx.send("API key is not set.")
-            return
-
-        if not channel_id:
-            if ctx:
-                await ctx.send("Channel is not set.")
-            return
-
-        channel = self.bot.get_channel(channel_id)
-        if not channel:
-            if ctx:
-                await ctx.send("Invalid channel.")
-            return
-
-        conn = http.client.HTTPSConnection("api.collectapi.com")
-        headers = {
-            'Content-Type': "application/json",
-            'Authorization': f"apikey {api_key}"
-        }
-        conn.request("GET", "/watching/moviesComing", headers=headers)
-        res = conn.getresponse()
-
-        # Debugging: Print response status and raw data
-        print(f"Response Status: {res.status}")
-        data = res.read()
-        print(f"Raw Data: {data}")
-
-        if res.status != 200:
-            if ctx:
-                await ctx.send(f"API request failed with status code {res.status}.")
-            return
-
-        if not data:
-            if ctx:
-                await ctx.send("Received an empty response from the API.")
-            return
-
-        try:
-            movies_data = json.loads(data.decode("utf-8"))
-        except json.JSONDecodeError as e:
-            if ctx:
-                await ctx.send(f"Failed to decode the JSON response: {str(e)}")
-            return
-
-        if movies_data.get("success"):
-            posted_movies = self.config.get("posted_movies", [])
-            new_movies = []
-
-            for movie in movies_data.get("result", []):
-                movie_name = movie.get('name')
-                if movie_name and movie_name not in posted_movies:
-                    embed = discord.Embed(
-                        title=movie_name,
-                        color=discord.Color.blue()
-                    )
-                    embed.add_field(name="Tür", value=movie.get('type', 'Unknown'))
-                    embed.add_field(name="Süre", value=movie.get('duration', 'Unknown'))
-                    embed.add_field(name="Konu", value=movie.get('summary', 'Unknown'))
-                    await channel.send(embed=embed)
-                    new_movies.append(movie_name)
-
-            # Update the list of posted movies
-            if new_movies:
-                posted_movies.extend(new_movies)
-                self.config["posted_movies"] = posted_movies
-                self.save_config()
-                if ctx:
-                    await ctx.send(f"Posted {len(new_movies)} new movie(s).")
-            else:
-                if ctx:
-                    await ctx.send("No new movies found.")
-        else:
-            if ctx:
-                await ctx.send("Failed to retrieve movie data.")
-
-    @check_movies.before_loop
-    async def before_check_movies(self):
+    @daily_task.before_loop
+    async def before_daily_task(self):
+        """Wait until the bot is ready before starting the daily task."""
         await self.bot.wait_until_ready()
+
+    async def post_new_movies(self):
+        """Fetch and post new movies."""
+        api_key = await self.config.api_key()
+        if not api_key:
+            return
+        
+        url = f"https://api.themoviedb.org/3/movie/now_playing?api_key={api_key}&language=tr-TR&region=TR"
+        
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as response:
+                if response.status != 200:
+                    return
+                
+                data = await response.json()
+                movies = data.get('results', [])
+                
+                if not movies:
+                    return
+                
+                posted_movies = await self.config.posted_movies()
+                new_movies = [movie for movie in movies if movie['id'] not in posted_movies]
+                
+                if not new_movies:
+                    return
+                
+                channel = self.bot.get_channel(YOUR_CHANNEL_ID)  # Replace with your channel ID
+                embed = self._create_embed(new_movies)
+                await channel.send(embed=embed)
+                
+                # Update the posted_movies list
+                posted_movies.extend([movie['id'] for movie in new_movies])
+                await self.config.posted_movies.set(posted_movies)
+
+    def _create_embed(self, movies):
+        embed = discord.Embed(title="Şu Anda Sinemalarda", color=discord.Color.blue())
+        for movie in movies[:5]:  # Display the first 5 movies
+            title = movie.get('title')
+            release_date = movie.get('release_date')
+            overview = movie.get('overview', 'Açıklama yok')
+            rating = movie.get('vote_average', 'Puan yok')
+            poster_path = movie.get('poster_path')
+            poster_url = f"https://image.tmdb.org/t/p/w500{poster_path}" if poster_path else None
+            
+            embed.add_field(
+                name=f"{title} ({release_date})",
+                value=f"Puan: {rating}\n\n{overview[:200]}...",
+                inline=False
+            )
+            
+            if poster_url:
+                embed.set_image(url=poster_url)
+        
+        return embed
+
+    @commands.group()
+    async def tmdb(self, ctx):
+        """Group command for TMDb related commands."""
+        pass
+
+    @tmdb.command()
+    async def set_key(self, ctx, api_key: str):
+        """Set the TMDb API key."""
+        await self.config.api_key.set(api_key)
+        await ctx.send("TMDb API key has been set.")
+
+    @tmdb.command()
+    async def now_playing(self, ctx):
+        """Fetches and displays movies currently playing in Turkish cinemas."""
+        await self.post_new_movies()
+
+    @tmdb.command()
+    async def clear_posted(self, ctx):
+        """Clear the list of already posted movies."""
+        await self.config.posted_movies.set([])
+        await ctx.send("Posted movies list has been cleared.")
 
 def setup(bot):
     bot.add_cog(Sinema(bot))
-            
+    
