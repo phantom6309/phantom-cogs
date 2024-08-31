@@ -19,24 +19,24 @@ class Sinema(commands.Cog):
         pass
 
     @sinema.command()
-    async def set_api_key(self, ctx, api_key: str):
+    async def api(self, ctx, api_key: str):
         """Set the TMDb API key."""
         await self.config.api_key.set(api_key)
         await ctx.send("TMDb API key has been set.")
 
     @sinema.command()
-    async def set_channel(self, ctx, channel: discord.TextChannel):
+    async def kanal(self, ctx, channel: discord.TextChannel):
         """Set the channel where movie updates will be posted."""
         await self.config.channel_id.set(channel.id)
         await ctx.send(f"Channel set to {channel.mention} for movie updates.")
 
     @sinema.command()
-    async def now_playing(self, ctx):
+    async def vizyonda(self, ctx):
         """Fetches and displays movies currently playing in Turkish cinemas."""
         await self.post_new_movies()
 
     @sinema.command()
-    async def clear_posted(self, ctx):
+    async def temizle(self, ctx):
         """Clear the list of already posted movies."""
         await self.config.posted_movies.set([])
         await ctx.send("Posted movies list has been cleared.")
@@ -74,9 +74,9 @@ class Sinema(commands.Cog):
                 description=movie.get('overview', 'No description available.'),
                 color=discord.Color.blue()
             )
-            embed.add_field(name="Rating", value=movie.get('vote_average', 'N/A'), inline=True)
-            embed.add_field(name="Release Date", value=movie.get('release_date', 'N/A'), inline=True)
-            embed.set_thumbnail(url=f"https://image.tmdb.org/t/p/w500{movie.get('poster_path')}")
+            embed.add_field(name="Puan", value=movie.get('vote_average', 'N/A'), inline=True)
+            embed.add_field(name="Yayınlanma Tarihi", value=movie.get('release_date', 'N/A'), inline=True)
+            embed.set_image(url=f"https://image.tmdb.org/t/p/w500{movie.get('poster_path')}")
 
             await channel.send(embed=embed)
             new_posted_movies.append(movie_id)
