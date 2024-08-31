@@ -94,7 +94,7 @@ class Sinema(commands.Cog):
         """Group command for TMDb related commands."""
         pass
 
-    @tmdb.command()
+    @sinema.command()
     async def set_key(self, ctx, api_key: str):
         """Set the TMDb API key."""
         if len(api_key) != 32:  # Basic length check for the API key
@@ -104,18 +104,18 @@ class Sinema(commands.Cog):
         await self.config.api_key.set(api_key)
         await ctx.send("TMDb API key has been set.")
 
-    @tmdb.command()
+    @sinema.command()
     async def set_channel(self, ctx, channel: discord.TextChannel):
         """Set the channel where movie updates will be posted."""
         await self.config.channel_id.set(channel.id)
         await ctx.send(f"Channel set to {channel.mention} for movie updates.")
 
-    @tmdb.command()
+    @sinema.command()
     async def now_playing(self, ctx):
         """Fetches and displays movies currently playing in Turkish cinemas."""
         await self.post_new_movies()
 
-    @tmdb.command()
+    @sinema.command()
     async def clear_posted(self, ctx):
         """Clear the list of already posted movies."""
         await self.config.posted_movies.set([])
