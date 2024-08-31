@@ -1,106 +1,26 @@
-import aiohttp
 import discord
 from redbot.core import commands, Config
-from discord.ext import tasks
+import aiohttp
 
 class Sinema(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.config = Config.get_conf(self, identifier=965854345)
+        self.config = Config.get_conf(self, identifier=965854234)  # Replace with your own identifier
         default_global = {
             "api_key": None,
-            "posted_movies": [],  # List to store already posted movies
-            "channel_id": None  # Channel ID where movies will be posted
+            "channel_id": None,
+            "posted_movies": []
         }
         self.config.register_global(**default_global)
-        self.daily_task.start()  # Start the daily task
-
-    def cog_unload(self):
-        self.daily_task.cancel()  # Cancel the task when the cog is unloaded
-
-    @tasks.loop(hours=24)
-    async def daily_task(self):
-        """Task to run daily and post new movies."""
-        await self.post_new_movies()
-
-    @daily_task.before_loop
-    async def before_daily_task(self):
-        """Wait until the bot is ready before starting the daily task."""
-        await self.bot.wait_until_ready()
-
-    async def post_new_movies(self):
-        """Fetch and post new movies."""
-        api_key = await self.config.api_key()
-        if not api_key:
-            return
-
-        channel_id = await self.config.channel_id()
-        if not channel_id:
-            return
-        
-        url = f"https://api.themoviedb.org/3/movie/now_playing?api_key={api_key}&language=tr-TR&region=TR"
-        
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as response:
-                if response.status != 200:
-                    return
-                
-                data = await response.json()
-                movies = data.get('results', [])
-                
-                if not movies:
-                    return
-                
-                posted_movies = await self.config.posted_movies()
-                new_movies = [movie for movie in movies if movie['id'] not in posted_movies]
-                
-                if not new_movies:
-                    return
-                
-                channel = self.bot.get_channel(channel_id)
-                if not channel:
-                    return
-                
-                embed = self._create_embed(new_movies)
-                await channel.send(embed=embed)
-                
-                # Update the posted_movies list
-                posted_movies.extend([movie['id'] for movie in new_movies])
-                await self.config.posted_movies.set(posted_movies)
-
-    def _create_embed(self, movies):
-        embed = discord.Embed(title="Şu Anda Sinemalarda", color=discord.Color.blue())
-        for movie in movies[:5]:  # Display the first 5 movies
-            title = movie.get('title')
-            release_date = movie.get('release_date')
-            overview = movie.get('overview', 'Açıklama yok')
-            rating = movie.get('vote_average', 'Puan yok')
-            poster_path = movie.get('poster_path')
-            poster_url = f"https://image.tmdb.org/t/p/w500{poster_path}" if poster_path else None
-            
-            embed.add_field(
-                name=f"{title} ({release_date})",
-                value=f"Puan: {rating}\n\n{overview[:200]}...",
-                inline=False
-            )
-            
-            if poster_url:
-                embed.set_image(url=poster_url)
-        
-        return embed
 
     @commands.group()
     async def sinema(self, ctx):
-        """Group command for TMDb related commands."""
+        """Commands related to movie updates."""
         pass
 
     @sinema.command()
-    async def set_key(self, ctx, api_key: str):
+    async def set_api_key(self, ctx, api_key: str):
         """Set the TMDb API key."""
-        if len(api_key) != 32:  # Basic length check for the API key
-            await ctx.send("Invalid API key. Please check and try again.")
-            return
-        
         await self.config.api_key.set(api_key)
         await ctx.send("TMDb API key has been set.")
 
@@ -120,6 +40,49 @@ class Sinema(commands.Cog):
         """Clear the list of already posted movies."""
         await self.config.posted_movies.set([])
         await ctx.send("Posted movies list has been cleared.")
+
+    async def post_new_movies(self):
+        api_key = await self.config.api_key()
+        channel_id = await self.config.channel_id()
+        posted_movies = await self.config.posted_movies()
+
+        if not api_key or not channel_id:
+            return  # No API key or channel set
+
+        url = f"https://api.themoviedb.org/3/movie/now_playing?api_key={api_key}&language=tr-TR"
+
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as response:
+                data = await response.json()
+
+        movies = data.get("results", [])
+        channel = self.bot.get_channel(channel_id)
+
+        if not channel:
+            return  # Channel not found
+
+        new_posted_movies = []
+
+        for movie in movies:
+            movie_id = movie['id']
+            if movie_id in posted_movies:
+                continue  # Skip movies already posted
+
+            # Create an embed for each movie
+            embed = discord.Embed(
+                title=movie['title'],
+                description=movie.get('overview', 'No description available.'),
+                color=discord.Color.blue()
+            )
+            embed.add_field(name="Rating", value=movie.get('vote_average', 'N/A'), inline=True)
+            embed.add_field(name="Release Date", value=movie.get('release_date', 'N/A'), inline=True)
+            embed.set_thumbnail(url=f"https://image.tmdb.org/t/p/w500{movie.get('poster_path')}")
+
+            await channel.send(embed=embed)
+            new_posted_movies.append(movie_id)
+
+        # Update the list of posted movies
+        await self.config.posted_movies.set(posted_movies + new_posted_movies)
 
 def setup(bot):
     bot.add_cog(Sinema(bot))
