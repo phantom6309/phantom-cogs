@@ -1,15 +1,16 @@
 import aiohttp
 import discord
-from datetime import datetime, timedelta
 from redbot.core import commands, Config
 from discord.ext import tasks
+
 class Sinema(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=965854345)
         default_global = {
             "api_key": None,
-            "posted_movies": []  # List to store already posted movies
+            "posted_movies": [],  # List to store already posted movies
+            "channel_id": None  # Channel ID where movies will be posted
         }
         self.config.register_global(**default_global)
         self.daily_task.start()  # Start the daily task
@@ -32,6 +33,10 @@ class Sinema(commands.Cog):
         api_key = await self.config.api_key()
         if not api_key:
             return
+
+        channel_id = await self.config.channel_id()
+        if not channel_id:
+            return
         
         url = f"https://api.themoviedb.org/3/movie/now_playing?api_key={api_key}&language=tr-TR&region=TR"
         
@@ -52,7 +57,10 @@ class Sinema(commands.Cog):
                 if not new_movies:
                     return
                 
-                channel = self.bot.get_channel(YOUR_CHANNEL_ID)  # Replace with your channel ID
+                channel = self.bot.get_channel(channel_id)
+                if not channel:
+                    return
+                
                 embed = self._create_embed(new_movies)
                 await channel.send(embed=embed)
                 
@@ -82,15 +90,25 @@ class Sinema(commands.Cog):
         return embed
 
     @commands.group()
-    async def tmdb(self, ctx):
+    async def sinema(self, ctx):
         """Group command for TMDb related commands."""
         pass
 
     @tmdb.command()
     async def set_key(self, ctx, api_key: str):
         """Set the TMDb API key."""
+        if len(api_key) != 32:  # Basic length check for the API key
+            await ctx.send("Invalid API key. Please check and try again.")
+            return
+        
         await self.config.api_key.set(api_key)
         await ctx.send("TMDb API key has been set.")
+
+    @tmdb.command()
+    async def set_channel(self, ctx, channel: discord.TextChannel):
+        """Set the channel where movie updates will be posted."""
+        await self.config.channel_id.set(channel.id)
+        await ctx.send(f"Channel set to {channel.mention} for movie updates.")
 
     @tmdb.command()
     async def now_playing(self, ctx):
