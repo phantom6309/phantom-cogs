@@ -12,7 +12,7 @@
 
     "tags" : [""],
 
-    "requirements" : ["ollama"],
+    "requirements" : ["aiosqlite"],
 
     "end_user_data_statement": " "
 
