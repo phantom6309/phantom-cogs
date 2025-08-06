@@ -1,0 +1,19 @@
+{
+
+    "author" : ["Phantom"],
+
+    "install_msg" : "thanks for installing",
+
+    "name" : "ollama",
+
+    "short" : "",
+
+    "description" : "chat with ollama",
+
+    "tags" : [""],
+
+    "requirements" : ["ollama"],
+
+    "end_user_data_statement": " "
+
+}
