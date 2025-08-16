@@ -338,7 +338,7 @@ class Trakt(commands.Cog):
             )
             return embed
 
-    @tasks.loop(minutes=15)
+    @tasks.loop(minutes=240)
     async def check_for_updates(self):
         await self.bot.wait_until_ready()
         
