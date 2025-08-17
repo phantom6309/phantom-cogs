@@ -236,9 +236,10 @@ class AIChat(commands.Cog):
                     await message.channel.send(response)
 
 
-def setup(bot):
+async def setup(bot):
     if not TRANSFORMERS_AVAILABLE:
         raise RuntimeError(
             "The transformers library is required for this cog. Install it with `pip install transformers torch`"
         )
+    await bot.add_cog(AIChat(bot))
    
