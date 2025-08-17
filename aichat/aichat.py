@@ -1,7 +1,6 @@
 import asyncio
 import aiohttp
 import logging
-import os
 import zipfile
 from pathlib import Path
 from typing import Optional
@@ -9,7 +8,6 @@ from typing import Optional
 import discord
 import torch
 from redbot.core import commands, Config, data_manager
-from redbot.core.utils.chat_formatting import box, humanize_list
 
 try:
     from transformers import GPT2LMHeadModel, GPT2Tokenizer
@@ -73,7 +71,7 @@ class AIChat(commands.Cog):
             self.model = GPT2LMHeadModel.from_pretrained(
                 str(self.model_path),
                 torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
-                low_cpu_mem_usage=True
+                low_cpu_mem_usage=True,
             )
             device = "cuda" if torch.cuda.is_available() else "cpu"
             self.model.to(device)
@@ -91,7 +89,9 @@ class AIChat(commands.Cog):
             max_length = await self.config.max_length()
             temperature = await self.config.temperature()
 
-            inputs = self.tokenizer.encode(prompt, return_tensors="pt", truncation=True, max_length=100)
+            inputs = self.tokenizer.encode(
+                prompt, return_tensors="pt", truncation=True, max_length=100
+            )
             if torch.cuda.is_available():
                 inputs = inputs.cuda()
 
@@ -103,12 +103,12 @@ class AIChat(commands.Cog):
                     do_sample=True,
                     pad_token_id=self.tokenizer.eos_token_id,
                     no_repeat_ngram_size=2,
-                    early_stopping=True
+                    early_stopping=True,
                 )
 
             response = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
             if response.startswith(prompt):
-                response = response[len(prompt):].strip()
+                response = response[len(prompt) :].strip()
 
             return response if response and len(response) > 3 else None
         except Exception as e:
@@ -165,12 +165,12 @@ class AIChat(commands.Cog):
         model_loaded = await self.config.model_loaded()
         if model_loaded and self.model:
             device = next(self.model.parameters()).device
-            embed = discord.Embed(title="AI Chat Status", color=0x00ff00)
+            embed = discord.Embed(title="AI Chat Status", color=0x00FF00)
             embed.add_field(name="Status", value="✅ Loaded", inline=True)
             embed.add_field(name="Device", value=str(device), inline=True)
             embed.add_field(name="Model Path", value=str(self.model_path), inline=False)
         else:
-            embed = discord.Embed(title="AI Chat Status", color=0xff0000)
+            embed = discord.Embed(title="AI Chat Status", color=0xFF0000)
             embed.add_field(name="Status", value="❌ Not loaded", inline=True)
             embed.add_field(name="Setup Required", value="Use `aichat setup <url>`", inline=False)
         await ctx.send(embed=embed)
@@ -219,6 +219,7 @@ class AIChat(commands.Cog):
 
         bot_mentioned = self.bot.user in message.mentions
         import random
+
         response_chance = await self.config.response_chance()
         should_respond_randomly = random.random() < response_chance
 
@@ -242,4 +243,3 @@ async def setup(bot):
             "The transformers library is required for this cog. Install it with `pip install transformers torch`"
         )
     await bot.add_cog(AIChat(bot))
-   
