@@ -241,4 +241,4 @@ def setup(bot):
         raise RuntimeError(
             "The transformers library is required for this cog. Install it with `pip install transformers torch`"
         )
-    bot.add_cog(AIChat(bot))
+   
