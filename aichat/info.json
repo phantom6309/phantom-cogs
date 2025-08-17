@@ -6,5 +6,5 @@
     "tags": ["ai", "chatbot", "gpt2"],
     "requirements": ["torch", "transformers"],
     "hidden": false,
-    "end_user_data_statement": "This cog stores AI model configuration and enabled channels.",
+    "end_user_data_statement": "This cog stores AI model configuration and enabled channels."
 }
