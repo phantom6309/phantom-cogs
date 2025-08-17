@@ -7,3 +7,4 @@
     "requirements": ["torch", "transformers"],
     "hidden": false,
     "end_user_data_statement": "This cog stores AI model configuration and enabled channels.",
+}
