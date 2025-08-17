@@ -1,0 +1,9 @@
+{
+    "author": ["phantom"],
+    "name": "AIChat",
+    "short": "AI chatbot using fine-tuned GPT-2",
+    "description": "A Discord AI chatbot trained on your server's messages",
+    "tags": ["ai", "chatbot", "gpt2"],
+    "requirements": ["torch", "transformers"],
+    "hidden": false,
+    "end_user_data_statement": "This cog stores AI model configuration and enabled channels.",
