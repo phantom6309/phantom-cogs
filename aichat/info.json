@@ -1,5 +1,5 @@
 {
     "author": ["phantom"],
     "tags": ["ai", "chatbot", "gpt2"],
-    "requirements": ["torch", "transformers"],
+    "requirements": ["torch", "transformers"]
 }
